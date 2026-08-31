@@ -1,0 +1,107 @@
+"use client"; // Client-side rendering directive for Next.js
+
+import { useMemo } from "react";
+import WikiRenderer from "@/components/Jhuloid/WikiRenderer";
+
+interface PrimaryProps {
+    block: Record<string, any>[];
+    index: number;
+    expandContent: (event: HTMLDivElement) => void;
+}
+
+interface InfoboxProps {
+    block: Record<string, any>[];
+    index: number;
+}
+
+export function PrimaryParser({ block, index, expandContent }: PrimaryProps): React.JSX.Element {
+    const isArray = (content: any): boolean => {
+        return Array.isArray(content);
+    }
+    const checkType = (content: Record<string, any>[], type: string): boolean => {
+        return content.some((item: Record<string, any>) => item.type.includes(type));
+    }
+
+    return (
+        <div className="content">
+            <div
+                onClick={(e) => expandContent(e.currentTarget)}
+                className="py-2 cursor-pointer flex justify-between items-center gap-2 border-b border-[rgb(85,85,85)] active:bg-gray-500/10"
+            >
+                <WikiRenderer block={block[0]} />
+                <span className="text-[1.3em]"><i className="child fa-solid fa-angle-down"></i></span>
+            </div>
+            <div className="child hidden pt-2">
+                {block.map((subBlock: any, subIndex: number) => {
+                    if (!isArray(subBlock) && subBlock.type !== "gen-heading-type") return (
+                        <WikiRenderer key={subIndex} block={subBlock} />
+                    );
+                    else if (isArray(subBlock) && checkType(subBlock, "ib")) return (
+                        <InfoboxParser key={subIndex} block={subBlock} index={subIndex} />
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
+
+export function InfoboxParser({ block, index }: InfoboxProps): React.JSX.Element {
+    const getIBSubheadings = useMemo<number[]>(() => {
+        const subheadings: number[] = [];
+        for (let pos: number = 0; pos < block.length; pos++) {
+            if (block[pos].type === "ib-subheading-type") subheadings.push(pos);
+        }
+        return subheadings;
+    }, [block]);
+
+    const setFullMode = (event: HTMLButtonElement, className: string): void => {
+        const infoboxChild: NodeListOf<Element> = document.querySelectorAll(`.${className}`);
+        infoboxChild.forEach((child: Element) => {
+            const isExpand: boolean = child.classList.contains("table-row");
+            child.classList.replace(isExpand ? "table-row" : "hidden", !isExpand ? "table-row" : "hidden");
+            event.children[0].textContent = !isExpand ? "Collapse" : "Expand";
+        });
+    }
+
+    return (
+        <table
+            width="100%"
+            className="mb-5 p-3 border-separate border border-[rgb(85,85,85)] bg-infobox-bg"
+        >
+            <tbody>
+                {block.map((subBlock: any, subIndex: number) => (
+                    <tr
+                        key={subIndex}
+                        className={`table-row ${getIBSubheadings.length > 1 && subIndex >= getIBSubheadings[1] ? `more-${index}` : ""}`}
+                    >
+                        <td>
+                            <WikiRenderer block={subBlock} />
+                        </td>
+                    </tr>
+                ))}
+                {getIBSubheadings.length > 1 && (
+                    <tr>
+                        <td>
+                            <div className="w-full mt-3 font-sans flex justify-center items-center hover:bg-gray-300/30">
+                                <button
+                                    onClick={(e) => setFullMode(e.currentTarget, `more-${index}`)}
+                                    className="w-full p-1 cursor-pointer border-none bg-transparent"
+                                >
+                                    <span className="px-1 font-semibold border-l border-r">Collapse</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                )}
+                <tr>
+                    <td>
+                        <div className="py-1 font-['Inter'] text-[14px] flex justify-between items-center border-t border-[rgb(85,85,85)]">
+                            <span>Infobox</span>
+                            <span className="p-0.5 rounded-[100%] scale-[-55%] text-white bg-blue-500"><i className="fa-solid fa-info ml-auto"></i></span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    );
+}

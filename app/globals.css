@@ -1,26 +1,61 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+    --foreground: #000000;
+    --background: #ebe1d2;
+    --link: #5c92ff;
+    --list-bg: #e3d3bc;
+    --infobox-bg: #ffffff4d;
+    --form-bg: #ffffff80;
+    --menu-form-bg: #ffffff;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+    --font-basic: var(--font-inter);
+    --font-montserrat: var(--font-montserrat);
+    --font-historical: "Times New Roman", Times, serif;
+
+    --color-foreground: var(--foreground);
+    --color-background: var(--background);
+    --color-border: rgba(85, 85, 85, 1);
+    --color-link: var(--link);
+
+    --color-list-bg: var(--list-bg);
+    --color-infobox-bg: var(--infobox-bg);
+    --color-form-bg: var(--form-bg);
+    --color-menu-form-bg: var(--menu-form-bg);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.theme-bright {
+    --foreground: #171717;
+    --background: #ebe1d2;
+    --list-bg: #d2cdaf;
+    --infobox-bg: #ffffff4d;
+    --form-bg: #ffffff80;
+    --menu-form-bg: #ffffff;
+}
+
+.theme-dark {
+    --foreground: #ffffff;
+    --background: #141e32;
+    --list-bg: #232d41;
+    --infobox-bg: #3741504d;
+    --form-bg: #37415180;
+    --menu-form-bg: #364153;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--font-basic), Helvetica, sans-serif;
+    color: var(--foreground);
+    background-color: var(--background);
+}
+
+img {
+    image-rendering: pixelated;
+}
+
+.highlight {
+    padding: 0 5px;
+    box-decoration-break: clone;
+    background: linear-gradient(to top, rgba(180, 180, 180, 0.7) 50%, rgba(0, 0, 0, 0) 0);
 }
