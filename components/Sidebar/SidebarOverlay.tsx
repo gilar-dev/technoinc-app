@@ -1,4 +1,4 @@
-"use client";
+"use client"; // Client-side rendering directive for Next.js
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 
@@ -7,7 +7,7 @@ export function SidebarOverlay() {
 
     return (
         <div
-            className={`w-full h-full absolute ${isOpen ? "block" : "hidden"} backdrop-blur-[5px] bg-black/30`}
+            className={`w-full h-screen absolute ${isOpen ? "block" : "hidden"} backdrop-blur-[5px] bg-black/30`}
             onClick={() => closeSidebar()}
         ></div>
     );
