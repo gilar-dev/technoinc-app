@@ -1,4 +1,4 @@
-"use client";
+"use client"; // Client-side rendering directive for Next.js
 
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
