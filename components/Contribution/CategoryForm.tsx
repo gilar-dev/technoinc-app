@@ -39,7 +39,7 @@ export default function CategoryForm() {
         const fetchData = async () => {
             setIsLoading(true);
             try {
-                const API_URL = process.env.NEXT_PUBLIC_TECHNOINC_BACKEND_API;
+                const API_URL = process.env.NEXT_PUBLIC_TECHNOINC_BACKEND_API!;
                 const response = await fetch(`${API_URL}/api/v1/wiki/category/search/${debounceQuery}`, { cache: "no-store" });
                 if (!response.ok) throw new Error(`Error when fetching data: ${response}`);
                 const result: FetchResult = await response.json();
@@ -116,8 +116,7 @@ export default function CategoryForm() {
                                         onClick={async () => {
                                             if (createCategory.create) {
                                                 const process = await dbCreateCategory(createCategory.createInput, category.category);
-                                                if (!process) setCategoryForm({ ...categoryForm, isOpen: false });
-                                                setData({ ...data, category: [...data.category, createCategory.createInput] });
+                                                if (process) setData({ ...data, category: [...data.category, createCategory.createInput] });
                                                 setCategoryForm({ ...categoryForm, isOpen: false });
                                                 return;
                                             }

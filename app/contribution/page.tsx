@@ -19,7 +19,7 @@ export default function ContributionPage() {
                 <Sidebar />
             </div>
             <div className="overflow-auto md:w-[75%]">
-                <Menubar title="Contribution - Create new article" />
+                <Menubar title="Contribution" />
                 <div>
                     <ArticleForm />
                 </div>

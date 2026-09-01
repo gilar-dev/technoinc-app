@@ -36,17 +36,18 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
         if (isOpen) closeSidebar();
         if (!contentTarget) return;
         if (!subContent) {
+            //  If it's a main content heading, scroll to it directly
             contentTarget.scrollIntoView({ behavior: "smooth", block: "start" });
             return;
         }
         const contentContainer = contentTarget.closest(".content");
         if (!contentContainer) return;
         const targets = contentContainer.getElementsByClassName("child");
-        if (targets.length === 0 || targets && targets[1].classList.contains("block")) {
-            targets[0].classList.replace("fa-angle-down", "fa-angle-up");
-            targets[1].classList.replace("hidden", "block");
+        if (targets[1].classList.contains("block")) {
+            // Check if the second target is visible (has the "block" class)
             contentTarget.scrollIntoView({ behavior: "smooth", block: "start" });
         } else {
+            // If the second target is not visible, toggle the classes to show it and scroll to the content
             targets[0].classList.replace("fa-angle-down", "fa-angle-up");
             targets[1].classList.replace("hidden", "block");
             contentTarget.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -71,8 +72,10 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
             if (viewportWidth > 768) closeSidebar();
         }
 
+        // Add event listener for window resize to handle sidebar behavior on larger screens
         window.addEventListener("resize", resizeEventHandler);
         return () => {
+            // Clean up the event listener when the component unmounts or when isOpen changes
             window.removeEventListener("resize", resizeEventHandler);
         }
     }, [isOpen]);
@@ -81,7 +84,7 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
         <aside
             ref={sidebarRef}
             className={`
-                w-[75%] h-full px-3 py-5 overflow-hidden font-basic flex-col gap-5 fixed z-1 border-r
+                w-[75%] h-screen px-3 py-5 overflow-hidden font-basic flex-col gap-5 fixed z-1 border-r
                 border-border text-foreground bg-background -translate-x-full transition-transform duration-150 ease-in-out
                 md:w-full md:relative md:translate-x-0
                 ${isOpen ? "translate-x-0" : ""}
@@ -106,11 +109,11 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
                     className="p-2 cursor-pointer flex justify-between items-center rounded-[10px] bg-list-bg peer-checked:[&>*:last-child]:rotate-180"
                 >
                     <span className="font-light">Main groups</span>
-                    <span className="transition-transform duration-150 ease-in-out"><i className="fa-solid fa-angle-down"></i></span>
+                    <span className="transition-transform duration-150 ease-in-out"><i className="fa-solid fa-angle-up"></i></span>
                 </label>
                 <div className="max-h-40 overflow-hidden peer-checked:max-h-0 peer-checked:p-0 transition-[max-height] duration-150 ease-in-out">
                     <ul className="m-3 flex flex-col gap-3">
-                        {mainGroupLists.map((group: string, index: number) => (
+                        {mainGroupLists.map((group, index) => (
                             <li
                                 key={`group-${index}`}
                                 className="cursor-pointer rounded-[5px] hover:bg-foreground/5"
@@ -133,7 +136,7 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
                     className="p-2 cursor-pointer flex justify-between items-center rounded-[10px] bg-list-bg peer-checked:[&>*:last-child]:rotate-180"
                 >
                     <span className="font-light">Featured</span>
-                    <span className="transition-transform duration-150 ease-in-out"><i className="fa-solid fa-angle-down"></i></span>
+                    <span className="transition-transform duration-150 ease-in-out"><i className="fa-solid fa-angle-up"></i></span>
                 </label>
                 <div className="max-h-40 overflow-hidden peer-checked:max-h-0 peer-checked:p-0 transition-[max-height] duration-150 ease-in-out">
                     <ul className="m-3 flex flex-col gap-3 [&>li]:cursor-pointer [&>li]:rounded-[5px] [&>li]:hover:bg-foreground/5">
@@ -169,7 +172,7 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
                         className="p-2 cursor-pointer flex justify-between items-center rounded-[10px] bg-list-bg peer-checked:[&>*:last-child]:rotate-180"
                     >
                         <span>Contents</span>
-                        <span className="transition-transform duration-150 ease-in-out"><i className="fa-solid fa-angle-down"></i></span>
+                        <span className="transition-transform duration-150 ease-in-out"><i className="fa-solid fa-angle-up"></i></span>
                     </label>
                     <div className="max-h-96 overflow-hidden peer-checked:max-h-0 peer-checked:p-0 transition-[max-height] duration-150 ease-in-out [&_ul]:pl-3">
                         <ul className="m-3 flex flex-col gap-1 [&_a]:cursor-pointer [&_a]:rounded-[5px] [&_a]:hover:bg-foreground/5">

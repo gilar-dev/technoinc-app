@@ -1,12 +1,11 @@
 import TextParser from "./TextParser";
-import { JSX } from "react/jsx-runtime";
-import "@/app/globals.css";
+import type { CSON } from "@/utils/typeUtils";
 
-interface PropTypes {
-    block: Record<string, any>;
+interface WikiRendererProps {
+    block: CSON;
 }
 
-export default function WikiRenderer({ block }: PropTypes): JSX.Element {
+export default function WikiRenderer({ block }: WikiRendererProps) {
     switch (block.type) {
         // General content block types
         case "gen-heading-type":
@@ -39,7 +38,7 @@ export default function WikiRenderer({ block }: PropTypes): JSX.Element {
                     <div className="min-w-[60%] max-w-[90%] max-h-[22em] p-1 flex flex-col items-center gap-1">
                         <div className="overflow-hidden cursor-pointer relative">
                             <img
-                                src={block.src || null}
+                                src={block.src || undefined}
                                 alt={block.description}
                                 className="w-full transition-transform ease-in-out duration-500 hover:scale-[110%]"
                             />

@@ -1,4 +1,4 @@
-"use client";
+"use client"; // Client-side rendering directive for Next.js
 
 import Link from "next/link";
 import { useTheme } from "next-themes";
@@ -30,8 +30,10 @@ export default function Menubar({ title = "" }: MenubarProps) {
             }
         };
 
+        // Add scroll event listener to the parent element to handle padding changes on scroll
         parentElement.addEventListener("scroll", parentScrollHandle);
         return () => {
+            // Clean up the event listener when the component unmounts
             parentElement.removeEventListener("scroll", parentScrollHandle);
         }
     }, []);
@@ -57,9 +59,9 @@ export default function Menubar({ title = "" }: MenubarProps) {
             </div>
             <div className="font-montserrat">
                 <h2 className="font-bold">
-                    {title !== "" ? title : "TechnoInc Wiki MC"}
+                    {title.trim() ? title : "TechnoInc Wiki MC"}
                 </h2>
-                {title !== "" && (
+                {title.trim() && (
                     <span className="font-semibold text-[0.75em]">TechnoInc MC Wiki</span>
                 )}
             </div>

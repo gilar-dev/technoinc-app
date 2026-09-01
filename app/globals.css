@@ -58,5 +58,21 @@ img {
 .highlight {
     padding: 0 5px;
     box-decoration-break: clone;
-    background: linear-gradient(to top, rgba(180, 180, 180, 0.7) 50%, rgba(0, 0, 0, 0) 0);
+    background: linear-gradient(to top, #b4b4b4b3 50%, #00000000 0);
+}
+
+@keyframes fadeIn {
+    0% {
+        bottom: 0;
+    }
+
+    10%,
+    90% {
+        bottom: 35%;
+    }
+
+    100% {
+        bottom: 0;
+        display: none;
+    }
 }

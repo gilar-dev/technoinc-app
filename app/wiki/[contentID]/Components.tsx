@@ -2,7 +2,7 @@
 
 interface ArticleTitleProps {
     title: string;
-    description: string | undefined;
+    description: string;
 }
 
 export function HeadingHolder({ title, description }: ArticleTitleProps) {
@@ -29,6 +29,14 @@ export function HeadingHolder({ title, description }: ArticleTitleProps) {
                     </ul>
                 </nav>
             </div>
+        </div>
+    );
+}
+
+export function RedirectNotice({ redirectedURL }: { redirectedURL: string }) {
+    return (
+        <div className="p-3 fixed left-[50%] bottom-0 rounded-[3px] text-foreground bg-menu-form-bg translate-x-[-50%] translate-y-full animate-[fadeIn_4.5s_ease-in-out_forwards]">
+            <p className="text-[0.9em] text-center">Redirected from '<strong>{redirectedURL.replaceAll("_", " ")}</strong>'</p>
         </div>
     );
 }
