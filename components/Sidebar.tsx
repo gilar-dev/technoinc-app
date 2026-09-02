@@ -35,14 +35,19 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
         window.history.pushState(null, "", `#${contentID}`);
         if (isOpen) closeSidebar();
         if (!contentTarget) return;
-        if (!subContent) {
-            //  If it's a main content heading, scroll to it directly
-            contentTarget.scrollIntoView({ behavior: "smooth", block: "start" });
-            return;
-        }
         const contentContainer = contentTarget.closest(".content");
         if (!contentContainer) return;
         const targets = contentContainer.getElementsByClassName("child");
+        if (!subContent) {
+            // If it's a main content heading, toggle the visibility of its child elements
+            if (targets[1].classList.contains("hidden")) {
+                targets[0].classList.replace("fa-angle-down", "fa-angle-up");
+                targets[1].classList.replace("hidden", "block");
+            }
+            // Scroll to the main content heading
+            contentTarget.scrollIntoView({ behavior: "smooth", block: "start" });
+            return;
+        }
         if (targets[1].classList.contains("block")) {
             // Check if the second target is visible (has the "block" class)
             contentTarget.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -84,13 +89,13 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
         <aside
             ref={sidebarRef}
             className={`
-                w-[75%] h-screen px-3 py-5 overflow-hidden font-basic flex-col gap-5 fixed z-1 border-r
+                w-[75%] h-screen px-3 pb-5 overflow-x-hidden overflow-y-auto font-basic flex-col gap-5 fixed z-1 border-r
                 border-border text-foreground bg-background -translate-x-full transition-transform duration-150 ease-in-out
                 md:w-full md:relative md:translate-x-0
                 ${isOpen ? "translate-x-0" : ""}
             `}
         >
-            <div className="mb-5 flex justify-between items-center text-foreground">
+            <div className="mb-1 py-5 flex justify-between items-center sticky top-0 border-b border-border text-foreground bg-background">
                 <span className="font-montserrat font-bold text-[0.9em]">TechnoInc MC Wiki</span>
                 <span className="text-[1.2em] md:hidden">
                     <button
@@ -102,7 +107,7 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
                 </span>
             </div>
             {/* Main groups */}
-            <div className="mb-5">
+            <div className={`mb-5 ${selectedGroup.isSelected ? "hidden" : "block"}`}>
                 <input id="main-group-label" type="checkbox" className="peer hidden" />
                 <label
                     htmlFor="main-group-label"
@@ -129,7 +134,7 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
                 </div>
             </div>
             {/* Featured */}
-            <div className="mb-5">
+            <div className={`mb-5 ${selectedGroup.isSelected ? "hidden" : "block"}`}>
                 <input id="featured-label" type="checkbox" className="peer hidden" />
                 <label
                     htmlFor="featured-label"
@@ -165,7 +170,7 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
             </div>
             {/* Dynamic content list */}
             {contentHeadings && (
-                <div className="mb-5">
+                <div className={`mb-5 ${selectedGroup.isSelected ? "hidden" : "block"}`}>
                     <input id="content-label" type="checkbox" className="peer hidden" />
                     <label
                         htmlFor="content-label"

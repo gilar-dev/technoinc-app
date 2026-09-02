@@ -12,7 +12,7 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
             return (
                 <h1
                     id={block.heading.replaceAll(" ", "_")}
-                    className="font-historical font-medium text-[26px]"
+                    className="scroll-mt-20 font-historical font-medium text-[26px]"
                 >
                     {block.heading}
                 </h1>
@@ -21,7 +21,7 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
             return (
                 <h2
                     id={block.subheading.replaceAll(" ", "_")}
-                    className="mb-2 font-['Inter'] font-semibold text-[18px]"
+                    className="scroll-mt-20 mb-2 font-['Inter'] font-semibold text-[18px]"
                 >
                     {block.subheading}
                 </h2>
@@ -83,12 +83,12 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
         case "ib-image-type":
             return (
                 <div className="whitespace-pre-wrap flex justify-center items-center">
-                    <div className="p-1 flex flex-col items-center gap-1">
-                        <div className="overflow-hidden cursor-pointer relative">
+                    <div className="p-1 flex flex-col items-center gap-1 md:p-3">
+                        <div className="min-w-[50vw] max-w-full overflow-hidden cursor-pointer relative md:min-w-[25vw]">
                             <img
                                 src={block.src || null}
                                 alt={block.description}
-                                className="min-w-[50vw] max-w-full transition-transform ease-in-out duration-500 hover:scale-[110%]"
+                                className="w-full transition-transform ease-in-out duration-500 hover:scale-[110%]"
                             />
                             <span className="p-1.25 text-[10px] absolute bottom-2 right-2 self-end rounded-full text-white bg-black/50">
                                 <i className="fa-regular fa-clone"></i>

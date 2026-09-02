@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import ThemeProvider from "@/contexts/ThemeProvider";
 import SidebarProvider from "@/contexts/SidebarProvider";
@@ -14,6 +14,10 @@ const montserrat = Montserrat({
     variable: "--font-montserrat",
     subsets: ["latin"]
 });
+
+export const viewport: Viewport = {
+    themeColor: "background"
+};
 
 export const metadata: Metadata = {
     title: "TechnoInc MC Wiki",

@@ -1,11 +1,10 @@
 "use client"; // Client-side rendering directive for Next.js
 
-import { useMemo } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import WikiRenderer from "@/components/Jhuloid/WikiRenderer";
 
 interface PrimaryProps {
     block: Record<string, any>[];
-    index: number;
     expandContent: (event: HTMLDivElement) => void;
 }
 
@@ -14,13 +13,26 @@ interface InfoboxProps {
     index: number;
 }
 
-export function PrimaryParser({ block, index, expandContent }: PrimaryProps): React.JSX.Element {
+export function PrimaryParser({ block, expandContent }: PrimaryProps): React.JSX.Element {
+    const [isMounted, setIsMounted] = useState<boolean>(false);
+    const contentRef = useRef<HTMLDivElement | null>(null);
     const isArray = (content: any): boolean => {
         return Array.isArray(content);
     }
     const checkType = (content: Record<string, any>[], type: string): boolean => {
         return content.some((item: Record<string, any>) => item.type.includes(type));
     }
+
+    useEffect(() => {
+        setIsMounted(true);
+        if (isMounted && contentRef.current) {
+            const windowWidth = window.innerWidth;
+            if (windowWidth >= 768) {
+                contentRef.current.classList.remove("md:block");
+                contentRef.current.classList.replace("hidden", "block");
+            }
+        }
+    }, [isMounted]);
 
     return (
         <div className="content">
@@ -31,7 +43,7 @@ export function PrimaryParser({ block, index, expandContent }: PrimaryProps): Re
                 <WikiRenderer block={block[0]} />
                 <span className="text-[1.3em]"><i className="child fa-solid fa-angle-down"></i></span>
             </div>
-            <div className="child hidden pt-2">
+            <div ref={contentRef} className="child pt-2 hidden md:block">
                 {block.map((subBlock: any, subIndex: number) => {
                     if (!isArray(subBlock) && subBlock.type !== "gen-heading-type") return (
                         <WikiRenderer key={subIndex} block={subBlock} />
@@ -66,7 +78,7 @@ export function InfoboxParser({ block, index }: InfoboxProps): React.JSX.Element
     return (
         <table
             width="100%"
-            className="mb-5 p-3 border-separate border border-[rgb(85,85,85)] bg-infobox-bg"
+            className="mb-5 p-3 border-separate border border-border bg-infobox-bg md:w-[10%] md:float-right md:clear-right md:ml-3"
         >
             <tbody>
                 {block.map((subBlock: any, subIndex: number) => (

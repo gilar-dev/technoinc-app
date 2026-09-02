@@ -28,7 +28,7 @@ export default function Jhuloid({ articleData }: JhuloidProps) {
                     <WikiRenderer key={index} block={block} />
                 );
                 else if (block[0].type === "gen-heading-type") return (
-                    <PrimaryParser key={index} index={index} block={block} expandContent={expandContent} />
+                    <PrimaryParser key={index} block={block} expandContent={expandContent} />
                 );
                 else if (block[0].type.includes("ib")) return (
                     <InfoboxParser key={index} block={block} index={index} />

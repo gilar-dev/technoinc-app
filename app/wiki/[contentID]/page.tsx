@@ -36,14 +36,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 export default async function WikiPage({ params }: Params) {
     const { contentID } = await params;
     const cookieStore = await cookies();
-    const redirectedURL = cookieStore.get("redirected")?.value;
+    const redirectedURL = cookieStore.get("x-user-previous-url")?.value;
     const reformatURI = decodeURIComponent(contentID).replace(/(_+)|( +)/g, "_");
     const cleanContentID = reformatURI.replaceAll("_", " ");
     const articleData = await dbGetArticleData(reformatURI);
 
-    console.log(redirectedURL);
-
     if (articleData) {
+        console.log(articleData.title, redirectedURL);
         // Redirect to the correct URL if the contentID in the URL does not match the article title
         if (decodeURIComponent(contentID) !== reformatURI || articleData.title !== cleanContentID) {
             redirect(`/wiki/${articleData.title.replaceAll(" ", "_")}`, "replace");
@@ -69,7 +68,9 @@ export default async function WikiPage({ params }: Params) {
                     }
                 </div>
             </div>
-            {redirectedURL && (<RedirectNotice redirectedURL={redirectedURL} />)}
+            {articleData && redirectedURL && articleData.title !== redirectedURL.replaceAll("_", " ") && (
+                <RedirectNotice redirectedURL={redirectedURL} />
+            )}
         </div>
     );
 }
