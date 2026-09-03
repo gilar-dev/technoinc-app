@@ -6,14 +6,16 @@ import WikiRenderer from "@/components/Jhuloid/WikiRenderer";
 interface PrimaryProps {
     block: Record<string, any>[];
     expandContent: (event: HTMLDivElement) => void;
+    existingLinks?: string[];
 }
 
 interface InfoboxProps {
     block: Record<string, any>[];
     index: number;
+    existingLinks?: string[];
 }
 
-export function PrimaryParser({ block, expandContent }: PrimaryProps): React.JSX.Element {
+export function PrimaryParser({ block, expandContent, existingLinks = [] }: PrimaryProps): React.JSX.Element {
     const [isMounted, setIsMounted] = useState<boolean>(false);
     const contentRef = useRef<HTMLDivElement | null>(null);
     const isArray = (content: any): boolean => {
@@ -40,7 +42,7 @@ export function PrimaryParser({ block, expandContent }: PrimaryProps): React.JSX
                 onClick={(e) => expandContent(e.currentTarget)}
                 className="py-2 cursor-pointer flex justify-between items-center gap-2 border-b border-[rgb(85,85,85)] active:bg-gray-500/10"
             >
-                <WikiRenderer block={block[0]} />
+                <WikiRenderer block={block[0]} existingLinks={existingLinks} />
                 <span className="text-[1.3em]"><i className="child fa-solid fa-angle-down"></i></span>
             </div>
             <div ref={contentRef} className="child pt-2 hidden md:block">
@@ -57,7 +59,7 @@ export function PrimaryParser({ block, expandContent }: PrimaryProps): React.JSX
     );
 }
 
-export function InfoboxParser({ block, index }: InfoboxProps): React.JSX.Element {
+export function InfoboxParser({ block, index, existingLinks = [] }: InfoboxProps): React.JSX.Element {
     const getIBSubheadings = useMemo<number[]>(() => {
         const subheadings: number[] = [];
         for (let pos: number = 0; pos < block.length; pos++) {
@@ -78,7 +80,7 @@ export function InfoboxParser({ block, index }: InfoboxProps): React.JSX.Element
     return (
         <table
             width="100%"
-            className="mb-5 p-3 border-separate border border-border bg-infobox-bg md:w-[10%] md:float-right md:clear-right md:ml-3"
+            className="mb-5 p-3 border-separate border border-border bg-infobox-bg md:w-[10%] md:float-right md:clear-right md:ml-5"
         >
             <tbody>
                 {block.map((subBlock: any, subIndex: number) => (
@@ -87,7 +89,7 @@ export function InfoboxParser({ block, index }: InfoboxProps): React.JSX.Element
                         className={`table-row ${getIBSubheadings.length > 1 && subIndex >= getIBSubheadings[1] ? `more-${index}` : ""}`}
                     >
                         <td>
-                            <WikiRenderer block={subBlock} />
+                            <WikiRenderer block={subBlock} existingLinks={existingLinks} />
                         </td>
                     </tr>
                 ))}

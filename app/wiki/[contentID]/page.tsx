@@ -6,7 +6,8 @@ import Sidebar from "@/components/Sidebar";
 import Jhuloid from "@/components/Jhuloid/Jhuloid";
 import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
 import { HeadingHolder, RedirectNotice } from "./Components";
-import { dbGetArticleData } from "@/utils/databaseutils";
+import { getLinks } from "@/utils/parserUtils";
+import { dbGetArticleData, dbGetExistingLinks } from "@/utils/databaseutils";
 
 interface Params {
     params: Promise<{ contentID: string }>;
@@ -40,9 +41,10 @@ export default async function WikiPage({ params }: Params) {
     const reformatURI = decodeURIComponent(contentID).replace(/(_+)|( +)/g, "_");
     const cleanContentID = reformatURI.replaceAll("_", " ");
     const articleData = await dbGetArticleData(reformatURI);
+    const links = articleData ? getLinks(articleData.wiki_content) : [];
+    const existingLinks = await dbGetExistingLinks(links);
 
     if (articleData) {
-        console.log(articleData.title, redirectedURL);
         // Redirect to the correct URL if the contentID in the URL does not match the article title
         if (decodeURIComponent(contentID) !== reformatURI || articleData.title !== cleanContentID) {
             redirect(`/wiki/${articleData.title.replaceAll(" ", "_")}`, "replace");
@@ -51,11 +53,11 @@ export default async function WikiPage({ params }: Params) {
 
     return (
         <div className="w-full h-screen overflow-hidden flex flex-col relative md:flex-row">
-            <div className="z-2 md:w-[25%]">
+            <div className="z-2 md:w-[25%] xl:w-[20%]">
                 <SidebarOverlay />
                 <Sidebar contents={articleData?.wiki_content} />
             </div>
-            <div className="overflow-auto md:w-[75%]">
+            <div className="overflow-auto md:w-[75%] xl:w-[80%]">
                 <Menubar title={articleData ? articleData.title : cleanContentID} />
                 <HeadingHolder
                     title={articleData ? articleData.title : cleanContentID}
@@ -63,7 +65,10 @@ export default async function WikiPage({ params }: Params) {
                 />
                 <div className="lg:px-7">
                     {articleData
-                        ? (<Jhuloid articleData={articleData} />)
+                        ? (<Jhuloid
+                            articleData={articleData}
+                            existingLinks={existingLinks}
+                        />)
                         : (<div className="p-3"><p>Sorry, we have no article for that yet.</p></div>)
                     }
                 </div>

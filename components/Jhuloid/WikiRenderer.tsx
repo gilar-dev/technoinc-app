@@ -3,9 +3,10 @@ import type { CSON } from "@/utils/typeUtils";
 
 interface WikiRendererProps {
     block: CSON;
+    existingLinks?: string[];
 }
 
-export default function WikiRenderer({ block }: WikiRendererProps) {
+export default function WikiRenderer({ block, existingLinks = [] }: WikiRendererProps) {
     switch (block.type) {
         // General content block types
         case "gen-heading-type":
@@ -29,7 +30,7 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
         case "gen-paragraph-type":
             return (
                 <p className="mb-3 font-['Inter'] font-normal text-[15px] leading-relaxed whitespace-pre-wrap">
-                    <TextParser content={block.text} />
+                    <TextParser content={block.text} existingLinks={existingLinks} />
                 </p>
             );
         case "gen-image-type":
@@ -46,7 +47,7 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
                                 <i className="fa-regular fa-clone"></i>
                             </span>
                         </div>
-                        <TextParser content={block.description} style="font-[400] text-[.75em] tracking-wide" />
+                        <TextParser content={block.description} style="font-[400] text-[.75em] tracking-wide" existingLinks={existingLinks} />
                     </div>
                 </div>
             );
@@ -54,7 +55,7 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
         case "ib-heading-type":
             return (
                 <div className="font-['Inter'] font-medium text-[1.25em] text-center whitespace-pre-wrap">
-                    <TextParser content={block.heading} />
+                    <TextParser content={block.heading} existingLinks={existingLinks} />
                 </div>
             );
         case "ib-subheading-type":
@@ -70,12 +71,12 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
                 <div className="py-1 font-['Inter'] flex justify-between gap-3">
                     <div className="w-full">
                         <h5 className="font-['Inter'] text-[0.9em] font-bold whitespace-pre-wrap">
-                            <TextParser content={block.head} />
+                            <TextParser content={block.head} existingLinks={existingLinks} />
                         </h5>
                     </div>
                     <div className="w-full">
                         <div className="font-['Inter'] text-[0.9em] leading-relaxed whitespace-pre-wrap">
-                            <TextParser content={block.data} />
+                            <TextParser content={block.data} existingLinks={existingLinks} />
                         </div>
                     </div>
                 </div>
@@ -94,7 +95,7 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
                                 <i className="fa-regular fa-clone"></i>
                             </span>
                         </div>
-                        <TextParser content={block.description} style="font-[400] text-[0.85em] tracking-wide" />
+                        <TextParser content={block.description} style="font-[400] text-[0.85em] tracking-wide" existingLinks={existingLinks} />
                     </div>
                 </div>
             );

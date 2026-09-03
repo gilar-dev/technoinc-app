@@ -1,4 +1,4 @@
-import { Content, Schema } from "./typeUtils";
+import { Schema } from "./typeUtils";
 
 export function getContents(schema: Schema | undefined): (string | string[])[] | undefined {
     if (!schema) return;
@@ -17,6 +17,23 @@ export function getContents(schema: Schema | undefined): (string | string[])[] |
     if (subheadings.length > 0) { headings.push(subheadings); subheadings = []; }
     
     return headings.length > 0 ? headings : undefined;
+}
+
+export function getLinks(schema: Schema) {
+    const links: string[] = [];
+    const stringifySchema = JSON.stringify(schema);
+    const regex = /<link:(.*?)#(.*?)>/g;
+    const matches = stringifySchema.match(regex);
+    if (matches) {
+        matches.forEach((match) => {
+            const url = match.split("#")[1]?.slice(0, -1);
+            if (url) {
+                const linkUrl = url.split("/")[2];
+                if (!links.includes(linkUrl)) links.push(linkUrl.replaceAll("_", " "));
+            }
+        });
+    }
+    return links;
 }
 
 export function contentGrouper(content: Schema): Record<string, any>[] {

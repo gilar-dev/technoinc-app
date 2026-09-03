@@ -1,9 +1,10 @@
 interface PropTypes {
     content: string;
     style?: string;
+    existingLinks?: string[];
 }
 
-export default function TextParser({ content, style = "" }: PropTypes) {
+export default function TextParser({ content, style = "", existingLinks = [] }: PropTypes) {
     const parsedText = (content: string): any => {
         if (!content) return [];
 
@@ -49,7 +50,7 @@ export default function TextParser({ content, style = "" }: PropTypes) {
                         key={`l-${index}`}
                         href={linkUrl} target={linkUrl.startsWith("http") ? "_blank" : "_self"}
                         rel="noopener nooferrer"
-                        className="font-medium text-link hover:underline"
+                        className={`font-medium ${existingLinks.includes(linkUrl.split("/")[2]) ? "text-link" : "text-red-400"} hover:underline`}
                     >
                         {parsedText(linkLabel)}
                     </a>

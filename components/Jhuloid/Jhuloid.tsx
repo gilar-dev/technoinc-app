@@ -8,9 +8,10 @@ import { Content } from "@/utils/typeUtils";
 
 interface JhuloidProps {
     articleData: ArticleData;
+    existingLinks?: string[];
 }
 
-export default function Jhuloid({ articleData }: JhuloidProps) {
+export default function Jhuloid({ articleData, existingLinks = [] }: JhuloidProps) {
     const contents: (Content | Content[])[] = contentGrouper(articleData.wiki_content);
     const expandContent = (event: HTMLDivElement): void => {
         const target = event.nextElementSibling;
@@ -25,13 +26,27 @@ export default function Jhuloid({ articleData }: JhuloidProps) {
         <main className="p-3 mb-5">
             {contents.map((block, index) => {
                 if (!Array.isArray(block)) return (
-                    <WikiRenderer key={index} block={block} />
+                    <WikiRenderer
+                        key={index}
+                        block={block}
+                        existingLinks={existingLinks}
+                    />
                 );
                 else if (block[0].type === "gen-heading-type") return (
-                    <PrimaryParser key={index} block={block} expandContent={expandContent} />
+                    <PrimaryParser
+                        key={index}
+                        block={block}
+                        expandContent={expandContent}
+                        existingLinks={existingLinks}
+                    />
                 );
                 else if (block[0].type.includes("ib")) return (
-                    <InfoboxParser key={index} block={block} index={index} />
+                    <InfoboxParser
+                        key={index}
+                        block={block}
+                        index={index}
+                        existingLinks={existingLinks}
+                    />
                 );
             })}
         </main>

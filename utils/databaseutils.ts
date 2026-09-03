@@ -39,3 +39,19 @@ export async function dbCreateCategory(category: string, parent: string): Promis
         console.error(error);
     }
 }
+
+export async function dbGetExistingLinks(links: string[]): Promise<string[] | undefined> {
+    try {
+        const API_URL = process.env.NEXT_PUBLIC_TECHNOINC_BACKEND_API!;
+        const response = await fetch(`${API_URL}/api/v1/wiki/check-links`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ links: links })
+        });
+        if (!response.ok) throw new Error("Failed to check existing links");
+        const result = await response.json();
+        return result.existing.map((link: string) => link.replaceAll(" ", "_"));
+    } catch (error) {
+        console.error(error);
+    }
+}

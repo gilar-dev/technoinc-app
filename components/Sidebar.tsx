@@ -90,7 +90,7 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
             ref={sidebarRef}
             className={`
                 w-[75%] h-screen px-3 pb-5 overflow-x-hidden overflow-y-auto font-basic flex-col gap-5 fixed z-1 border-r
-                border-border text-foreground bg-background -translate-x-full transition-transform duration-150 ease-in-out
+                border-border text-foreground bg-background-bg -translate-x-full transition-transform duration-150 ease-in-out
                 md:w-full md:relative md:translate-x-0
                 ${isOpen ? "translate-x-0" : ""}
             `}
