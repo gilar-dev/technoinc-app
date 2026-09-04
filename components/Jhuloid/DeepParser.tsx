@@ -48,7 +48,7 @@ export function PrimaryParser({ block, expandContent, existingLinks = [] }: Prim
             <div ref={contentRef} className="child pt-2 hidden md:block">
                 {block.map((subBlock: any, subIndex: number) => {
                     if (!isArray(subBlock) && subBlock.type !== "gen-heading-type") return (
-                        <WikiRenderer key={subIndex} block={subBlock} />
+                        <WikiRenderer key={subIndex} block={subBlock} existingLinks={existingLinks} />
                     );
                     else if (isArray(subBlock) && checkType(subBlock, "ib")) return (
                         <InfoboxParser key={subIndex} block={subBlock} index={subIndex} />
