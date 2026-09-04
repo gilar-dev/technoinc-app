@@ -46,7 +46,7 @@ export function PrimaryParser({ block, expandContent }: PrimaryProps): React.JSX
             <div ref={contentRef} className="child pt-2 hidden md:block">
                 {block.map((subBlock: any, subIndex: number) => {
                     if (!isArray(subBlock) && subBlock.type !== "gen-heading-type") return (
-                        <WikiRenderer key={subIndex} block={subBlock} existingLinks={existingLinks} />
+                        <WikiRenderer key={subIndex} block={subBlock} />
                     );
                     else if (isArray(subBlock) && checkType(subBlock, "ib")) return (
                         <InfoboxParser key={subIndex} block={subBlock} index={subIndex} />
