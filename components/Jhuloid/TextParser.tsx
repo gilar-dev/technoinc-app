@@ -1,10 +1,15 @@
+"use client"; // Client-side rendering directive for Next.js
+
+import { useJhuloid } from "./Jhuloid";
+
 interface PropTypes {
     content: string;
     style?: string;
-    existingLinks?: string[];
 }
 
-export default function TextParser({ content, style = "", existingLinks = [] }: PropTypes) {
+export default function TextParser({ content, style = "" }: PropTypes) {
+    const { existingLinks } = useJhuloid();
+
     const parsedText = (content: string): any => {
         if (!content) return [];
 

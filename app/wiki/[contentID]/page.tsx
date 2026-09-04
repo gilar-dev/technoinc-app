@@ -73,9 +73,11 @@ export default async function WikiPage({ params }: Params) {
                     }
                 </div>
             </div>
-            {articleData && redirectedURL && articleData.title !== redirectedURL.replaceAll("_", " ") && (
-                <RedirectNotice redirectedURL={redirectedURL} />
-            )}
+            {articleData && redirectedURL
+                && articleData.title.toLowerCase() === redirectedURL.replaceAll("_", " ").toLowerCase()
+                && articleData.title !== redirectedURL.replaceAll("_", " ") && (
+                    <RedirectNotice redirectedURL={redirectedURL} />
+                )}
         </div>
     );
 }

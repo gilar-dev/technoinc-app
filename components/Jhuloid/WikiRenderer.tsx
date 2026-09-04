@@ -3,10 +3,9 @@ import type { CSON } from "@/utils/typeUtils";
 
 interface WikiRendererProps {
     block: CSON;
-    existingLinks?: string[];
 }
 
-export default function WikiRenderer({ block, existingLinks = [] }: WikiRendererProps) {
+export default function WikiRenderer({ block }: WikiRendererProps) {
     switch (block.type) {
         // General content block types
         case "gen-heading-type":
@@ -30,7 +29,7 @@ export default function WikiRenderer({ block, existingLinks = [] }: WikiRenderer
         case "gen-paragraph-type":
             return (
                 <p className="mb-3 font-['Inter'] font-normal text-[15px] leading-relaxed whitespace-pre-wrap">
-                    <TextParser content={block.text} existingLinks={existingLinks} />
+                    <TextParser content={block.text} />
                 </p>
             );
         case "gen-image-type":
@@ -47,20 +46,20 @@ export default function WikiRenderer({ block, existingLinks = [] }: WikiRenderer
                                 <i className="fa-regular fa-clone"></i>
                             </span>
                         </div>
-                        <TextParser content={block.description} style="font-[400] text-[.75em] tracking-wide" existingLinks={existingLinks} />
+                        <TextParser content={block.description} style="font-[400] text-[.75em] tracking-wide" />
                     </div>
                 </div>
             );
         // Infobox content block types
         case "ib-heading-type":
             return (
-                <div className="font-['Inter'] font-medium text-[1.25em] text-center whitespace-pre-wrap">
-                    <TextParser content={block.heading} existingLinks={existingLinks} />
+                <div className="font-['Inter'] font-medium text-[1.25em] text-center whitespace-pre-wrap md:text-[1em] xl:text-[1.2em]">
+                    <TextParser content={block.heading} />
                 </div>
             );
         case "ib-subheading-type":
             return (
-                <div className="mt-5 p-3 border-t border-[rgb(85,85,85)]">
+                <div className="mt-5 p-3 border-t border-border">
                     <h4 className="font-bold text-center">
                         <span className="highlight">{block.subheading}</span>
                     </h4>
@@ -68,15 +67,15 @@ export default function WikiRenderer({ block, existingLinks = [] }: WikiRenderer
             );
         case "ib-info-type":
             return (
-                <div className="py-1 font-['Inter'] flex justify-between gap-3">
+                <div className="p-3 font-['Inter'] flex justify-between gap-3">
                     <div className="w-full">
                         <h5 className="font-['Inter'] text-[0.9em] font-bold whitespace-pre-wrap">
-                            <TextParser content={block.head} existingLinks={existingLinks} />
+                            <TextParser content={block.head} />
                         </h5>
                     </div>
                     <div className="w-full">
                         <div className="font-['Inter'] text-[0.9em] leading-relaxed whitespace-pre-wrap">
-                            <TextParser content={block.data} existingLinks={existingLinks} />
+                            <TextParser content={block.data} />
                         </div>
                     </div>
                 </div>
@@ -84,7 +83,7 @@ export default function WikiRenderer({ block, existingLinks = [] }: WikiRenderer
         case "ib-image-type":
             return (
                 <div className="whitespace-pre-wrap flex justify-center items-center">
-                    <div className="p-1 flex flex-col items-center gap-1 md:p-3">
+                    <div className="p-3 flex flex-col items-center gap-1">
                         <div className="min-w-[50vw] max-w-full overflow-hidden cursor-pointer relative md:min-w-[25vw]">
                             <img
                                 src={block.src || null}
@@ -95,7 +94,7 @@ export default function WikiRenderer({ block, existingLinks = [] }: WikiRenderer
                                 <i className="fa-regular fa-clone"></i>
                             </span>
                         </div>
-                        <TextParser content={block.description} style="font-[400] text-[0.85em] tracking-wide" existingLinks={existingLinks} />
+                        <TextParser content={block.description} style="font-[400] text-[0.85em] tracking-wide" />
                     </div>
                 </div>
             );

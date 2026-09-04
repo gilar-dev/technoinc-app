@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Menubar from "@/components/Menubar";
 import Sidebar from "@/components/Sidebar";
 import ArticleForm from "@/components/Contribution/ArticleForm";
+import BlockTools from "@/components/Editor/BlockTools";
 import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
 
 export const metadata: Metadata = {
@@ -20,8 +21,9 @@ export default function ContributionPage() {
             </div>
             <div className="overflow-auto md:w-[75%]">
                 <Menubar title="Contribution" />
-                <div>
+                <div className="w-full">
                     <ArticleForm />
+                    <BlockTools />
                 </div>
             </div>
         </div>

@@ -101,7 +101,7 @@ export default function CategoryForm() {
                     )}
                     {/* List of matches categories */}
                     <ul className="flex flex-col">
-                        {matches.map((category, index) => (
+                        {matches.length > 0 && matches.map((category, index) => (
                             <li
                                 key={`match-category-${index}`}
                                 className="p-1 flex justify-between items-center has-[>button:hover]:bg-foreground/10 transition-colors duration-150 ease-in-out"
