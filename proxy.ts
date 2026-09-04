@@ -17,5 +17,5 @@ export async function proxy(response: NextRequest) {
 }
 
 export const config = {
-    matcher: "/wiki/:contentID*",
+    matcher: "/wiki/:contentID*"
 };
