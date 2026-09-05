@@ -42,7 +42,7 @@ export default async function WikiPage({ params }: Params) {
     const cleanContentID = reformatURI.replaceAll("_", " ");
     const articleData = await dbGetArticleData(reformatURI);
     const links = articleData ? getLinks(articleData.wiki_content) : [];
-    const existingLinks = await dbGetExistingLinks(links);
+    const existingLinks = links ? await dbGetExistingLinks(links) : undefined;
 
     if (articleData) {
         // Redirect to the correct URL if the contentID in the URL does not match the article title

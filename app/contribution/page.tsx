@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Menubar from "@/components/Menubar";
 import Sidebar from "@/components/Sidebar";
+import EditorProvider from "@/contexts/EditorProvider";
 import ArticleForm from "@/components/Contribution/ArticleForm";
+import TextEditor from "@/components/Editor/TextEditor";
 import BlockTools from "@/components/Editor/BlockTools";
 import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
 
@@ -12,7 +14,6 @@ export const metadata: Metadata = {
 }
 
 export default function ContributionPage() {
-
     return (
         <div className="w-full h-screen overflow-hidden flex flex-col md:flex-row">
             <div className="z-2 md:w-[25%]">
@@ -21,10 +22,11 @@ export default function ContributionPage() {
             </div>
             <div className="overflow-auto md:w-[75%]">
                 <Menubar title="Contribution" />
-                <div className="w-full">
+                <EditorProvider>
                     <ArticleForm />
+                    <TextEditor />
                     <BlockTools />
-                </div>
+                </EditorProvider>
             </div>
         </div>
     );

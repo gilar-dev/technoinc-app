@@ -27,6 +27,7 @@ export default function ArticleForm({ formData = undefined }: ArticleFormProps) 
             <div className="mb-5 flex flex-col">
                 <h1 className="py-1 text-[1.2em] border-b border-border">Title</h1>
                 <textarea
+                    name="article-title-input"
                     placeholder="Article title"
                     value={formData && !useProvider ? formData.title : data.title}
                     className="peer min-h-2 mt-1 p-1 text-[1.3em] field-sizing-content resize-none outline-none bg-black/10"
@@ -43,6 +44,7 @@ export default function ArticleForm({ formData = undefined }: ArticleFormProps) 
             <div className="mb-5 flex flex-col">
                 <h1 className="py-1 text-[1.2em] border-b border-border">Description</h1>
                 <textarea
+                    name="article-brief-input"
                     placeholder="Description (optional)"
                     value={formData && !useProvider ? formData.description : data.description}
                     className="peer min-h-2 mt-1 p-1 text-[1em] field-sizing-content resize-none outline-none bg-black/10"

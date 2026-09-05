@@ -4,8 +4,7 @@ import { usePathname } from "next/navigation";
 
 export default function NotFound() {
     const pathName: string = usePathname();
-    const mainPath: string = pathName.split("/")[1].replace(/([%20]+)|(_+)/g, " ");
-    console.log(mainPath);
+    const mainPath: string = pathName.split("/")[1].replace(/(%20+)|(_+)/g, " ");
 
     return (
         <div>
