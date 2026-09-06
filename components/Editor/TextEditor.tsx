@@ -20,7 +20,7 @@ export default function TextEditor() {
     }, []);
 
     return (
-        <div className="h-12 m-3 flex justify-between items-center bg-menu-form-bg/50 lg:mx-7">
+        <div className="h-12 m-3 flex justify-between items-center bg-menu-form-bg lg:mx-7">
             {editMode.status && (
                 <div className="w-full h-full text-center">
                     <button
@@ -34,7 +34,7 @@ export default function TextEditor() {
             <div className="w-full h-full text-center">
                 <button
                     title="Bold"
-                    className="w-full h-full hover:bg-gray-500/30 transition-colors duration-150 ease-in-out"
+                    className="w-full h-full cursor-pointer hover:bg-gray-500/30 transition-colors duration-150 ease-in-out"
                 >
                     <i className="fa-solid fa-bold"></i>
                 </button>
@@ -42,7 +42,7 @@ export default function TextEditor() {
             <div className="w-full h-full text-center">
                 <button
                     title="Italic"
-                    className="w-full h-full hover:bg-gray-500/30 transition-colors duration-150 ease-in-out"
+                    className="w-full h-full cursor-pointer hover:bg-gray-500/30 transition-colors duration-150 ease-in-out"
                 >
                     <i className="fa-solid fa-italic"></i>
                 </button>
@@ -50,7 +50,7 @@ export default function TextEditor() {
             <div className="w-full h-full text-center">
                 <button
                     title="Underline"
-                    className="w-full h-full hover:bg-gray-500/30 transition-colors duration-150 ease-in-out"
+                    className="w-full h-full cursor-pointer hover:bg-gray-500/30 transition-colors duration-150 ease-in-out"
                 >
                     <i className="fa-solid fa-underline"></i>
                 </button>
@@ -58,7 +58,7 @@ export default function TextEditor() {
             <div className="w-full h-full text-center">
                 <button
                     title="Dotted"
-                    className="w-full h-full hover:bg-gray-500/30 transition-colors duration-150 ease-in-out"
+                    className="w-full h-full cursor-pointer hover:bg-gray-500/30 transition-colors duration-150 ease-in-out"
                 >
                     <i className="fa-solid fa-ellipsis"></i>
                 </button>
@@ -66,12 +66,12 @@ export default function TextEditor() {
             <div className="w-full h-full text-center">
                 <button
                     title="Link"
-                    className="w-full h-full hover:bg-gray-500/30 transition-colors duration-150 ease-in-out"
+                    className="w-full h-full cursor-pointer hover:bg-gray-500/30 transition-colors duration-150 ease-in-out"
                 >
                     <i className="fa-solid fa-link"></i>
                 </button>
             </div>
-            <div className="w-[50%] h-full text-center">
+            <div className="w-full h-full text-center md:w-[50%]">
                 <button
                     title="Publish"
                     className="w-full h-full cursor-pointer text-white bg-blue-500 hover:bg-blue-700 transition-colors duration-150 ease-in-out"

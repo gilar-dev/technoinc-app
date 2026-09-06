@@ -8,6 +8,11 @@ interface ArticleDataResult extends Status {
     article: ArticleData;
 }
 
+/**
+ * Get article data from database by article title "contentID"
+ * @param contentID string
+ * @returns ArticleData | undefined
+ */
 export async function dbGetArticleData(contentID: string): Promise<ArticleData | undefined> {
     try {
         const API_URL = process.env.NEXT_PUBLIC_TECHNOINC_BACKEND_API!;
@@ -24,6 +29,12 @@ interface CreateCategoryResult extends Status {
     message: string
 }
 
+/**
+ * Create new category in database
+ * @param category string
+ * @param parent string
+ * @returns boolean | undefined
+ */
 export async function dbCreateCategory(category: string, parent: string): Promise<boolean | undefined> {
     try {
         const API_URL = process.env.NEXT_PUBLIC_TECHNOINC_BACKEND_API!;

@@ -41,11 +41,10 @@ export default function Menubar({ title = "" }: MenubarProps) {
     return (
         <nav
             ref={menubarRef}
-            className={`
-                w-full mb- font-basic p-[0.7em] flex justify-evenly items-center gap-1 sticky top-0 border-b z-1 border-border text-white
-                transition-[padding,background-color] duration-300 ease-in-out [&_button]:text-[1.3em]
-                ${mounted && theme === "bright" ? "bg-[#141e32]" : "bg-[#240e1e]"}
-            `}
+            className="
+                w-full mb- font-basic p-[0.7em] flex justify-evenly items-center gap-1 sticky top-0 border-b z-1 border-border text-white bg-navbar-bg
+                transition-[padding] duration-300 ease-in-out [&_button]:text-[1.3em]
+            "
         >
             <div
                 title="Menu"

@@ -5,6 +5,7 @@ import EditorProvider from "@/contexts/EditorProvider";
 import ArticleForm from "@/components/Contribution/ArticleForm";
 import TextEditor from "@/components/Editor/TextEditor";
 import BlockTools from "@/components/Editor/BlockTools";
+import BlockMenu from "@/components/Editor/BlockMenu";
 import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
 
 export const metadata: Metadata = {
@@ -26,6 +27,7 @@ export default function ContributionPage() {
                     <ArticleForm />
                     <TextEditor />
                     <BlockTools />
+                    <BlockMenu />
                 </EditorProvider>
             </div>
         </div>

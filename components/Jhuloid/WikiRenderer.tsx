@@ -34,8 +34,8 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
             );
         case "gen-image-type":
             return (
-                <div className="p-3 whitespace-pre-wrap flex justify-center items-center">
-                    <div className="min-w-[60%] max-w-[90%] max-h-[22em] p-1 flex flex-col items-center gap-1">
+                <div className="whitespace-pre-wrap flex justify-center items-center md:max-w-[40%] md:float-left">
+                    <div className="min-w-[60%] max-w-[90%] p-1 flex flex-col items-center gap-1">
                         <div className="overflow-hidden cursor-pointer relative">
                             <img
                                 src={block.src || undefined}
@@ -46,7 +46,7 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
                                 <i className="fa-regular fa-clone"></i>
                             </span>
                         </div>
-                        <TextParser content={block.description} style="font-[400] text-[.75em] tracking-wide" />
+                        <TextParser content={block.description} style="font-[400] text-[0.85em] tracking-wide" />
                     </div>
                 </div>
             );
@@ -99,6 +99,6 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
                 </div>
             );
         default:
-            return (<></>);
+            return null;
     }
 }

@@ -5,6 +5,7 @@
     --foreground: #000000;
     --background: #ebe1d2;
     --link: #5c92ff;
+    --navbar-bg: #141e32;
     --list-bg: #e3d3bc;
     --infobox-bg: #ffffff4d;
     --form-bg: #ffffff80;
@@ -22,6 +23,7 @@
     --color-border: rgba(85, 85, 85, 1);
     --color-link: var(--link);
 
+    --color-navbar-bg: var(--navbar-bg);
     --color-list-bg: var(--list-bg);
     --color-infobox-bg: var(--infobox-bg);
     --color-form-bg: var(--form-bg);
@@ -32,6 +34,7 @@
 .theme-bright {
     --foreground: #171717;
     --background: #ebe1d2;
+    --navbar-bg: #141e32;
     --list-bg: #d2cdaf;
     --infobox-bg: #ffffff4d;
     --form-bg: #ffffff80;
@@ -42,6 +45,7 @@
 .theme-dark {
     --foreground: #ffffff;
     --background: #141e32;
+    --navbar-bg: #240e1e;
     --list-bg: #232d41;
     --infobox-bg: #3741504d;
     --form-bg: #37415180;
@@ -65,7 +69,7 @@ img {
     background: linear-gradient(to top, #b4b4b4b3 50%, #00000000 0);
 }
 
-@keyframes fadeIn {
+@keyframes showUp {
     0% {
         bottom: 0;
     }
