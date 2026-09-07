@@ -12,6 +12,7 @@ export default function TextEditor() {
     const router = useRouter();
 
     const addSyntax = (prefix: string, suffix: string): void => {
+        if (!selection.selected) return;
         const updatedContent = [...data.wiki_content];
         const currentValue: string = updatedContent[selection.blockIndex][selection.key];
         const isSelected = selection.start === selection.end;
@@ -20,8 +21,9 @@ export default function TextEditor() {
         updatedContent[selection.blockIndex][selection.key] = addedPrefix;
         setSelection({
             ...selection,
+            selected: false,
             start: selection.start + prefix.length,
-            end: isSelected ? selection.end + suffix.length + 4 : selection.end + suffix.length,
+            end: isSelected ? selection.end + prefix.length + 4 : selection.end + prefix.length,
             done: true
         });
         setData({ ...data, wiki_content: updatedContent });
@@ -45,7 +47,7 @@ export default function TextEditor() {
             <div className="w-full h-full text-center">
                 <button
                     title="Bold"
-                    className={`h-full w-full cursor-pointer ${selection.selected ? "text-green-500" : "text-foreground/65"} hover:bg-sidebar-hover transition-colors duration-150 ease-in-out`}
+                    className={`h-full w-full cursor-pointer ${selection.selected ? "text-foreground" : "text-foreground/30"} hover:bg-sidebar-hover transition-colors duration-150 ease-in-out`}
                     onMouseDown={(e) => { e.preventDefault(); addSyntax("**", "**"); }}
                 >
                     <i className="fa-solid fa-bold"></i>
@@ -54,7 +56,8 @@ export default function TextEditor() {
             <div className="w-full h-full text-center">
                 <button
                     title="Italic"
-                    className="h-full w-full cursor-pointer text-foreground/65 hover:bg-sidebar-hover transition-colors duration-150 ease-in-out"
+                    className={`h-full w-full cursor-pointer ${selection.selected ? "text-foreground" : "text-foreground/30"} hover:bg-sidebar-hover transition-colors duration-150 ease-in-out`}
+                    onMouseDown={(e) => { e.preventDefault(); addSyntax("*", "*"); }}
                 >
                     <i className="fa-solid fa-italic"></i>
                 </button>
@@ -62,7 +65,8 @@ export default function TextEditor() {
             <div className="w-full h-full text-center">
                 <button
                     title="Underline"
-                    className="h-full w-full cursor-pointer text-foreground/65 hover:bg-sidebar-hover transition-colors duration-150 ease-in-out"
+                    className={`h-full w-full cursor-pointer ${selection.selected ? "text-foreground" : "text-foreground/30"} hover:bg-sidebar-hover transition-colors duration-150 ease-in-out`}
+                    onMouseDown={(e) => { e.preventDefault(); addSyntax("__", "__"); }}
                 >
                     <i className="fa-solid fa-underline"></i>
                 </button>
@@ -70,7 +74,8 @@ export default function TextEditor() {
             <div className="w-full h-full text-center">
                 <button
                     title="Dotted"
-                    className="h-full w-full cursor-pointer text-foreground/65 hover:bg-sidebar-hover transition-colors duration-150 ease-in-out"
+                    className={`h-full w-full cursor-pointer ${selection.selected ? "text-foreground" : "text-foreground/30"} hover:bg-sidebar-hover transition-colors duration-150 ease-in-out`}
+                    onMouseDown={(e) => { e.preventDefault(); addSyntax("*", "_"); }}
                 >
                     <i className="fa-solid fa-ellipsis"></i>
                 </button>
@@ -78,7 +83,8 @@ export default function TextEditor() {
             <div className="w-full h-full text-center">
                 <button
                     title="Link"
-                    className="h-full w-full cursor-pointer text-foreground/65 hover:bg-sidebar-hover transition-colors duration-150 ease-in-out"
+                    className={`h-full w-full cursor-pointer ${selection.selected ? "text-foreground" : "text-foreground/30"} hover:bg-sidebar-hover transition-colors duration-150 ease-in-out`}
+                    onMouseDown={(e) => { e.preventDefault(); addSyntax("<link:", "#/wiki/>"); }}
                 >
                     <i className="fa-solid fa-link"></i>
                 </button>

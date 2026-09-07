@@ -20,6 +20,16 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
         setData({ ...data, wiki_content: updatedContent });
     }
 
+    const handleSelection = (target: HTMLTextAreaElement): void => {
+        const selectionStart = target.selectionStart;
+        const selectionEnd = target.selectionEnd;
+        setSelection({ ...selection, selected: true, blockIndex: index, key: "text", start: selectionStart, end: selectionEnd });
+        if (selection.done) {
+            target.setSelectionRange(selection.start, selection.end);
+            setSelection({ ...selection, done: false });
+        }
+    }
+
     switch (block.type) {
         case "gen-heading-type":
             return (
@@ -42,12 +52,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                         value={block.text}
                         className="text-input w-full resize-none field-sizing-content leading-relaxed whitespace-pre-wrap"
                         onChange={(e) => handleChange(index, "text", e.currentTarget.value)}
-                        onSelect={(e) => {
-                            const target = e.currentTarget;
-                            const selectionStart = target.selectionStart;
-                            const selectionEnd = target.selectionEnd;
-                            setSelection({ ...selection, selected: true, blockIndex: index, key: "text", start: selectionStart, end: selectionEnd });
-                        }}
+                        onSelect={(e) => handleSelection(e.currentTarget)}
                         onBlur={() => setSelection({ ...selection, selected: false })}
                     />
                 </div>
