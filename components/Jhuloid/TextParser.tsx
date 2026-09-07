@@ -50,12 +50,23 @@ export default function TextParser({ content, style = "" }: PropTypes) {
             } else if (groups?.link) {
                 const linkLabel = match[10];
                 const linkUrl = match[11];
+                const isExternalLink = /^https?:\/\//i.test(linkUrl);
+                const articleID = isExternalLink ? undefined : linkUrl.split("/")[2];
+                const isSafeLink = isExternalLink || Boolean(articleID);
+
+                if (!isSafeLink) {
+                    elements.push(parsedText(linkLabel));
+                    lastIndex = matchIndex + matchString.length;
+                    return;
+                }
+
                 elements.push(
                     <a
                         key={`l-${index}`}
-                        href={linkUrl} target={linkUrl.startsWith("http") ? "_blank" : "_self"}
-                        rel="noopener nooferrer"
-                        className={`font-medium ${existingLinks.includes(linkUrl.split("/")[2]) ? "text-link" : "text-red-400"} hover:underline`}
+                        href={linkUrl}
+                        target={isExternalLink ? "_blank" : "_self"}
+                        rel={isExternalLink ? "noopener noreferrer" : undefined}
+                        className={`font-medium ${articleID && existingLinks.includes(articleID) ? "text-link" : "text-red-400"} hover:underline`}
                     >
                         {parsedText(linkLabel)}
                     </a>

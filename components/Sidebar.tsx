@@ -89,16 +89,25 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
         <aside
             ref={sidebarRef}
             className={`
-                w-[75%] h-screen px-3 pb-5 overflow-x-hidden overflow-y-auto font-basic flex-col gap-5 fixed z-1 border-r
-                border-border/50 text-foreground bg-background -translate-x-full transition-transform duration-150 ease-in-out
+                w-[75%] h-screen pb-5 overflow-x-hidden overflow-y-auto font-basic flex-col gap-5 fixed z-1 border-r
+                border-sidebar-border text-foreground bg-sidebar-bg -translate-x-full transition-transform duration-150 ease-in-out
                 md:w-full md:relative md:translate-x-0
                 ${isOpen ? "translate-x-0" : ""}
             `}
         >
-            <div className="mb-1 py-5 flex justify-between items-center sticky top-0 border-b border-border text-foreground bg-background">
-                <span className="font-montserrat font-bold text-[0.9em]">TechnoInc MC Wiki</span>
-                <span className="text-[1.2em] md:hidden">
+            <div className="mb-1 px-3 py-4 flex justify-between items-center sticky top-0 border-b border-sidebar-border text-foreground bg-sidebar-bg">
+                <div className="flex items-center gap-3">
+                    <span className="w-9 h-9 flex justify-center items-center rounded-lg text-sidebar-bg bg-sidebar-accent shadow-sm shadow-black/15">
+                        <i className="fa-solid fa-cube"></i>
+                    </span>
+                    <div className="leading-none">
+                        <span className="block font-montserrat font-bold text-[1em] tracking-wide">TechnoInc</span>
+                        <span className="mt-1 block font-montserrat text-[0.62em] font-semibold uppercase tracking-[0.2em] text-sidebar-accent">MC Wiki</span>
+                    </div>
+                </div>
+                <span className="text-[1.1em] text-sidebar-accent md:hidden">
                     <button
+                        title="Close sidebar"
                         className="cursor-pointer"
                         onClick={() => closeSidebar()}
                     >
@@ -107,11 +116,11 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
                 </span>
             </div>
             {/* Main groups */}
-            <div className={`mb-5 ${selectedGroup.isSelected ? "hidden" : "block"}`}>
+            <div className={`mx-1 mb-5 ${selectedGroup.isSelected ? "hidden" : "block"}`}>
                 <input id="main-group-label" type="checkbox" className="peer hidden" />
                 <label
                     htmlFor="main-group-label"
-                    className="p-2 cursor-pointer flex justify-between items-center rounded-[10px] bg-list-bg peer-checked:[&>*:last-child]:rotate-180"
+                    className="p-2 cursor-pointer flex justify-between items-center rounded-[10px] border border-sidebar-border bg-sidebar-panel peer-checked:[&>*:last-child]:rotate-180"
                 >
                     <span className="font-light">Main groups</span>
                     <span className="transition-transform duration-150 ease-in-out"><i className="fa-solid fa-angle-up"></i></span>
@@ -121,12 +130,12 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
                         {mainGroupLists.map((group, index) => (
                             <li
                                 key={`group-${index}`}
-                                className="cursor-pointer rounded-[5px] hover:bg-foreground/5"
+                                className="cursor-pointer rounded-[5px] hover:bg-sidebar-hover"
                                 onClick={() => setSelectedGroup({ isSelected: true, selectedIndex: index })}
                             >
                                 <div className="group flex justify-between items-center gap-1 hover:font-bold transition-[font] duration-150 ease-in-out">
                                     <span className="text-[0.9em]">{group}</span>
-                                    <span className="group-hover:scale-[120%]"><i className="fa-solid fa-angle-right"></i></span>
+                                    <span className="text-sidebar-accent group-hover:scale-[120%]"><i className="fa-solid fa-angle-right"></i></span>
                                 </div>
                             </li>
                         ))}
@@ -134,22 +143,22 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
                 </div>
             </div>
             {/* Featured */}
-            <div className={`mb-5 ${selectedGroup.isSelected ? "hidden" : "block"}`}>
+            <div className={`mx-1 mb-5 ${selectedGroup.isSelected ? "hidden" : "block"}`}>
                 <input id="featured-label" type="checkbox" className="peer hidden" />
                 <label
                     htmlFor="featured-label"
-                    className="p-2 cursor-pointer flex justify-between items-center rounded-[10px] bg-list-bg peer-checked:[&>*:last-child]:rotate-180"
+                    className="p-2 cursor-pointer flex justify-between items-center rounded-[10px] border border-sidebar-border bg-sidebar-panel peer-checked:[&>*:last-child]:rotate-180"
                 >
                     <span className="font-light">Featured</span>
                     <span className="transition-transform duration-150 ease-in-out"><i className="fa-solid fa-angle-up"></i></span>
                 </label>
                 <div className="max-h-40 overflow-hidden peer-checked:max-h-0 peer-checked:p-0 transition-[max-height] duration-150 ease-in-out">
-                    <ul className="m-3 flex flex-col gap-3 [&>li]:cursor-pointer [&>li]:rounded-[5px] [&>li]:hover:bg-foreground/5">
+                    <ul className="m-3 flex flex-col gap-3 [&>li]:cursor-pointer [&>li]:rounded-[5px] [&>li]:hover:bg-sidebar-hover">
                         <li
                             onClick={() => { setTheme(theme === "bright" ? "dark" : "bright"); closeSidebar(); }}
                         >
                             <div className="group flex items-center gap-3 hover:font-bold transition-[font,scale] duration-150 ease-in-out">
-                                <span className="group-hover:scale-[120%]">
+                                <span className="text-sidebar-accent group-hover:scale-[120%]">
                                     <i className={`fa-solid ${mounted && theme === "bright" ? "fa-sun" : "fa-moon"}`}></i>
                                 </span>
                                 <span className="text-[0.9em]">Switch theme</span>
@@ -159,7 +168,7 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
                             onClick={() => { }}
                         >
                             <div className="group flex items-center gap-3 hover:font-bold transition-[font,scale] duration-150 ease-in-out">
-                                <span className="group-hover:scale-[120%]">
+                                <span className="text-sidebar-accent group-hover:scale-[120%]">
                                     <i className="fa-regular fa-map"></i>
                                 </span>
                                 <span className="text-[0.9em]">Interactive map</span>
@@ -170,17 +179,17 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
             </div>
             {/* Dynamic content list */}
             {contentHeadings && (
-                <div className={`mb-5 ${selectedGroup.isSelected ? "hidden" : "block"}`}>
+                <div className={`mx-1 mb-5 ${selectedGroup.isSelected ? "hidden" : "block"}`}>
                     <input id="content-label" type="checkbox" className="peer hidden" />
                     <label
                         htmlFor="content-label"
-                        className="p-2 cursor-pointer flex justify-between items-center rounded-[10px] bg-list-bg peer-checked:[&>*:last-child]:rotate-180"
+                        className="p-2 cursor-pointer flex justify-between items-center rounded-[10px] border border-sidebar-border bg-sidebar-panel peer-checked:[&>*:last-child]:rotate-180"
                     >
                         <span>Contents</span>
                         <span className="transition-transform duration-150 ease-in-out"><i className="fa-solid fa-angle-up"></i></span>
                     </label>
                     <div className="max-h-96 overflow-hidden peer-checked:max-h-0 peer-checked:p-0 transition-[max-height] duration-150 ease-in-out [&_ul]:pl-3">
-                        <ul className="m-3 flex flex-col gap-1 [&_a]:cursor-pointer [&_a]:rounded-[5px] [&_a]:hover:bg-foreground/5">
+                        <ul className="m-3 flex flex-col gap-1 [&_a]:cursor-pointer [&_a]:rounded-[5px] [&_a]:hover:bg-sidebar-hover">
                             {contentHeadings.map((heading, index) => {
                                 const nextContent = contentHeadings[index + 1];
                                 if (!Array.isArray(heading)) return (
@@ -190,7 +199,7 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
                                     >
                                         {Array.isArray(nextContent) && (
                                             <span
-                                                className="mr-2 cursor-pointer absolute translate-x-[-110%] bg-foreground/5"
+                                                className="mr-2 cursor-pointer absolute translate-x-[-110%] text-sidebar-accent"
                                                 onClick={(e) => {
                                                     const parent = e.currentTarget.parentElement;
                                                     const icon = e.currentTarget.children[0];
@@ -213,7 +222,7 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
                                             }}
                                         >{heading}</a>
                                         {Array.isArray(nextContent) && (
-                                            <ul className="flex flex-col gap-1 [&_a]:cursor-pointer [&_a]:rounded-[5px] [&_a]:hover:bg-foreground/5">
+                                            <ul className="flex flex-col gap-1 border-l border-sidebar-border [&_a]:cursor-pointer [&_a]:rounded-[5px] [&_a]:hover:bg-sidebar-hover">
                                                 {nextContent.map((subheading, subindex) => (
                                                     <li key={`subheading-${index}.${subindex}`}>
                                                         <a
@@ -237,10 +246,10 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
             )}
             {/* Another sidebar panel menu for categories of group */}
             <div className={`
-                    w-full h-full px-3 absolute top-0 left-0 bg-background transition-transform duration-150 ease-in-out
+                    w-full h-full px-3 absolute top-0 left-0 bg-sidebar-bg transition-transform duration-150 ease-in-out
                     ${selectedGroup.isSelected ? "translate-x-0" : "translate-x-full"}
                 `}>
-                <div className="mb-5 py-3 flex justify-between items-center border-b border-border text-foreground">
+                <div className="mb-5 py-3 flex justify-between items-center border-b border-sidebar-border text-foreground">
                     <span className="font-montserrat font-bold text-[1em]">{mainGroupLists[selectedGroup.selectedIndex]}</span>
                     <span className="text-[1.4em]">
                         <button
@@ -254,7 +263,7 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
                 <div className="text-foreground">
                     <ul>
                         {CategoriesOfGroups[selectedGroup.selectedIndex].map((category, index) => (
-                            <li key={`category-${index}`}>
+                            <li key={`category-${index}`} className="rounded-[5px] px-2 py-1.5 hover:bg-sidebar-hover">
                                 <div>
                                     <span>{category}</span>
                                 </div>

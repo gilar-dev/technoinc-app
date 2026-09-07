@@ -5,6 +5,8 @@ import { cookies } from "next/headers";
 export async function proxy(response: NextRequest) {
     const { pathname } = response.nextUrl;
     const contentID = decodeURIComponent(pathname).split("/wiki/")[1];
+    if (!contentID) return NextResponse.next();
+
     const reformatURI = contentID.replace(/(_+)|( +)/g, "_");
     const cookieStore = await cookies();
 

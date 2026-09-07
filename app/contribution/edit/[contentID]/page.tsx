@@ -1,6 +1,11 @@
 import Menubar from "@/components/Menubar";
 import Sidebar from "@/components/Sidebar";
+import EditorProvider from "@/contexts/EditorProvider";
 import ArticleForm from "@/components/Contribution/ArticleForm";
+import TextEditor from "@/components/Editor/TextEditor";
+import BlockTools from "@/components/Editor/BlockTools";
+import BlockMenu from "@/components/Editor/BlockMenu";
+import { ContributionHeader } from "../Components";
 import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
 import { dbGetArticleData } from "@/utils/databaseutils";
 
@@ -20,11 +25,29 @@ export default async function ContributionEditPage({ params }: PageProps) {
                 <SidebarOverlay />
                 <Sidebar />
             </div>
-            <div className="overflow-auto md:w-[75%]">
-                <Menubar title="Contribution - Edit article" />
-                <div>
-                    {!articleData && (<p>We have no article about <strong>{cleanContentID}</strong></p>)}
-                    {articleData && (<ArticleForm formData={articleData} />)}
+            <div className="overflow-auto bg-background md:w-[75%]">
+                <Menubar title="Contribution - Edit" />
+                <div className="mx-auto max-w-5xl py-3 lg:py-5">
+                    {!articleData && (
+                        <div className="mx-3 rounded-lg border border-sidebar-border bg-form-bg p-6 text-center shadow-sm shadow-black/10 lg:mx-21">
+                            <div className="mb-3 text-2xl text-sidebar-accent">
+                                <i className="fa-regular fa-file-lines"></i>
+                            </div>
+                            <h1 className="text-xl font-bold">Article unavailable for editing</h1>
+                            <p className="mt-2 text-sm text-foreground/65">
+                                We could not find an article about <strong className="text-foreground">{cleanContentID}</strong>.
+                            </p>
+                        </div>
+                    )}
+                    {articleData && (
+                        <EditorProvider editMode={true}>
+                            <ContributionHeader title={articleData.title} />
+                            <ArticleForm formData={articleData} />
+                            <TextEditor />
+                            <BlockTools />
+                            <BlockMenu />
+                        </EditorProvider>
+                    )}
                 </div>
             </div>
         </div>

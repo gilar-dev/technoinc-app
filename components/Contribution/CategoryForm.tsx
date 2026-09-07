@@ -35,35 +35,47 @@ export default function CategoryForm() {
     }
 
     useEffect(() => {
-        if (!debounceQuery.trim()) { setMatches([]); setIsLoading(false); return; }
+        const controller = new AbortController();
+
+        if (!debounceQuery.trim()) {
+            setMatches([]);
+            setIsLoading(false);
+            return () => controller.abort();
+        }
+
         const fetchData = async () => {
             setIsLoading(true);
             try {
                 const API_URL = process.env.NEXT_PUBLIC_TECHNOINC_BACKEND_API!;
-                const response = await fetch(`${API_URL}/api/v1/wiki/category/search/${debounceQuery}`, { cache: "no-store" });
+                const response = await fetch(`${API_URL}/api/v1/wiki/category/search/${encodeURIComponent(debounceQuery)}`, {
+                    cache: "no-store",
+                    signal: controller.signal
+                });
                 if (!response.ok) throw new Error(`Error when fetching data: ${response}`);
                 const result: FetchResult = await response.json();
                 setMatches(result.data);
             } catch (error) {
-                console.error("Error occures:", error);
+                if (!controller.signal.aborted) console.error("Error when fetching categories:", error);
             } finally {
-                setIsLoading(false);
+                if (!controller.signal.aborted) setIsLoading(false);
             }
         };
         fetchData();
+
+        return () => controller.abort();
     }, [debounceQuery]);
 
     return (
         <div className="w-full h-full flex flex-col justify-center items-center">
             {/* Category menu form */}
-            <div className="w-full p-3 border border-border bg-menu-form-bg shadow-2xs shadow-black">
+            <div className="w-full rounded-md border border-sidebar-border bg-menu-form-bg p-4 shadow-lg shadow-black/15">
                 {createCategory.create && (
-                    <div className="mb-1 flex flex-col">
+                    <div className="mb-3 flex flex-col rounded-sm border-l-4 border-sidebar-accent bg-sidebar-panel p-3">
                         <div className="flex items-center gap-2">
-                            <span className="text-[1.2em]">Create category:</span>
-                            <span className="font-semibold text-[1.2em]">{cleanText(createCategory.createInput)}</span>
+                            <span className="text-[0.8em] font-semibold uppercase tracking-wide text-sidebar-accent">Create category</span>
+                            <span className="font-semibold">{cleanText(createCategory.createInput)}</span>
                         </div>
-                        <div className="font-light text-[1em]">
+                        <div className="text-sm text-foreground/65">
                             <p>New category must have parent category</p>
                         </div>
                     </div>
@@ -76,25 +88,25 @@ export default function CategoryForm() {
                         placeholder={!createCategory.create ? "Search category" : "Search parent category"}
                         value={input}
                         autoFocus
-                        className="w-full p-1 outline-none border border-foreground"
+                        className="w-full rounded-l-sm border border-sidebar-border bg-foreground/5 p-2 outline-none focus:border-sidebar-accent"
                         onChange={(e) => setInput(e.currentTarget.value)}
                     />
                     <button
                         title="Cancel"
-                        className="py-1 px-3 cursor-pointer font-semibold border border-red-500 text-white bg-red-500/50 hover:bg-red-500/70 transition-colors duration-150 ease-in-out"
+                        className="cursor-pointer rounded-r-sm border border-red-500 bg-red-500/80 px-3 py-2 font-semibold text-white hover:bg-red-600 transition-colors duration-150 ease-in-out"
                         onClick={() => setCategoryForm({ ...categoryForm, isOpen: false })}
                     >Cancel</button>
                 </div>
                 {/* List of categories */}
-                <div className="max-h-75 mt-1 overflow-auto border border-foreground">
+                <div className="mt-2 max-h-75 overflow-auto rounded-sm border border-sidebar-border">
                     {/* Modal menu when category is not exist */}
                     {debounceQuery.trim() && !isLoading && !createCategory.create && matches.length === 0 && (
-                        <div className="p-3">
-                            <h1 className="mb-1 font-medium text-center text-[1.3em] bg-foreground/10">Category not found</h1>
-                            <p className="text-center text-[1em]">Category of "<strong>{input.trim()}</strong>" is not exist.</p>
+                        <div className="p-4">
+                            <h1 className="mb-2 text-center text-[1.1em] font-semibold">Category not found</h1>
+                            <p className="text-center text-sm">Category of "<strong>{input.trim()}</strong>" does not exist.</p>
                             <p className="text-center text-[1em]">Would you like to create this category?</p>
                             <button
-                                className="w-[70%] mt-3 mx-auto p-2 font-semibold block border border-green-500 bg-green-500/10 hover:bg-green-500/30 transition-colors duration-150 ease-in-out"
+                                className="mx-auto mt-3 block w-[70%] rounded-sm border border-sidebar-accent bg-sidebar-panel p-2 font-semibold hover:bg-sidebar-hover transition-colors duration-150 ease-in-out"
                                 onClick={() => { setInput(""); setCreateCategory({ create: true, createInput: capitalize(formattedText(input)) }) }}
                             >Create category</button>
                         </div>
@@ -104,15 +116,15 @@ export default function CategoryForm() {
                         {matches.length > 0 && matches.map((category, index) => (
                             <li
                                 key={`match-category-${index}`}
-                                className="p-1 flex justify-between items-center has-[>button:hover]:bg-foreground/10 transition-colors duration-150 ease-in-out"
+                                className="flex items-center justify-between border-b border-sidebar-border/60 p-2 last:border-b-0 has-[>button:hover]:bg-sidebar-hover transition-colors duration-150 ease-in-out"
                             >
                                 <div className="w-full flex flex-col">
-                                    <span className="font-semibold text-[1.2em]">{cleanText(category.category)}</span>
-                                    <em className="text-[1em]">{cleanText(category.hierarchy)}</em>
+                                    <span className="font-semibold">{cleanText(category.category)}</span>
+                                    <em className="text-sm text-foreground/60">{cleanText(category.hierarchy)}</em>
                                 </div>
                                 {checkConditions(category.category) && (
                                     <button
-                                        className="h-10 aspect-square p-1 cursor-pointer flex justify-center items-center border border-foreground"
+                                        className="flex h-9 aspect-square cursor-pointer items-center justify-center rounded-sm border border-sidebar-border text-sidebar-accent hover:bg-sidebar-hover"
                                         onClick={async () => {
                                             if (createCategory.create) {
                                                 const process = await dbCreateCategory(createCategory.createInput, category.category);
@@ -130,7 +142,7 @@ export default function CategoryForm() {
                     </ul>
                 </div>
                 {/* Directive information */}
-                <div className="font-light">
+                <div className="mt-3 text-sm text-foreground/65">
                     <span>See more about category on </span>
                     <Link
                         href="/category"

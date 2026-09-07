@@ -4,13 +4,19 @@
 :root {
     --foreground: #000000;
     --background: #ebe1d2;
+
     --link: #5c92ff;
     --navbar-bg: #141e32;
     --list-bg: #e3d3bc;
     --infobox-bg: #ffffff4d;
     --form-bg: #ffffff80;
     --menu-form-bg: #ffffff;
+
     --sidebar-bg: #f5f5f5e2;
+    --sidebar-panel: #e8edf3;
+    --sidebar-hover: #dce4ed;
+    --sidebar-border: #c5d0dc;
+    --sidebar-accent: #526b86;
 }
 
 @theme inline {
@@ -28,29 +34,46 @@
     --color-infobox-bg: var(--infobox-bg);
     --color-form-bg: var(--form-bg);
     --color-menu-form-bg: var(--menu-form-bg);
+
     --color-sidebar-bg: var(--sidebar-bg);
+    --color-sidebar-panel: var(--sidebar-panel);
+    --color-sidebar-hover: var(--sidebar-hover);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent: var(--sidebar-accent);
 }
 
 .theme-bright {
     --foreground: #171717;
     --background: #ebe1d2;
+
     --navbar-bg: #141e32;
     --list-bg: #d2cdaf;
     --infobox-bg: #ffffff4d;
     --form-bg: #ffffff80;
     --menu-form-bg: #ffffff;
-    --sidebar-bg: #f5f5f5e2;
+
+    --sidebar-bg: #f1eadf;
+    --sidebar-panel: #e3d6c5;
+    --sidebar-hover: #d8c8b2;
+    --sidebar-border: #c5b49d;
+    --sidebar-accent: #735f4a;
 }
 
 .theme-dark {
     --foreground: #ffffff;
     --background: #141e32;
+
     --navbar-bg: #240e1e;
     --list-bg: #232d41;
     --infobox-bg: #3741504d;
     --form-bg: #37415180;
     --menu-form-bg: #364153;
+
     --sidebar-bg: #1e293b;
+    --sidebar-panel: #27364a;
+    --sidebar-hover: #34465d;
+    --sidebar-border: #455a73;
+    --sidebar-accent: #526b86;
 }
 
 body {

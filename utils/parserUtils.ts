@@ -22,33 +22,24 @@ export function getContents(schema: Schema | undefined): (string | string[])[] |
 export function getLinks(schema: Schema) {
     const links: string[] = [];
     const stringifySchema = JSON.stringify(schema);
-    const regex = /<link:(.*?)#(.*?)>/g;
-    const matches = stringifySchema.match(regex);
-    if (matches) {
-        matches.forEach((match) => {
-            const url = match.split("#")[1]?.slice(0, -1);
-            if (url) {
-                const linkUrl = url.split("/")[2];
-                if (!links.includes(linkUrl)) links.push(linkUrl.replaceAll("_", " "));
-            }
-        });
+    const regex = /<link:([^#>]+)#([^>]+)>/g;
+    for (const match of stringifySchema.matchAll(regex)) {
+        const linkUrl = match[2].split("/")[2];
+        if (linkUrl && !links.includes(linkUrl)) {
+            links.push(linkUrl.replaceAll("_", " "));
+        }
     }
     return links;
 }
 
 export function contentGrouper(content: Schema): Record<string, any>[] {
     const group: Schema = [];
-    let headingID: number = 0;
-    let subheadingID: number = 0;
     for (let index = 0; index < content.length; index++) {
         const block = content[index];
         const last = group.length - 1;
 
         if (block.type === "gen-heading-type") {
-            headingID++;
-            subheadingID = 0;
-            block.contentID = headingID;
-            group.push([block]);
+            group.push([{ ...block }]);
             continue;
         }
 

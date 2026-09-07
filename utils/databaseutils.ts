@@ -8,21 +8,25 @@ interface ArticleDataResult extends Status {
     article: ArticleData;
 }
 
+function getAPIUrl(): string {
+    const apiUrl = process.env.NEXT_PUBLIC_TECHNOINC_BACKEND_API;
+    if (!apiUrl) throw new Error("NEXT_PUBLIC_TECHNOINC_BACKEND_API is not configured");
+    return apiUrl.replace(/\/$/, "");
+}
+
 /**
  * Get article data from database by article title "contentID"
  * @param contentID string
  * @returns ArticleData | undefined
  */
 export async function dbGetArticleData(contentID: string): Promise<ArticleData | undefined> {
-    try {
-        const API_URL = process.env.NEXT_PUBLIC_TECHNOINC_BACKEND_API!;
-        const response = await fetch(`${API_URL}/api/v1/wiki/get/${contentID}`, { cache: "no-store" });
-        if (!response.ok) throw new Error("Failed to fetch article content");
-        const result: ArticleDataResult | undefined = await response.json();
-        return result ? result.article : undefined;
-    } catch (error) {
-        console.error("Error fetching article content:", error);
-    }
+    const API_URL = getAPIUrl();
+    const response = await fetch(`${API_URL}/api/v1/wiki/get/${encodeURIComponent(contentID)}`, { cache: "no-store" });
+    if (response.status === 404) return undefined;
+    if (!response.ok) throw new Error(`Failed to fetch article content (${response.status})`);
+
+    const result: ArticleDataResult | undefined = await response.json();
+    return result?.article;
 }
 
 interface CreateCategoryResult extends Status {
@@ -37,7 +41,7 @@ interface CreateCategoryResult extends Status {
  */
 export async function dbCreateCategory(category: string, parent: string): Promise<boolean | undefined> {
     try {
-        const API_URL = process.env.NEXT_PUBLIC_TECHNOINC_BACKEND_API!;
+        const API_URL = getAPIUrl();
         const response = await fetch(`${API_URL}/api/v1/wiki/category/create`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -53,7 +57,7 @@ export async function dbCreateCategory(category: string, parent: string): Promis
 
 export async function dbGetExistingLinks(links: string[]): Promise<string[] | undefined> {
     try {
-        const API_URL = process.env.NEXT_PUBLIC_TECHNOINC_BACKEND_API!;
+        const API_URL = getAPIUrl();
         const response = await fetch(`${API_URL}/api/v1/wiki/check-links`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },

@@ -6,6 +6,7 @@ import ArticleForm from "@/components/Contribution/ArticleForm";
 import TextEditor from "@/components/Editor/TextEditor";
 import BlockTools from "@/components/Editor/BlockTools";
 import BlockMenu from "@/components/Editor/BlockMenu";
+import { ContributionHeader } from "./edit/Components";
 import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
 
 export const metadata: Metadata = {
@@ -21,9 +22,10 @@ export default function ContributionPage() {
                 <SidebarOverlay />
                 <Sidebar />
             </div>
-            <div className="overflow-auto md:w-[75%]">
+            <div className="overflow-auto bg-background md:w-[75%]">
                 <Menubar title="Contribution" />
                 <EditorProvider>
+                    <ContributionHeader />
                     <ArticleForm />
                     <TextEditor />
                     <BlockTools />

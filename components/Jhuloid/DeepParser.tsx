@@ -25,20 +25,23 @@ export function PrimaryParser({ block, expandContent }: PrimaryProps): React.JSX
 
     useEffect(() => {
         setIsMounted(true);
-        if (isMounted && contentRef.current) {
-            const windowWidth = window.innerWidth;
-            if (windowWidth >= 768) {
-                contentRef.current.classList.remove("md:block");
-                contentRef.current.classList.replace("hidden", "block");
+        const handleResize = (): void => {
+            if (isMounted && contentRef.current) {
+                if (window.innerWidth > 768) {
+                    contentRef.current.classList.replace("hidden", "block");
+                    contentRef.current.classList.remove("md:block");
+                }
             }
         }
+        window.addEventListener("resize", handleResize);
+        return () => { window.removeEventListener("resize", handleResize); }
     }, [isMounted]);
 
     return (
         <div className="content">
             <div
                 onClick={(e) => expandContent(e.currentTarget)}
-                className="py-2 cursor-pointer flex justify-between items-center gap-2 border-b border-[rgb(85,85,85)] active:bg-gray-500/10"
+                className="py-2 cursor-pointer flex justify-between items-center gap-2 border-b border-border active:bg-gray-500/10"
             >
                 <WikiRenderer block={block[0]} />
                 <span className="text-[1.3em]"><i className="child fa-solid fa-angle-down"></i></span>

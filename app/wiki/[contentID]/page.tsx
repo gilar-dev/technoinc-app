@@ -5,7 +5,7 @@ import Menubar from "@/components/Menubar";
 import Sidebar from "@/components/Sidebar";
 import Jhuloid from "@/components/Jhuloid/Jhuloid";
 import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
-import { HeadingHolder, RedirectNotice } from "./Components";
+import { HeadingHolder, MissingArticle, RedirectNotice } from "./Components";
 import { getLinks } from "@/utils/parserUtils";
 import { dbGetArticleData, dbGetExistingLinks } from "@/utils/databaseutils";
 
@@ -69,7 +69,7 @@ export default async function WikiPage({ params }: Params) {
                             articleData={articleData}
                             existingLinks={existingLinks}
                         />)
-                        : (<div className="p-3"><p>Sorry, we have no article for that yet.</p></div>)
+                        : (<MissingArticle title={cleanContentID} />)
                     }
                 </div>
             </div>

@@ -4,7 +4,7 @@ import { createContext, useContext, useState } from "react";
 import { SetState } from "@/utils/typeUtils";
 
 interface EditorTypes {
-    editMode: { status: boolean; set: SetState<boolean>; }
+    editMode: boolean;
     blockMenu: { show: boolean, set: SetState<boolean>; }
 }
 
@@ -16,13 +16,12 @@ export function useEditor() {
     return context;
 }
 
-export default function EditorProvider({ children }: { children: React.ReactNode }) {
-    const [editMode, setEditMode] = useState<boolean>(false);
+export default function EditorProvider({ children, editMode = false }: { children: React.ReactNode, editMode?: boolean }) {
     const [blockMenu, setBlockMenu] = useState<boolean>(false);
 
     return (
         <EditorContext.Provider value={{
-            editMode: { status: editMode, set: setEditMode },
+            editMode: editMode,
             blockMenu: { show: blockMenu, set: setBlockMenu }
         }}>
             {children}
