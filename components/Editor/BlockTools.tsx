@@ -6,7 +6,7 @@ export default function BlockTools() {
     const { blockMenu } = useEditor();
 
     return (
-        <div className="sticky bottom-0 z-1 m-3 rounded-md border border-sidebar-border bg-menu-form-bg p-1 shadow-sm shadow-black/10 lg:mx-21">
+        <div className="sticky bottom-3 z-1 m-3 rounded-md border border-sidebar-border bg-menu-form-bg p-1 shadow-sm shadow-black/10 lg:mx-14 xl:mx-21">
             <div>
                 <button
                     data-block-menu-trigger

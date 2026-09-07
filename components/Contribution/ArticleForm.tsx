@@ -28,7 +28,7 @@ export default function ArticleForm({ formData = undefined }: ArticleFormProps) 
     }, [formData]);
 
     return (
-        <div className="m-3 rounded-lg border border-sidebar-border border-t-4 bg-form-bg p-5 font-basic shadow-sm shadow-black/10 lg:mx-21 lg:p-7">
+        <div className="m-3 rounded-lg border border-sidebar-border border-t-4 bg-form-bg p-5 font-basic shadow-sm shadow-black/10 lg:mx-14 lg:p-7 xl:mx-21">
             {/* Article title input section */}
             <div className="mb-5 flex flex-col">
                 <h1 className="py-2 text-[1.05em] font-semibold border-b border-sidebar-border">Title</h1>

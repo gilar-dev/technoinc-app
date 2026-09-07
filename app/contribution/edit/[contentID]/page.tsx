@@ -3,6 +3,7 @@ import Sidebar from "@/components/Sidebar";
 import EditorProvider from "@/contexts/EditorProvider";
 import ArticleForm from "@/components/Contribution/ArticleForm";
 import TextEditor from "@/components/Editor/TextEditor";
+import ContentSchema from "@/components/Schema/ContentSchema";
 import BlockTools from "@/components/Editor/BlockTools";
 import BlockMenu from "@/components/Editor/BlockMenu";
 import { ContributionHeader } from "../Components";
@@ -44,6 +45,7 @@ export default async function ContributionEditPage({ params }: PageProps) {
                             <ContributionHeader title={articleData.title} />
                             <ArticleForm formData={articleData} />
                             <TextEditor />
+                            <ContentSchema wikiContent={articleData.wiki_content} />
                             <BlockTools />
                             <BlockMenu />
                         </EditorProvider>

@@ -12,9 +12,9 @@ export const blockMenuList: BlockMenuList = {
 
     ],
     infobox: [
-        { label: "Ib Heading", icon: "fa-solid fa-heading p-1 border border-foreground" },
-        { label: "Ib Subheading", icon: "fa-solid fa-s p-1 border border-foreground" },
-        { label: "Ib Text", icon: "fa-solid fa-t p-1 border border-foreground" },
-        { label: "Ib Image", icon: "fa-solid fa-image p-1 border border-foreground" }
+        { label: "Ib Heading", icon: "fa-solid fa-heading p-1 border" },
+        { label: "Ib Subheading", icon: "fa-solid fa-s p-1 border" },
+        { label: "Ib Text", icon: "fa-solid fa-t p-1 border" },
+        { label: "Ib Image", icon: "fa-solid fa-image p-1 border" }
     ]
 }
