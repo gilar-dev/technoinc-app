@@ -2,12 +2,15 @@
 
 import { useTheme } from "next-themes";
 import { useState, useEffect, useMemo, useRef } from "react";
-import { useSidebar } from "@/contexts/SidebarProvider";
-import { Schema } from "@/utils/typeUtils";
+import type { Schema } from "@/utils/typeUtils";
 import { getContents } from "@/utils/parserUtils";
+import { useArticleData } from "@/contexts/ArticleDataProvider";
+import { useSidebar } from "@/contexts/SidebarProvider";
+import SidebarContent from "./Sidebar/SidebarContent";
 
 interface SidebarProps {
     contents?: Schema | undefined;
+    historyLog?: boolean;
 }
 
 const mainGroupLists: string[] = [
@@ -21,8 +24,9 @@ const CategoriesOfGroups: string[][] = [
     ["Arts", "Literature", "History", "Geography", "Philosophy"] // Culture and Thought
 ];
 
-export default function Sidebar({ contents = undefined }: SidebarProps) {
+export default function Sidebar({ contents = undefined, historyLog = false }: SidebarProps) {
     const { theme, setTheme } = useTheme();
+    const { data } = useArticleData();
     const { isOpen, closeSidebar } = useSidebar();
     const [mounted, setMounted] = useState<boolean>(false);
     const [selectedGroup, setSelectedGroup] = useState({ isSelected: false, selectedIndex: 0 });
@@ -178,72 +182,7 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
                 </div>
             </div>
             {/* Dynamic content list */}
-            {contentHeadings && (
-                <div className={`mx-1 mb-5 ${selectedGroup.isSelected ? "hidden" : "block"}`}>
-                    <input id="content-label" type="checkbox" className="peer hidden" />
-                    <label
-                        htmlFor="content-label"
-                        className="p-2 cursor-pointer flex justify-between items-center rounded-[10px] border border-sidebar-border bg-sidebar-panel peer-checked:[&>*:last-child]:rotate-180"
-                    >
-                        <span>Contents</span>
-                        <span className="transition-transform duration-150 ease-in-out"><i className="fa-solid fa-angle-up"></i></span>
-                    </label>
-                    <div className="max-h-96 overflow-hidden peer-checked:max-h-0 peer-checked:p-0 transition-[max-height] duration-150 ease-in-out [&_ul]:pl-3">
-                        <ul className="m-3 flex flex-col gap-1 [&_a]:cursor-pointer [&_a]:rounded-[5px] [&_a]:hover:bg-sidebar-hover">
-                            {contentHeadings.map((heading, index) => {
-                                const nextContent = contentHeadings[index + 1];
-                                if (!Array.isArray(heading)) return (
-                                    <li
-                                        key={`heading-${index}`}
-                                        className="relative"
-                                    >
-                                        {Array.isArray(nextContent) && (
-                                            <span
-                                                className="mr-2 cursor-pointer absolute translate-x-[-110%] text-sidebar-accent"
-                                                onClick={(e) => {
-                                                    const parent = e.currentTarget.parentElement;
-                                                    const icon = e.currentTarget.children[0];
-                                                    if (!parent || !icon) return;
-                                                    const child = parent.children[2];
-                                                    const currentDisplay = child.classList.contains("flex");
-                                                    icon.classList.replace(currentDisplay ? "fa-angle-up" : "fa-angle-down", currentDisplay ? "fa-angle-down" : "fa-angle-up");
-                                                    child.classList.replace(currentDisplay ? "flex" : "hidden", currentDisplay ? "hidden" : "flex")
-                                                }}
-                                            >
-                                                <i className="fa-solid fa-angle-up"></i>
-                                            </span>
-                                        )}
-                                        <a
-                                            href={`#${heading.replaceAll(" ", "_")}`}
-                                            className="w-full inline-block text-[0.9em]"
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                openContent(heading, false);
-                                            }}
-                                        >{heading}</a>
-                                        {Array.isArray(nextContent) && (
-                                            <ul className="flex flex-col gap-1 border-l border-sidebar-border [&_a]:cursor-pointer [&_a]:rounded-[5px] [&_a]:hover:bg-sidebar-hover">
-                                                {nextContent.map((subheading, subindex) => (
-                                                    <li key={`subheading-${index}.${subindex}`}>
-                                                        <a
-                                                            href={`#${subheading.replaceAll(" ", "_")}`}
-                                                            className="w-full block text-[0.9em]"
-                                                            onClick={(e) => {
-                                                                e.preventDefault();
-                                                                openContent(subheading, true);
-                                                            }}
-                                                        >{subheading}</a>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        )}
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    </div>
-                </div>
-            )}
+            {contentHeadings && (<SidebarContent show={selectedGroup.isSelected} contents={contentHeadings} expandContent={openContent} />)}
             {/* Another sidebar panel menu for categories of group */}
             <div className={`
                     w-full h-full px-3 absolute top-0 left-0 bg-sidebar-bg transition-transform duration-150 ease-in-out

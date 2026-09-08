@@ -1,12 +1,22 @@
 "use client"; // Client-side rendering directive for Next.js
 
 import { useEffect, useRef } from "react";
+import type { Content } from "@/utils/typeUtils";
+import { useArticleData } from "@/contexts/ArticleDataProvider";
 import { useEditor } from "@/contexts/EditorProvider";
 import { blockMenuList } from "@/utils/blockUtils";
 
 export default function BlockMenu() {
+    const { data, setData } = useArticleData();
     const { blockMenu } = useEditor();
     const blockMenuRef = useRef<HTMLDivElement>(null);
+
+    const addContentBlock = (block: Content): void => {
+        setData({ ...data, wiki_content: [...data.wiki_content, block] });
+        blockMenu.set(false);
+        const mainContainer = document.querySelector(".main-container");
+        if (mainContainer) mainContainer.scrollTo({ top: mainContainer.scrollHeight, behavior: "smooth" });
+    }
 
     useEffect(() => {
         if (!blockMenu.show) return;
@@ -65,8 +75,9 @@ export default function BlockMenu() {
                                 <div
                                     className="
                                         w-26 aspect-square font-montserrat flex flex-col items-center justify-center gap-2 rounded-md
-                                        border border-sidebar-border bg-sidebar-panel hover:border-sidebar-accent hover:text-sidebar-accent hover:bg-sidebar-hover"
-                                    onClick={() => { }}
+                                        border border-sidebar-border bg-sidebar-panel hover:border-sidebar-accent hover:text-sidebar-accent hover:bg-sidebar-hover
+                                        active:border-sidebar-accent active:text-sidebar-accent active:bg-sidebar-hover"
+                                    onClick={() => addContentBlock(item.block())}
                                 >
                                     <div className="text-3xl">
                                         <i className={item.icon}></i>
@@ -90,8 +101,9 @@ export default function BlockMenu() {
                                 <div
                                     className="
                                         w-26 aspect-square font-montserrat flex flex-col items-center justify-center gap-2 rounded-md
-                                        border border-sidebar-border bg-sidebar-panel hover:border-sidebar-accent hover:text-sidebar-accent hover:bg-sidebar-hover"
-                                    onClick={() => { }}
+                                        border border-sidebar-border bg-sidebar-panel hover:border-sidebar-accent hover:text-sidebar-accent hover:bg-sidebar-hover
+                                        active:border-sidebar-accent active:text-sidebar-accent active:bg-sidebar-hover"
+                                    onClick={() => console.log(item.label)}
                                 >
                                     <div className="text-3xl">
                                         <i className={item.icon}></i>

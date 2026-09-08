@@ -8,7 +8,7 @@ import { useEditor } from "@/contexts/EditorProvider";
 export default function TextEditor() {
     const { data, setData } = useArticleData();
     const { editMode, selection, setSelection } = useEditor();
-    const [isMounted, setIsMounted] = useState<boolean>(false);
+    const [focus, setFocus] = useState<boolean>(false);
     const router = useRouter();
 
     const addSyntax = (prefix: string, suffix: string): void => {
@@ -19,6 +19,7 @@ export default function TextEditor() {
         const selectedValue = isSelected ? "text" : currentValue.slice(selection.start, selection.end);
         const addedPrefix = currentValue.slice(0, selection.start) + prefix + selectedValue + suffix + currentValue.slice(selection.end);
         updatedContent[selection.blockIndex][selection.key] = addedPrefix;
+        setData({ ...data, wiki_content: updatedContent });
         setSelection({
             ...selection,
             selected: false,
@@ -26,7 +27,6 @@ export default function TextEditor() {
             end: isSelected ? selection.end + prefix.length + 4 : selection.end + prefix.length,
             done: true
         });
-        setData({ ...data, wiki_content: updatedContent });
     }
 
     return (
@@ -75,7 +75,7 @@ export default function TextEditor() {
                 <button
                     title="Dotted"
                     className={`h-full w-full cursor-pointer ${selection.selected ? "text-foreground" : "text-foreground/30"} hover:bg-sidebar-hover transition-colors duration-150 ease-in-out`}
-                    onMouseDown={(e) => { e.preventDefault(); addSyntax("*", "_"); }}
+                    onMouseDown={(e) => { e.preventDefault(); addSyntax("_", "_"); }}
                 >
                     <i className="fa-solid fa-ellipsis"></i>
                 </button>

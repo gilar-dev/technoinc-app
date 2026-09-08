@@ -6,7 +6,7 @@ import TextEditor from "@/components/Editor/TextEditor";
 import ContentSchema from "@/components/Schema/ContentSchema";
 import BlockTools from "@/components/Editor/BlockTools";
 import BlockMenu from "@/components/Editor/BlockMenu";
-import { ContributionHeader } from "../Components";
+import { ContributionHeader, MissingArticle } from "../Components";
 import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
 import { dbGetArticleData } from "@/utils/databaseutils";
 
@@ -26,26 +26,17 @@ export default async function ContributionEditPage({ params }: PageProps) {
                 <SidebarOverlay />
                 <Sidebar />
             </div>
-            <div className="overflow-auto bg-background md:w-[75%]">
+            <div className="main-container overflow-auto bg-background md:w-[75%]">
                 <Menubar title="Contribution - Edit" />
                 <div className="mx-auto max-w-5xl py-3 lg:py-5">
-                    {!articleData && (
-                        <div className="mx-3 rounded-lg border border-sidebar-border bg-form-bg p-6 text-center shadow-sm shadow-black/10 lg:mx-21">
-                            <div className="mb-3 text-2xl text-sidebar-accent">
-                                <i className="fa-regular fa-file-lines"></i>
-                            </div>
-                            <h1 className="text-xl font-bold">Article unavailable for editing</h1>
-                            <p className="mt-2 text-sm text-foreground/65">
-                                We could not find an article about <strong className="text-foreground">{cleanContentID}</strong>.
-                            </p>
-                        </div>
-                    )}
-                    {articleData && (
+                    {!articleData ? (
+                        <MissingArticle title={cleanContentID} />
+                    ) : (
                         <EditorProvider editMode={true}>
                             <ContributionHeader title={articleData.title} />
                             <ArticleForm formData={articleData} />
                             <TextEditor />
-                            <ContentSchema wikiContent={articleData.wiki_content} />
+                            <ContentSchema />
                             <BlockTools />
                             <BlockMenu />
                         </EditorProvider>

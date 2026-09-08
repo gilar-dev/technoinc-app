@@ -30,3 +30,17 @@ export function ContributionHeader({ title = "" }: ContributionHeaderProps) {
         </div>
     );
 }
+
+export function MissingArticle({ title }: { title: string; }) {
+    return (
+        <div className="mx-3 rounded-lg border border-sidebar-border bg-form-bg p-6 text-center shadow-sm shadow-black/10 lg:mx-21">
+            <div className="mb-3 text-2xl text-sidebar-accent">
+                <i className="fa-regular fa-file-lines"></i>
+            </div>
+            <h1 className="text-xl font-bold">Article unavailable for editing</h1>
+            <p className="mt-2 text-sm text-foreground/65">
+                We could not find an article about <strong className="text-foreground">{title}</strong>.
+            </p>
+        </div>
+    );
+}

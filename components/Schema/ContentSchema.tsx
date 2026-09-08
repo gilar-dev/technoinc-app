@@ -1,16 +1,14 @@
 "use client"; // Client-side rendering directive for Next.js
 
-import type { Schema } from "@/utils/typeUtils";
+import { useArticleData } from "@/contexts/ArticleDataProvider";
 import BlockRenderer from "./BlockRenderer";
 
-interface ContentSchemaProps {
-    wikiContent?: Schema | undefined;
-}
+export default function ContentSchema() {
+    const { data } = useArticleData();
 
-export default function ContentSchema({ wikiContent = undefined }: ContentSchemaProps) {
     return (
-        <main className="mx-3 lg:mx-14 xl:mx-21">
-            {wikiContent && wikiContent.map((block, index) => (
+        <main data-content-schema className="scroll-mb-50 flex flex-col gap-3 mx-3 lg:mx-14 xl:mx-21">
+            {data.wiki_content.map((block, index) => (
                 <BlockRenderer key={`block-${index}`} block={block} index={index} />
             ))}
         </main>

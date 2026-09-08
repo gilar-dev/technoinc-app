@@ -4,6 +4,7 @@ import Sidebar from "@/components/Sidebar";
 import EditorProvider from "@/contexts/EditorProvider";
 import ArticleForm from "@/components/Contribution/ArticleForm";
 import TextEditor from "@/components/Editor/TextEditor";
+import ContentSchema from "@/components/Schema/ContentSchema";
 import BlockTools from "@/components/Editor/BlockTools";
 import BlockMenu from "@/components/Editor/BlockMenu";
 import { ContributionHeader } from "./edit/Components";
@@ -22,12 +23,13 @@ export default function ContributionPage() {
                 <SidebarOverlay />
                 <Sidebar />
             </div>
-            <div className="overflow-auto bg-background md:w-[75%]">
+            <div className="main-container overflow-auto bg-background md:w-[75%]">
                 <Menubar title="Contribution" />
                 <EditorProvider>
                     <ContributionHeader />
                     <ArticleForm />
                     <TextEditor />
+                    <ContentSchema />
                     <BlockTools />
                     <BlockMenu />
                 </EditorProvider>
