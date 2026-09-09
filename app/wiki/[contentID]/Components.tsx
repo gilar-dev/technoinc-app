@@ -7,6 +7,7 @@ interface ArticleTitleProps {
     description: string;
 }
 
+// Article heading holder
 export function HeadingHolder({ title, description }: ArticleTitleProps) {
     return (
         <div className="w-full mt-5 font-basic text-center flex flex-col items-center gap-5 lg:px-7">
