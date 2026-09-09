@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             className="h-full antialiased"
             suppressHydrationWarning
         >
-            <body className={`${inter.variable} ${montserrat.variable} overflow-hidden`}>
+            <body className={`${inter.variable} ${montserrat.variable} overflow-auto`}>
                 <ThemeProvider>
                     <SidebarProvider>
                         <ArticleDataProvider>
