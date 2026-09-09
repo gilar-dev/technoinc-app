@@ -62,7 +62,7 @@ export default async function WikiPage({ params }: Params) {
                 title={articleData ? articleData.title : cleanContentID}
                 description={articleData ? articleData.description : ""}
             />
-            <div className="lg:px-7">
+            <div className="main-container lg:px-7">
                 {articleData
                     ? (<Jhuloid
                         articleData={articleData}

@@ -93,8 +93,7 @@ export default function Sidebar({ contents = undefined, historyLog = false }: Si
             className={`
                 w-[75%] h-screen pb-5 overflow-x-hidden overflow-y-auto font-basic flex-col gap-5 fixed z-1 border-r
                 border-sidebar-border text-foreground bg-sidebar-bg -translate-x-full transition-transform duration-150 ease-in-out
-                md:w-full md:relative md:translate-x-0
-                ${isOpen ? "translate-x-0" : ""}
+                md:w-full md:relative md:translate-x-0 ${isOpen ? "translate-x-0" : ""}
             `}
         >
             <div className="mb-1 px-3 py-4 flex justify-between items-center sticky top-0 border-b border-sidebar-border text-foreground bg-sidebar-bg">

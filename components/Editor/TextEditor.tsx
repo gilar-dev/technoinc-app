@@ -30,7 +30,7 @@ export default function TextEditor() {
     }
 
     return (
-        <div className="sticky top-20 z-1 m-3 flex h-12 items-center justify-between overflow-hidden rounded-md border border-sidebar-border bg-menu-form-bg shadow-sm shadow-black/10 lg:mx-14 xl:mx-21">
+        <div className="sticky top-18 z-1 m-3 flex h-12 items-center justify-between overflow-hidden rounded-md border border-sidebar-border bg-menu-form-bg shadow-sm shadow-black/10 lg:mx-14 xl:mx-21">
             {editMode && (
                 <div className="w-full h-full text-center md:w-[50%]">
                     <button

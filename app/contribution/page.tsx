@@ -18,9 +18,9 @@ export const metadata: Metadata = {
 
 export default function ContributionPage() {
     return (
-        <div className="w-full max-h-screen flex flex-col md:flex-row">
+        <div className="md:relative md:w-[75%] md:left-[25%]">
             <Menubar title="Contribution - Create" />
-            <div className="z-2 md:w-[25%]">
+            <div className="fixed top-0 left-0 z-2 md:w-[25%]">
                 <SidebarOverlay />
                 <Sidebar />
             </div>

@@ -1,9 +1,9 @@
 "use client"; // Client-side rendering directive for Next.js
 
-import { useState, useEffect } from "react";
 import type { Content } from "@/utils/typeUtils"
 import { useArticleData } from "@/contexts/ArticleDataProvider";
 import { useEditor } from "@/contexts/EditorProvider";
+import BlockOption from "./BlockOption";
 
 interface BlockRendererProps {
     block: Content;
@@ -34,7 +34,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
         // General block types
         case "gen-heading-type":
             return (
-                <div className="font-historical font-medium flex flex-col items-center text-[26px] bg-sidebar-bg">
+                <div className="mb-3 font-historical font-medium flex flex-col items-center text-[26px] bg-sidebar-bg">
                     <textarea
                         name="gen-heading-type"
                         placeholder="Heading"
@@ -48,7 +48,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
             );
         case "gen-subheading-type":
             return (
-                <div className="font-['Inter'] font-semibold text-[18px] flex flex-col bg-sidebar-bg">
+                <div className="mb-3 font-['Inter'] font-semibold text-[18px] flex flex-col bg-sidebar-bg">
                     <textarea
                         name="gen-subheading-type"
                         placeholder="Subheading"
@@ -61,7 +61,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
             );
         case "gen-paragraph-type":
             return (
-                <div className="font-['Inter'] font-normal text-[15px] bg-sidebar-bg">
+                <div className="mb-3 font-['Inter'] font-normal text-[15px] flex justify-center relative bg-sidebar-bg">
                     <textarea
                         name="gen-paragraph-type"
                         placeholder="Paragraph"
@@ -76,7 +76,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
             );
         case "gen-image-type":
             return (
-                <div className="font-['Inter'] flex justify-center items-center">
+                <div className="mb-3 font-['Inter'] flex justify-center items-center bg-sidebar-bg">
                     <div className="max-w-[80%] flex flex-col gap-3">
                         <img
                             src={block.src || undefined}

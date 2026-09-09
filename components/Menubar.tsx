@@ -49,7 +49,7 @@ export default function Menubar({ title = "" }: MenubarProps) {
                     onClick={() => toggleSidebar()}
                 ></button>
             </div>
-            <div className="font-montserrat">
+            <div className="font-montserrat flex flex-col">
                 <h2 className="font-bold">
                     {title.trim() ? title : "TechnoInc Wiki MC"}
                 </h2>

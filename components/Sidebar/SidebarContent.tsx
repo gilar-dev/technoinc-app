@@ -33,11 +33,11 @@ export default function SidebarContent({ show, contents, expandContent }: Sideba
                                             if (!parent || !icon) return;
                                             const child = parent.children[2];
                                             const currentDisplay = child.classList.contains("flex");
-                                            icon.classList.replace(currentDisplay ? "fa-angle-up" : "fa-angle-down", currentDisplay ? "fa-angle-down" : "fa-angle-up");
+                                            icon.classList.replace(currentDisplay ? "fa-angle-down" : "fa-angle-right", currentDisplay ? "fa-angle-right" : "fa-angle-down");
                                             child.classList.replace(currentDisplay ? "flex" : "hidden", currentDisplay ? "hidden" : "flex")
                                         }}
                                     >
-                                        <i className="fa-solid fa-angle-up"></i>
+                                        <i className="fa-solid fa-angle-down"></i>
                                     </span>
                                 )}
                                 <a
