@@ -53,7 +53,7 @@ export default function ArticleForm({ formData = undefined }: ArticleFormProps) 
                     name="article-brief-input"
                     placeholder="Description (optional)"
                     value={formData && !useProvider ? formData.description : data.description}
-                    className="peer mt-2 min-h-2 field-sizing-content resize-none rounded-[4px] border border-transparent bg-foreground/5 p-2 text-[1em] outline-none transition-colors placeholder:text-foreground/45 focus:border-sidebar-accent"
+                    className="peer mt-2 min-h-2 field-sizing-content resize-none rounded-sm border border-transparent bg-foreground/5 p-2 text-[1em] outline-none transition-colors placeholder:text-foreground/45 focus:border-sidebar-accent"
                     onChange={(e) => setData({ ...data, description: e.currentTarget.value })}
 
                 />
@@ -66,7 +66,7 @@ export default function ArticleForm({ formData = undefined }: ArticleFormProps) 
                     <button
                         title="Add category"
                         onClick={() => setCategoryForm({ ...categoryForm, isOpen: true })}
-                        className={`flex cursor-pointer items-center gap-2 rounded-[4px] border border-sidebar-border bg-sidebar-panel px-2 py-1 text-sm hover:bg-sidebar-hover transition-colors duration-150 ease-in-out ${categoryForm.isOpen ? "hidden" : "flex"}`}
+                        className={`flex cursor-pointer items-center gap-2 rounded-sm border border-sidebar-border bg-sidebar-panel px-2 py-1 text-sm hover:bg-sidebar-hover transition-colors duration-150 ease-in-out ${categoryForm.isOpen ? "hidden" : "flex"}`}
                     >
                         <span>Add category</span>
                         <i className="fa-solid fa-plus"></i>
@@ -78,7 +78,7 @@ export default function ArticleForm({ formData = undefined }: ArticleFormProps) 
                     {!categoryForm.isOpen && category.map((category, index) => (
                         <span
                             key={`category-${index}`}
-                            className="rounded-[4px] border border-sidebar-border bg-sidebar-panel p-1.5 has-[>button:hover]:border-red-500 has-[>button:hover]:text-white has-[>button:hover]:bg-red-500/50 transition-colors duration-150 ease-in-out"
+                            className="rounded-sm border border-sidebar-border bg-sidebar-panel p-1.5 has-[>button:hover]:border-red-500 has-[>button:hover]:text-white has-[>button:hover]:bg-red-500/50 transition-colors duration-150 ease-in-out"
                         >
                             <span>{cleanText(category)}</span>
                             <button
@@ -113,7 +113,7 @@ export default function ArticleForm({ formData = undefined }: ArticleFormProps) 
                     <label
                         htmlFor="article-cover-input"
                         title="Add category"
-                        className="flex cursor-pointer items-center gap-2 rounded-[4px] border border-sidebar-border bg-sidebar-panel px-2 py-1 text-sm hover:bg-sidebar-hover transition-colors duration-150 ease-in-out"
+                        className="flex cursor-pointer items-center gap-2 rounded-sm border border-sidebar-border bg-sidebar-panel px-2 py-1 text-sm hover:bg-sidebar-hover transition-colors duration-150 ease-in-out"
                     >Choose cover</label>
                 </div>
                 <div className="p-1 flex justify-center items-center">
@@ -133,7 +133,7 @@ export default function ArticleForm({ formData = undefined }: ArticleFormProps) 
                     type="text"
                     value={`${formData && !useProvider ? formData.version : data.version} (readonly)`}
                     readOnly
-                    className="mt-2 rounded-[4px] border border-sidebar-border bg-foreground/5 p-2 outline-none"
+                    className="mt-2 rounded-sm border border-sidebar-border bg-foreground/5 p-2 outline-none"
                 />
             </div>
         </div>

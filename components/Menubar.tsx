@@ -1,40 +1,33 @@
 "use client"; // Client-side rendering directive for Next.js
 
 import Link from "next/link";
-import { useTheme } from "next-themes";
 import { useSidebar } from "@/contexts/SidebarProvider";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 interface MenubarProps {
     title?: string;
 }
 
 export default function Menubar({ title = "" }: MenubarProps) {
-    const { theme } = useTheme();
     const { toggleSidebar } = useSidebar();
-    const [mounted, setMounted] = useState<boolean>(false);
     const menubarRef = useRef<HTMLElement | null>(null);
 
     useEffect(() => {
-        setMounted(true);
         if (!menubarRef.current) return;
 
-        const parentElement = menubarRef.current.parentElement;
-        if (!parentElement) return;
-
-        const parentScrollHandle = () => {
+        const windowScrollHandle = () => {
             if (menubarRef.current) {
-                const scrollTop = parentElement.scrollTop;
+                const scrollTop = window.scrollY;
                 if (scrollTop > 0) menubarRef.current.classList.replace("p-[0.7em]", "p-[0.5em]")
                 else menubarRef.current.classList.replace("p-[0.5em]", "p-[0.7em]");
             }
         };
 
         // Add scroll event listener to the parent element to handle padding changes on scroll
-        parentElement.addEventListener("scroll", parentScrollHandle);
+        window.addEventListener("scroll", windowScrollHandle);
         return () => {
             // Clean up the event listener when the component unmounts
-            parentElement.removeEventListener("scroll", parentScrollHandle);
+            window.removeEventListener("scroll", windowScrollHandle);
         }
     }, []);
 
@@ -42,7 +35,7 @@ export default function Menubar({ title = "" }: MenubarProps) {
         <nav
             ref={menubarRef}
             className="
-                w-full mb- font-basic p-[0.7em] flex justify-evenly items-center gap-1 sticky top-0 border-b z-1 border-border text-white bg-navbar-bg
+                w-full font-basic p-[0.7em] flex justify-evenly items-center gap-1 sticky top-0 border-b z-1 border-border text-white bg-navbar-bg
                 transition-[padding] duration-300 ease-in-out [&_button]:text-[1.3em]
             "
         >

@@ -3,6 +3,11 @@
 import { createContext, useContext, useState } from "react";
 import { SetState } from "@/utils/typeUtils";
 
+interface EditorProviderProps {
+    children: React.ReactNode;
+    editMode?: boolean;
+}
+
 interface Selection {
     selected: boolean;
     blockIndex: number
@@ -27,9 +32,11 @@ export function useEditor() {
     return context;
 }
 
-export default function EditorProvider({ children, editMode = false }: { children: React.ReactNode, editMode?: boolean }) {
+export default function EditorProvider({ children, editMode = false }: EditorProviderProps) {
     const [blockMenu, setBlockMenu] = useState<boolean>(false);
-    const [selection, setSelection] = useState<Selection>({ selected: false, blockIndex: 0, key: "", start: 0, end: 0, done: false });
+    const [selection, setSelection] = useState<Selection>({
+        selected: false, blockIndex: 0, key: "", start: 0, end: 0, done: false
+    });
 
     return (
         <EditorContext.Provider value={{

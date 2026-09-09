@@ -19,21 +19,19 @@ export const metadata: Metadata = {
 export default function ContributionPage() {
     return (
         <div className="w-full max-h-screen flex flex-col md:flex-row">
+            <Menubar title="Contribution - Create" />
             <div className="z-2 md:w-[25%]">
                 <SidebarOverlay />
                 <Sidebar />
             </div>
-            <div className="main-container overflow-auto bg-background md:w-[75%]">
-                <Menubar title="Contribution" />
-                <EditorProvider>
-                    <ContributionHeader />
-                    <ArticleForm />
-                    <TextEditor />
-                    <ContentSchema />
-                    <BlockTools />
-                    <BlockMenu />
-                </EditorProvider>
-            </div>
+            <EditorProvider>
+                <ContributionHeader />
+                <ArticleForm />
+                <TextEditor />
+                <ContentSchema />
+                <BlockTools />
+                <BlockMenu />
+            </EditorProvider>
         </div>
     );
 }

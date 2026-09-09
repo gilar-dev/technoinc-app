@@ -21,28 +21,24 @@ export default async function ContributionEditPage({ params }: PageProps) {
     const articleData = await dbGetArticleData(reformatURI);
 
     return (
-        <div className="w-full h-screen overflow-hidden flex flex-col md:flex-row">
-            <div className="z-2 md:w-[25%]">
+        <div className="md:relative md:w-[75%] md:left-[25%]">
+            <Menubar title="Contribution - Edit" />
+            <div className="fixed top-0 left-0 z-2 md:w-[25%]">
                 <SidebarOverlay />
                 <Sidebar />
             </div>
-            <div className="main-container overflow-auto bg-background md:w-[75%]">
-                <Menubar title="Contribution - Edit" />
-                <div className="mx-auto max-w-5xl py-3 lg:py-5">
-                    {!articleData ? (
-                        <MissingArticle title={cleanContentID} />
-                    ) : (
-                        <EditorProvider editMode={true}>
-                            <ContributionHeader title={articleData.title} />
-                            <ArticleForm formData={articleData} />
-                            <TextEditor />
-                            <ContentSchema />
-                            <BlockTools />
-                            <BlockMenu />
-                        </EditorProvider>
-                    )}
-                </div>
-            </div>
+            {!articleData ? (
+                <MissingArticle title={cleanContentID} />
+            ) : (
+                <EditorProvider editMode={true}>
+                    <ContributionHeader title={articleData.title} />
+                    <ArticleForm formData={articleData} />
+                    <TextEditor />
+                    <ContentSchema />
+                    <BlockTools />
+                    <BlockMenu />
+                </EditorProvider>
+            )}
         </div>
     );
 }

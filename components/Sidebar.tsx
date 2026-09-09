@@ -26,7 +26,6 @@ const CategoriesOfGroups: string[][] = [
 
 export default function Sidebar({ contents = undefined, historyLog = false }: SidebarProps) {
     const { theme, setTheme } = useTheme();
-    const { data } = useArticleData();
     const { isOpen, closeSidebar } = useSidebar();
     const [mounted, setMounted] = useState<boolean>(false);
     const [selectedGroup, setSelectedGroup] = useState({ isSelected: false, selectedIndex: 0 });
@@ -73,8 +72,7 @@ export default function Sidebar({ contents = undefined, historyLog = false }: Si
         const parentSibling = parentElement.nextElementSibling as HTMLElement;
         if (!parentSibling) return;
 
-        if (isOpen) parentSibling.classList.replace("overflow-auto", "overflow-hidden");
-        else parentSibling.classList.replace("overflow-hidden", "overflow-auto");
+        document.body.style.overflow = isOpen ? "hidden" : "visible";
 
         const resizeEventHandler = () => {
             const viewportWidth = window.innerWidth;

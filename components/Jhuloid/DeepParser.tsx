@@ -16,6 +16,7 @@ interface InfoboxProps {
 export function PrimaryParser({ block, expandContent }: PrimaryProps): React.JSX.Element {
     const [isMounted, setIsMounted] = useState<boolean>(false);
     const contentRef = useRef<HTMLDivElement | null>(null);
+
     const isArray = (content: any): boolean => {
         return Array.isArray(content);
     }
