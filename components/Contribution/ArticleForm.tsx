@@ -73,23 +73,23 @@ export default function ArticleForm({ formData = undefined }: ArticleFormProps) 
                     </button>
                 </div>
                 <div className="py-1 flex flex-wrap gap-1">
-                    {categoryForm.isOpen && (<CategoryForm />)}
-                    {!categoryForm.isOpen && category.length === 0 && (<em className="p-1.25">No category added</em>)}
-                    {!categoryForm.isOpen && category.map((category, index) => (
-                        <span
-                            key={`category-${index}`}
-                            className="rounded-sm border border-sidebar-border bg-sidebar-panel p-1.5 has-[>button:hover]:border-red-500 has-[>button:hover]:text-white has-[>button:hover]:bg-red-500/50 transition-colors duration-150 ease-in-out"
-                        >
-                            <span>{cleanText(category)}</span>
-                            <button
-                                title="Delete category"
-                                className="cursor-pointer"
-                                onClick={() => setData({ ...data, category: data.category.toSpliced(index, 1) })}
+                    {categoryForm.isOpen && (<CategoryForm />)
+                        || !categoryForm.isOpen && category.length === 0 && (<em className="p-1.25">No category added</em>)
+                        || !categoryForm.isOpen && category.map((category, index) => (
+                            <span
+                                key={`category-${index}`}
+                                className="rounded-sm border border-sidebar-border bg-sidebar-panel p-1.5 has-[>button:hover]:border-red-500 has-[>button:hover]:text-white has-[>button:hover]:bg-red-500/50 transition-colors duration-150 ease-in-out"
                             >
-                                <i className="fa-solid fa-xmark"></i>
-                            </button>
-                        </span>
-                    ))}
+                                <span>{cleanText(category)}</span>
+                                <button
+                                    title="Delete category"
+                                    className="cursor-pointer"
+                                    onClick={() => setData({ ...data, category: data.category.toSpliced(index, 1) })}
+                                >
+                                    <i className="fa-solid fa-xmark"></i>
+                                </button>
+                            </span>
+                        ))}
                 </div>
             </div>
             {/* Article cover input */}
@@ -112,7 +112,7 @@ export default function ArticleForm({ formData = undefined }: ArticleFormProps) 
                     />
                     <label
                         htmlFor="article-cover-input"
-                        title="Add category"
+                        title="Choose article cover"
                         className="flex cursor-pointer items-center gap-2 rounded-sm border border-sidebar-border bg-sidebar-panel px-2 py-1 text-sm hover:bg-sidebar-hover transition-colors duration-150 ease-in-out"
                     >Choose cover</label>
                 </div>

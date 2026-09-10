@@ -47,7 +47,7 @@ export default function CategoryForm() {
             setIsLoading(true);
             try {
                 const API_URL = process.env.NEXT_PUBLIC_TECHNOINC_BACKEND_API!;
-                const response = await fetch(`${API_URL}/api/v1/wiki/category/search/${encodeURIComponent(debounceQuery)}`, {
+                const response = await fetch(`${API_URL}/api/v1/wiki/category/search/${formattedText(debounceQuery)}`, {
                     cache: "no-store",
                     signal: controller.signal
                 });
@@ -124,7 +124,7 @@ export default function CategoryForm() {
                                 </div>
                                 {checkConditions(category.category) && (
                                     <button
-                                        className="flex h-9 aspect-square cursor-pointer items-center justify-center rounded-sm border border-sidebar-border text-sidebar-accent hover:bg-sidebar-hover"
+                                        className="flex h-9 aspect-square cursor-pointer items-center justify-center rounded-sm border border-sidebar-accent text-sidebar-accent hover:bg-sidebar-hover"
                                         onClick={async () => {
                                             if (createCategory.create) {
                                                 const process = await dbCreateCategory(createCategory.createInput, category.category);
