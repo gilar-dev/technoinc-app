@@ -21,14 +21,14 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
             return (
                 <h2
                     id={block.subheading.replaceAll(" ", "_")}
-                    className="scroll-mt-20 mb-2 font-['Inter'] font-semibold text-[18px]"
+                    className="scroll-mt-20 mb-2 font-basic font-semibold text-[18px]"
                 >
                     {block.subheading}
                 </h2>
             );
         case "gen-paragraph-type":
             return (
-                <p className="mb-3 font-['Inter'] font-normal text-[15px] leading-relaxed whitespace-pre-wrap">
+                <p className="mb-3 font-basic font-normal text-[15px] leading-relaxed whitespace-pre-wrap">
                     <TextParser content={block.text} />
                 </p>
             );
@@ -53,28 +53,28 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
         // Infobox content block types
         case "ib-heading-type":
             return (
-                <div className="font-['Inter'] font-medium text-[1.25em] text-center whitespace-pre-wrap md:text-[1em] xl:text-[1.2em]">
+                <div className="font-basic font-medium text-[1.25em] text-center whitespace-pre-wrap md:text-[1em] xl:text-[1.2em]">
                     <TextParser content={block.heading} />
                 </div>
             );
         case "ib-subheading-type":
             return (
                 <div className="mt-5 p-3 border-t border-border">
-                    <h4 className="font-bold text-center">
+                    <h4 className="font-basic font-bold text-center">
                         <span className="highlight">{block.subheading}</span>
                     </h4>
                 </div>
             );
         case "ib-info-type":
             return (
-                <div className="p-3 font-['Inter'] flex justify-between gap-3">
+                <div className="p-3 font-basic flex justify-between gap-3">
                     <div className="w-full">
-                        <h5 className="font-['Inter'] text-[0.9em] font-bold whitespace-pre-wrap">
+                        <h5 className="font-basic text-[0.9em] font-bold whitespace-pre-wrap">
                             <TextParser content={block.head} />
                         </h5>
                     </div>
                     <div className="w-full">
-                        <div className="font-['Inter'] text-[0.9em] leading-relaxed whitespace-pre-wrap">
+                        <div className="font-basic text-[0.9em] leading-relaxed whitespace-pre-wrap">
                             <TextParser content={block.data} />
                         </div>
                     </div>
@@ -94,7 +94,7 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
                                 <i className="fa-regular fa-clone"></i>
                             </span>
                         </div>
-                        <TextParser content={block.description} style="font-[400] text-[0.85em] tracking-wide" />
+                        <TextParser content={block.description} style="font-inter font-[400] text-[0.85em] tracking-wide" />
                     </div>
                 </div>
             );

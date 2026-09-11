@@ -1,6 +1,6 @@
 "use client"; // Client-side rendering directive for Next.js
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useArticleData } from "@/contexts/ArticleDataProvider";
 import { useEditor } from "@/contexts/EditorProvider";
@@ -8,7 +8,6 @@ import { useEditor } from "@/contexts/EditorProvider";
 export default function TextEditor() {
     const { data, setData } = useArticleData();
     const { editMode, selection, setSelection } = useEditor();
-    const [focus, setFocus] = useState<boolean>(false);
     const router = useRouter();
 
     const addSyntax = (prefix: string, suffix: string): void => {
@@ -30,7 +29,7 @@ export default function TextEditor() {
     }
 
     return (
-        <div className="sticky top-18 z-1 m-3 flex h-12 items-center justify-between overflow-hidden rounded-md border border-sidebar-border bg-menu-form-bg shadow-sm shadow-black/10 lg:mx-14 xl:mx-21">
+        <div className="sticky top-18 z-2 m-3 flex h-12 items-center justify-between overflow-hidden rounded-md border border-sidebar-border bg-menu-form-bg shadow-sm shadow-black/10 lg:mx-14 xl:mx-21">
             {editMode && (
                 <div className="w-full h-full text-center md:w-[50%]">
                     <button
@@ -38,7 +37,7 @@ export default function TextEditor() {
                         title="Cancel editing"
                         aria-label="Cancel editing and return to contribution"
                         className="h-full w-full cursor-pointer border-r border-sidebar-border bg-red-500/10 text-red-700 hover:bg-red-500 hover:text-white transition-colors duration-150 ease-in-out"
-                        onClick={() => router.push("/contribution")}
+                        onClick={() => router.back()}
                     >
                         <i className="fa-solid fa-xmark"></i>
                     </button>

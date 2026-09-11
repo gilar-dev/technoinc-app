@@ -35,7 +35,7 @@ export default function Menubar({ title = "" }: MenubarProps) {
         <nav
             ref={menubarRef}
             className="
-                w-full font-basic p-[0.7em] flex justify-evenly items-center gap-1 sticky top-0 border-b z-1 border-border text-white bg-navbar-bg
+                w-full font-basic p-[0.7em] flex justify-evenly items-center gap-1 sticky top-0 border-b z-2 border-border text-white bg-navbar-bg
                 transition-[padding] duration-300 ease-in-out [&_button]:text-[1.3em]
             "
         >

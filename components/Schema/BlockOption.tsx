@@ -11,7 +11,7 @@ type ModifyBlockAction = "copy" | "cut" | "paste" | "paste-below";
 
 export default function BlockOption({ index }: BlockOptionProps) {
     const { data, setData } = useArticleData();
-    const { blockOpt, blockStored } = useEditor();
+    const { blockOpt, blockStored, blockMenu } = useEditor();
 
     // Swapping or moving block to up or down within wiki content
     const optMoveBlock = (direction: "up" | "down", index: number): void => {
@@ -25,6 +25,12 @@ export default function BlockOption({ index }: BlockOptionProps) {
         modifiedContent[index] = modifiedContent[targetBlock];
         modifiedContent[targetBlock] = currentblock;
         setData({ ...data, wiki_content: modifiedContent });
+    }
+
+    // Adding new block to wiki content
+    const optAddBlock = (index: number): void => {
+        blockMenu.setInsert(index);
+        blockMenu.set(true);
     }
 
     // Modifying block from wiki content
@@ -82,11 +88,19 @@ export default function BlockOption({ index }: BlockOptionProps) {
                                 onClick={() => optMoveBlock("down", index)}
                             ><i className="fa-solid fa-angle-down"></i></button>
                         </li>
+                        {/* Add action */}
+                        <li>
+                            <button
+                                title="Add block"
+                                className="p-2 cursor-pointer border-l-2 border-r-2 border-blue-500 hover:text-green-500"
+                                onClick={() => optAddBlock(index)}
+                            ><i className="fa-solid fa-plus"></i></button>
+                        </li>
                         {/* Modify action */}
                         <li>
                             <button
                                 title="Copy block"
-                                className="p-2 cursor-pointer border-l-2 border-blue-500 hover:text-blue-500"
+                                className="p-2 cursor-pointer hover:text-blue-500"
                                 onClick={() => optModifyBlock("copy", index)}
                             ><i className="fa-solid fa-copy"></i></button>
                         </li>

@@ -12,10 +12,17 @@ export default function BlockMenu() {
     const blockMenuRef = useRef<HTMLDivElement>(null);
 
     const addContentBlock = (block: Content): void => {
+        if (blockMenu.insert) {
+            const modifiedContent = [...data.wiki_content];
+            setData({ ...data, wiki_content: modifiedContent.toSpliced(blockMenu.insert + 1, 0, block) });
+            blockMenu.setInsert(null);
+            blockMenu.set(false);
+            return;
+        }
         setData({ ...data, wiki_content: [...data.wiki_content, block] });
         blockMenu.set(false);
-        const mainContainer = document.querySelector(".main-container");
-        if (mainContainer) mainContainer.scrollTo({ top: mainContainer.scrollHeight, behavior: "smooth" });
+        const mainContainer = document.querySelector("main");
+        if (mainContainer) mainContainer.scrollIntoView({ block: "end", behavior: "smooth" });
     }
 
     useEffect(() => {
@@ -25,10 +32,14 @@ export default function BlockMenu() {
             const target = event.target;
             if (!(target instanceof Node) || blockMenuRef.current?.contains(target)) return;
             if (target instanceof Element && target.closest("[data-block-menu-trigger]")) return;
+            if (blockMenu.insert) blockMenu.setInsert(null);
             blockMenu.set(false);
         };
         const closeOnEscape = (event: KeyboardEvent): void => {
-            if (event.key === "Escape") blockMenu.set(false);
+            if (event.key === "Escape") {
+                if (blockMenu.insert) blockMenu.setInsert(null);
+                blockMenu.set(false);
+            }
         };
 
         document.addEventListener("pointerdown", closeFromOutside);
@@ -74,7 +85,7 @@ export default function BlockMenu() {
                             <li key={`item-${index}`}>
                                 <div
                                     className="
-                                        w-26 aspect-square font-montserrat flex flex-col items-center justify-center gap-2 rounded-md
+                                        w-26 aspect-square cursor-pointer font-montserrat flex flex-col items-center justify-center gap-2 rounded-md
                                         border border-sidebar-border bg-sidebar-panel hover:border-sidebar-accent hover:text-sidebar-accent hover:bg-sidebar-hover
                                         active:border-sidebar-accent active:text-sidebar-accent active:bg-sidebar-hover"
                                     onClick={() => addContentBlock(item.block())}
@@ -100,10 +111,10 @@ export default function BlockMenu() {
                             <li key={`item-${index}`}>
                                 <div
                                     className="
-                                        w-26 aspect-square font-montserrat flex flex-col items-center justify-center gap-2 rounded-md
+                                        w-26 aspect-square cursor-pointer font-montserrat flex flex-col items-center justify-center gap-2 rounded-md
                                         border border-sidebar-border bg-sidebar-panel hover:border-sidebar-accent hover:text-sidebar-accent hover:bg-sidebar-hover
                                         active:border-sidebar-accent active:text-sidebar-accent active:bg-sidebar-hover"
-                                    onClick={() => console.log(item.label)}
+                                    onClick={() => addContentBlock(item.block())}
                                 >
                                     <div className="text-3xl">
                                         <i className={item.icon}></i>

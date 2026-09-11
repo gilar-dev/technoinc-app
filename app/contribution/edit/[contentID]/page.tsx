@@ -6,6 +6,7 @@ import TextEditor from "@/components/Editor/TextEditor";
 import ContentSchema from "@/components/Schema/ContentSchema";
 import BlockTools from "@/components/Editor/BlockTools";
 import BlockMenu from "@/components/Editor/BlockMenu";
+import Footer from "@/components/Footer";
 import { ContributionHeader, MissingArticle } from "../Components";
 import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
 import { dbGetArticleData } from "@/utils/databaseutils";
@@ -23,7 +24,7 @@ export default async function ContributionEditPage({ params }: PageProps) {
     return (
         <div className="md:relative md:w-[75%] md:left-[25%]">
             <Menubar title="Contribution - Edit" />
-            <div className="fixed top-0 left-0 z-2 md:w-[25%]">
+            <div className="fixed top-0 left-0 z-3 md:w-[25%]">
                 <SidebarOverlay />
                 <Sidebar />
             </div>
@@ -39,6 +40,7 @@ export default async function ContributionEditPage({ params }: PageProps) {
                     <BlockMenu />
                 </EditorProvider>
             )}
+            <Footer />
         </div>
     );
 }

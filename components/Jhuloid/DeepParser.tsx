@@ -73,7 +73,7 @@ export function InfoboxParser({ block, index }: InfoboxProps): React.JSX.Element
     const setFullMode = (event: HTMLButtonElement, className: string): void => {
         const infoboxChild: NodeListOf<Element> = document.querySelectorAll(`.${className}`);
         infoboxChild.forEach((child: Element) => {
-            const isExpand: boolean = child.classList.contains("table-row");
+            const isExpand = child.classList.contains("table-row");
             child.classList.replace(isExpand ? "table-row" : "hidden", !isExpand ? "table-row" : "hidden");
             event.children[0].textContent = !isExpand ? "Collapse" : "Expand";
         });

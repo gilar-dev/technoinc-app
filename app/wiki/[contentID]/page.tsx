@@ -3,11 +3,13 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import Menubar from "@/components/Menubar";
 import Sidebar from "@/components/Sidebar";
+import Footer from "@/components/Footer";
 import Jhuloid from "@/components/Jhuloid/Jhuloid";
 import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
 import { HeadingHolder, MissingArticle, RedirectNotice } from "./Components";
 import { getLinks } from "@/utils/parserUtils";
 import { dbGetArticleData, dbGetExistingLinks } from "@/utils/databaseutils";
+import { FORMERR } from "dns";
 
 interface Params {
     params: Promise<{ contentID: string }>;
@@ -54,12 +56,12 @@ export default async function WikiPage({ params }: Params) {
     return (
         <div className="md:relative md:w-[75%] md:left-[25%]">
             <Menubar title={articleData ? articleData.title : cleanContentID} />
-            <div className="fixed top-0 left-0 z-2 md:w-[25%]">
+            <div className="fixed top-0 left-0 z-3 md:w-[25%]">
                 <SidebarOverlay />
                 <Sidebar contents={articleData?.wiki_content} />
             </div>
             <HeadingHolder
-                title={articleData ? articleData.title : cleanContentID}
+                title={articleData ? articleData.title : reformatURI}
                 description={articleData ? articleData.description : ""}
             />
             <div className="main-container lg:px-7">
@@ -71,6 +73,7 @@ export default async function WikiPage({ params }: Params) {
                     : (<MissingArticle title={cleanContentID} />)
                 }
             </div>
+            <Footer />
             {articleData
                 && redirectedURL
                 && articleData.title.toLowerCase() === redirectedURL.replaceAll("_", " ").toLowerCase()

@@ -25,7 +25,7 @@ export interface GenImage {
     type: "gen-image-type";
     src: string;
     public_id: string;
-    description?: string;
+    description: string;
     raw_file?: File;
 }
 
@@ -47,7 +47,7 @@ export interface IbImage {
     type: "ib-image-type";
     src: string;
     public_id: string;
-    description?: string;
+    description: string;
     raw_file?: File;
 }
 
