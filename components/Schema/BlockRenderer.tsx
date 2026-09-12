@@ -14,10 +14,15 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
     const { data, setData } = useArticleData();
     const { blockOpt, selection, setSelection } = useEditor();
 
+    const checkNextType = (type: string): boolean => {
+        if (!data.content[index + 1]) return false;
+        return data.content[index + 1]["type"].includes(type);
+    }
+
     const handleChange = (index: number, key: string, value: string): void => {
-        const updatedContent = [...data.wiki_content];
+        const updatedContent = [...data.content];
         updatedContent[index] = { ...updatedContent[index], [key]: value };
-        setData({ ...data, wiki_content: updatedContent });
+        setData({ ...data, content: updatedContent });
     }
 
     const handleSelection = (target: HTMLTextAreaElement, key: string): void => {
@@ -34,17 +39,17 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
         if (!images) return;
         const imageFile = images[0];
         const imagepreview = URL.createObjectURL(imageFile);
-        const modifiedContent = [...data.wiki_content];
+        const modifiedContent = [...data.content];
         modifiedContent[index]["raw_file"] = imageFile;
         modifiedContent[index]["src"] = imagepreview;
-        setData({ ...data, wiki_content: modifiedContent });
+        setData({ ...data, content: modifiedContent });
     }
 
     switch (block.type) {
         // General block types
         case "gen-heading-type":
             return (
-                <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "outline-2 outline-blue-500" : ""}`}>
+                <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""}`}>
                     <BlockOption index={index} />
                     <div className="w-full overflow-hidden font-historical font-medium text-[26px] flex flex-col items-center">
                         <textarea
@@ -61,7 +66,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
             );
         case "gen-subheading-type":
             return (
-                <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "outline-2 outline-blue-500" : ""}`}>
+                <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""}`}>
                     <BlockOption index={index} />
                     <div className="w-full overflow-hidden font-['Inter'] font-semibold text-[18px] flex items-center">
                         <textarea
@@ -77,7 +82,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
             );
         case "gen-paragraph-type":
             return (
-                <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "outline-2 outline-blue-500" : ""}`}>
+                <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""}`}>
                     <BlockOption index={index} />
                     <div className="w-full overflow-hidden font-['Inter'] font-normal text-[15px]">
                         <textarea
@@ -95,7 +100,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
             );
         case "gen-image-type":
             return (
-                <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "outline-2 outline-blue-500" : ""}`}>
+                <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""}`}>
                     <BlockOption index={index} />
                     <div className="w-full p-1 font-['Inter'] flex justify-center items-center">
                         <div className="max-w-[60%] flex flex-col gap-3">
@@ -133,7 +138,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
         // Infobox block types
         case "ib-heading-type":
             return (
-                <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "outline-2 outline-blue-500" : ""}`}>
+                <div className={`flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""} ${checkNextType("ib") ? "" : "mb-3"}`}>
                     <BlockOption index={index} />
                     <div className="w-full overflow-hidden font-basic font-medium text-[1.25em] flex flex-col items-center border border-border bg-infobox-bg">
                         <textarea
@@ -151,9 +156,10 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
             );
         case "ib-subheading-type":
             return (
-                <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "outline-2 outline-blue-500" : ""}`}>
+                <div className={`flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""} ${checkNextType("ib") ? "" : "mb-3"}`}>
                     <BlockOption index={index} />
                     <div className="w-full overflow-hidden font-basic font-bold flex flex-col items-center border border-border bg-infobox-bg">
+                        <div className="w-full mt-2 border-t border-border"></div>
                         <textarea
                             name="ib-subheading-type"
                             placeholder="Ib Subheading"
@@ -169,26 +175,26 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
             );
         case "ib-info-type":
             return (
-                <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "outline-2 outline-blue-500" : ""}`}>
+                <div className={`flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""} ${checkNextType("ib") ? "" : "mb-3"}`}>
                     <BlockOption index={index} />
                     <div className="w-full overflow-hidden font-basic text-[0.9em] flex border border-border bg-infobox-bg">
-                        <div className="w-full">
+                        <div className="w-full flex">
                             <textarea
                                 name="ib-info-head-type"
                                 placeholder="Ib Head"
                                 aria-label={`Ib info head block ${index}`}
                                 value={block.head}
-                                className="w-full px-1 font-bold text-center resize-none field-sizing-content leading-relaxed whitespace-pre-wrap outline-none"
+                                className="w-full px-3 font-bold resize-none field-sizing-content leading-relaxed whitespace-pre-wrap outline-none"
                                 onChange={(e) => handleChange(index, "head", e.currentTarget.value)}
                             />
                         </div>
-                        <div className="w-full">
+                        <div className="w-full flex">
                             <textarea
                                 name="ib-info-data-type"
                                 placeholder="Ib Data"
                                 aria-label={`Ib info data block ${index}`}
                                 value={block.data}
-                                className="w-full px-1 text-center resize-none field-sizing-content leading-relaxed whitespace-pre-wrap outline-none"
+                                className="w-full px-3 resize-none field-sizing-content leading-relaxed whitespace-pre-wrap outline-none"
                                 onChange={(e) => handleChange(index, "data", e.currentTarget.value)}
                                 onSelect={(e) => handleSelection(e.currentTarget, "data")}
                                 onBlur={() => setSelection({ ...selection, selected: false })}
@@ -199,7 +205,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
             );
         case "ib-image-type":
             return (
-                <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "outline-2 outline-blue-500" : ""}`}>
+                <div className={`flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""} ${checkNextType("ib") ? "" : "mb-3 py-1"}`}>
                     <BlockOption index={index} />
                     <div className="w-full p-1 font-['Inter'] flex justify-center items-center border border-border bg-infobox-bg">
                         <div className="max-w-[60%] flex flex-col gap-3">

@@ -8,7 +8,7 @@ import ContentSchema from "@/components/Schema/ContentSchema";
 import BlockTools from "@/components/Editor/BlockTools";
 import BlockMenu from "@/components/Editor/BlockMenu";
 import Footer from "@/components/Footer";
-import { ContributionHeader } from "./edit/Components";
+import { ContributionHeader } from "./Components";
 import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
 
 export const metadata: Metadata = {

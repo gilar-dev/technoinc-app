@@ -25,7 +25,7 @@ export function useJhuloid() {
 }
 
 export default function Jhuloid({ articleData, existingLinks = [] }: JhuloidProps) {
-    const contents: (Content | Content[])[] = contentGrouper(articleData.wiki_content);
+    const contents: (Content | Content[])[] = contentGrouper(articleData.content);
     const expandContent = (event: HTMLDivElement): void => {
         const target = event.nextElementSibling;
         if (!target) return;

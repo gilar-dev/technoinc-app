@@ -7,7 +7,7 @@ import ContentSchema from "@/components/Schema/ContentSchema";
 import BlockTools from "@/components/Editor/BlockTools";
 import BlockMenu from "@/components/Editor/BlockMenu";
 import Footer from "@/components/Footer";
-import { ContributionHeader, MissingArticle } from "../Components";
+import { ContributionHeader, MissingArticle } from "../../Components";
 import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
 import { dbGetArticleData } from "@/utils/databaseutils";
 

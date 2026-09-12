@@ -1,99 +1,93 @@
-"use client"; // Client-side rendering directive for Next.js
+"use client";
 
-import { useState } from "react";
+import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useArticleData } from "@/contexts/ArticleDataProvider";
 import { useEditor } from "@/contexts/EditorProvider";
+
+const TOOLBAR_BUTTON_CLASS = "h-full w-full cursor-pointer text-foreground transition-colors duration-150 ease-in-out hover:bg-sidebar-hover";
+const DISABLED_BUTTON_CLASS = `${TOOLBAR_BUTTON_CLASS} text-foreground/30`;
 
 export default function TextEditor() {
     const { data, setData } = useArticleData();
     const { editMode, selection, setSelection } = useEditor();
     const router = useRouter();
 
+    const syntaxActions = useMemo(() => [
+        { title: "Bold", icon: "fa-solid fa-bold", prefix: "**", suffix: "**" },
+        { title: "Italic", icon: "fa-solid fa-italic", prefix: "*", suffix: "*" },
+        { title: "Underline", icon: "fa-solid fa-underline", prefix: "__", suffix: "__" },
+        { title: "Dotted", icon: "fa-solid fa-ellipsis", prefix: "_", suffix: "_" },
+        { title: "Link", icon: "fa-solid fa-link", prefix: "<link:", suffix: "#/wiki/>" },
+    ], []);
+
     const addSyntax = (prefix: string, suffix: string): void => {
         if (!selection.selected) return;
-        const updatedContent = [...data.wiki_content];
-        const currentValue: string = updatedContent[selection.blockIndex][selection.key];
-        const isSelected = selection.start === selection.end;
-        const selectedValue = isSelected ? "text" : currentValue.slice(selection.start, selection.end);
-        const addedPrefix = currentValue.slice(0, selection.start) + prefix + selectedValue + suffix + currentValue.slice(selection.end);
-        updatedContent[selection.blockIndex][selection.key] = addedPrefix;
-        setData({ ...data, wiki_content: updatedContent });
+
+        const updatedContent = [...data.content];
+        const currentValue = updatedContent[selection.blockIndex][selection.key];
+        const isCollapsed = selection.start === selection.end;
+        const selectedValue = isCollapsed ? "text" : currentValue.slice(selection.start, selection.end);
+        const newValue =
+            currentValue.slice(0, selection.start) +
+            prefix +
+            selectedValue +
+            suffix +
+            currentValue.slice(selection.end);
+
+        updatedContent[selection.blockIndex][selection.key] = newValue;
+
+        setData({ ...data, content: updatedContent });
         setSelection({
             ...selection,
             selected: false,
             start: selection.start + prefix.length,
-            end: isSelected ? selection.end + prefix.length + 4 : selection.end + prefix.length,
-            done: true
+            end: isCollapsed ? selection.end + prefix.length + 4 : selection.end + prefix.length,
+            done: true,
         });
-    }
+    };
+
+    const handleButtonMouseDown = (event: React.MouseEvent<HTMLButtonElement>, prefix: string, suffix: string) => {
+        event.preventDefault();
+        addSyntax(prefix, suffix);
+    };
 
     return (
-        <div className="sticky top-18 z-2 m-3 flex h-12 items-center justify-between overflow-hidden rounded-md border border-sidebar-border bg-menu-form-bg shadow-sm shadow-black/10 lg:mx-14 xl:mx-21">
+        <div className="sticky top-18 m-3 flex h-12 items-center justify-between overflow-hidden rounded-md border border-sidebar-border bg-menu-form-bg shadow-sm shadow-black/10 lg:mx-14 xl:mx-21">
             {editMode && (
-                <div className="w-full h-full text-center md:w-[50%]">
+                <div className="h-full w-full text-center md:w-[50%]">
                     <button
                         type="button"
                         title="Cancel editing"
                         aria-label="Cancel editing and return to contribution"
-                        className="h-full w-full cursor-pointer border-r border-sidebar-border bg-red-500/10 text-red-700 hover:bg-red-500 hover:text-white transition-colors duration-150 ease-in-out"
+                        className="h-full w-full cursor-pointer border-r border-sidebar-border bg-red-500/10 text-red-700 transition-colors duration-150 ease-in-out hover:bg-red-500 hover:text-white"
                         onClick={() => router.back()}
                     >
-                        <i className="fa-solid fa-xmark"></i>
+                        <i className="fa-solid fa-xmark" />
                     </button>
                 </div>
             )}
-            <div className="w-full h-full text-center">
+
+            {syntaxActions.map(({ title, icon, prefix, suffix }) => (
+                <div key={title} className="h-full w-full text-center">
+                    <button
+                        type="button"
+                        title={title}
+                        className={selection.selected ? TOOLBAR_BUTTON_CLASS : DISABLED_BUTTON_CLASS}
+                        onMouseDown={(event) => handleButtonMouseDown(event, prefix, suffix)}
+                    >
+                        <i className={icon} />
+                    </button>
+                </div>
+            ))}
+
+            <div className="h-full w-full text-center md:w-[50%]">
                 <button
-                    title="Bold"
-                    className={`h-full w-full cursor-pointer ${selection.selected ? "text-foreground" : "text-foreground/30"} hover:bg-sidebar-hover transition-colors duration-150 ease-in-out`}
-                    onMouseDown={(e) => { e.preventDefault(); addSyntax("**", "**"); }}
-                >
-                    <i className="fa-solid fa-bold"></i>
-                </button>
-            </div>
-            <div className="w-full h-full text-center">
-                <button
-                    title="Italic"
-                    className={`h-full w-full cursor-pointer ${selection.selected ? "text-foreground" : "text-foreground/30"} hover:bg-sidebar-hover transition-colors duration-150 ease-in-out`}
-                    onMouseDown={(e) => { e.preventDefault(); addSyntax("*", "*"); }}
-                >
-                    <i className="fa-solid fa-italic"></i>
-                </button>
-            </div>
-            <div className="w-full h-full text-center">
-                <button
-                    title="Underline"
-                    className={`h-full w-full cursor-pointer ${selection.selected ? "text-foreground" : "text-foreground/30"} hover:bg-sidebar-hover transition-colors duration-150 ease-in-out`}
-                    onMouseDown={(e) => { e.preventDefault(); addSyntax("__", "__"); }}
-                >
-                    <i className="fa-solid fa-underline"></i>
-                </button>
-            </div>
-            <div className="w-full h-full text-center">
-                <button
-                    title="Dotted"
-                    className={`h-full w-full cursor-pointer ${selection.selected ? "text-foreground" : "text-foreground/30"} hover:bg-sidebar-hover transition-colors duration-150 ease-in-out`}
-                    onMouseDown={(e) => { e.preventDefault(); addSyntax("_", "_"); }}
-                >
-                    <i className="fa-solid fa-ellipsis"></i>
-                </button>
-            </div>
-            <div className="w-full h-full text-center">
-                <button
-                    title="Link"
-                    className={`h-full w-full cursor-pointer ${selection.selected ? "text-foreground" : "text-foreground/30"} hover:bg-sidebar-hover transition-colors duration-150 ease-in-out`}
-                    onMouseDown={(e) => { e.preventDefault(); addSyntax("<link:", "#/wiki/>"); }}
-                >
-                    <i className="fa-solid fa-link"></i>
-                </button>
-            </div>
-            <div className="w-full h-full text-center md:w-[50%]">
-                <button
+                    type="button"
                     title="Publish"
-                    className="h-full w-full cursor-pointer text-blue-500 bg-blue-500/30 hover:text-white hover:bg-blue-500 transition-colors duration-150 ease-in-out"
+                    className="h-full w-full cursor-pointer bg-blue-500/30 text-blue-500 transition-colors duration-150 ease-in-out hover:bg-blue-500 hover:text-white"
                 >
-                    <i className="fa-solid fa-angle-right"></i>
+                    <i className="fa-solid fa-angle-right" />
                 </button>
             </div>
         </div>

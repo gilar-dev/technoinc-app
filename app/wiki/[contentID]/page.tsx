@@ -9,7 +9,6 @@ import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
 import { HeadingHolder, MissingArticle, RedirectNotice } from "./Components";
 import { getLinks } from "@/utils/parserUtils";
 import { dbGetArticleData, dbGetExistingLinks } from "@/utils/databaseutils";
-import { FORMERR } from "dns";
 
 interface Params {
     params: Promise<{ contentID: string }>;
@@ -17,19 +16,19 @@ interface Params {
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
     const { contentID } = await params;
-    const cleanContentID = decodeURIComponent(contentID).replace(/(_+)|( +)/g, " ");
+    const cleanContentID = decodeURIComponent(contentID).replace(/(_+)|( +)/g, "_");
     const articleData = await dbGetArticleData(contentID);
 
     if (!articleData) return { title: `${cleanContentID} - TechnoInc MC Wiki` }
     return {
         title: `${articleData.title} - TechnoInc MC Wiki`,
-        description: articleData.description,
+        description: articleData.desc,
         metadataBase: new URL(`https://technoinc.world/wiki/${articleData.title.replaceAll(" ", "_")}`),
         openGraph: {
             type: "website",
             url: `https://technoinc.world/wiki/${articleData.title.replaceAll(" ", "_")}`,
             title: `${articleData.title} - TechnoInc MC Wiki`,
-            description: articleData.description,
+            description: articleData.desc,
             siteName: "TechnoInc MC Wiki",
             images: [{ url: articleData.cover, width: 800, height: 600, alt: articleData.title }]
         }
@@ -41,28 +40,28 @@ export default async function WikiPage({ params }: Params) {
     const cookieStore = await cookies();
     const redirectedURL = cookieStore.get("x-user-previous-url")?.value;
     const reformatURI = decodeURIComponent(contentID).replace(/(_+)|( +)/g, "_");
-    const cleanContentID = reformatURI.replaceAll("_", " ");
+    const cleanURI = reformatURI.replaceAll("_", " ");
     const articleData = await dbGetArticleData(reformatURI);
-    const links = articleData ? getLinks(articleData.wiki_content) : [];
+    const links = articleData ? getLinks(articleData.content) : [];
     const existingLinks = links ? await dbGetExistingLinks(links) : undefined;
 
     if (articleData) {
         // Redirect to the correct URL if the contentID in the URL does not match the article title
-        if (decodeURIComponent(contentID) !== reformatURI || articleData.title !== cleanContentID) {
+        if (decodeURIComponent(contentID) !== reformatURI || articleData.title !== reformatURI) {
             redirect(`/wiki/${articleData.title.replaceAll(" ", "_")}`, "replace");
         }
     }
 
     return (
         <div className="md:relative md:w-[75%] md:left-[25%]">
-            <Menubar title={articleData ? articleData.title : cleanContentID} />
+            <Menubar title={articleData ? articleData.title.replaceAll("_", " ") : cleanURI} />
             <div className="fixed top-0 left-0 z-3 md:w-[25%]">
                 <SidebarOverlay />
-                <Sidebar contents={articleData?.wiki_content} />
+                <Sidebar contents={articleData?.content} />
             </div>
             <HeadingHolder
-                title={articleData ? articleData.title : reformatURI}
-                description={articleData ? articleData.description : ""}
+                title={articleData ? articleData.title.replaceAll("_", " ") : cleanURI}
+                description={articleData ? articleData.desc : ""}
             />
             <div className="main-container lg:px-7">
                 {articleData
@@ -70,14 +69,14 @@ export default async function WikiPage({ params }: Params) {
                         articleData={articleData}
                         existingLinks={existingLinks}
                     />)
-                    : (<MissingArticle title={cleanContentID} />)
+                    : (<MissingArticle title={cleanURI} />)
                 }
             </div>
             <Footer />
             {articleData
                 && redirectedURL
-                && articleData.title.toLowerCase() === redirectedURL.replaceAll("_", " ").toLowerCase()
-                && articleData.title !== redirectedURL.replaceAll("_", " ")
+                && articleData.title.toLowerCase() === redirectedURL.toLowerCase()
+                && articleData.title !== redirectedURL
                 && (<RedirectNotice redirectedURL={redirectedURL} />)}
         </div>
     );

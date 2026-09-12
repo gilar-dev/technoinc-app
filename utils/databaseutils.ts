@@ -20,13 +20,20 @@ function getAPIUrl(): string {
  * @returns ArticleData | undefined
  */
 export async function dbGetArticleData(contentID: string): Promise<ArticleData | undefined> {
-    const API_URL = getAPIUrl();
-    const response = await fetch(`${API_URL}/api/v1/wiki/get/${encodeURIComponent(contentID)}`, { cache: "no-store" });
-    if (response.status === 404) return undefined;
-    if (!response.ok) throw new Error(`Failed to fetch article content (${response.status})`);
+    try {
+        const API_URL = getAPIUrl();
+        const response = await fetch(`${API_URL}/api/v1/wiki/get/${encodeURIComponent(contentID)}`, {
+            cache: "no-store"
+        });
+        if (response.status === 404) return undefined;
+        if (!response.ok) throw new Error(`Failed to fetch article content (${response.status})`);
 
-    const result: ArticleDataResult | undefined = await response.json();
-    return result?.article;
+        const result: ArticleDataResult | undefined = await response.json();
+        return result?.article;
+    }
+    catch (error) {
+        console.error(error);
+    }
 }
 
 interface CreateCategoryResult extends Status {
@@ -45,7 +52,8 @@ export async function dbCreateCategory(category: string, parent: string): Promis
         const response = await fetch(`${API_URL}/api/v1/wiki/category/create`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ category_name: category, category_parent: parent })
+            body: JSON.stringify({ category_name: category, category_parent: parent }),
+            cache: "no-store"
         })
         if (!response.ok) throw new Error("Failed to create category");
         const result: CreateCategoryResult = await response.json();

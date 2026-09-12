@@ -40,7 +40,7 @@ export function HeadingHolder({ title, description }: ArticleTitleProps) {
 
 export function RedirectNotice({ redirectedURL }: { redirectedURL: string }) {
     return (
-        <div className="min-w-[65%] max-w-[90%] p-3 fixed left-[50%] bottom-0 z-2 rounded-[3px] text-white bg-gray-800 translate-x-[-50%] translate-y-full animate-[showUp_7s_ease-in-out_forwards]">
+        <div className="min-w-[65%] max-w-[90%] p-3 fixed left-[50%] bottom-0 z-3 rounded-[3px] text-white bg-gray-800 translate-x-[-50%] translate-y-full animate-[showUp_7s_ease-in-out_forwards]">
             <p className="text-[0.9em] text-center">Redirected from '<span className="font-semibold underline">{redirectedURL.replaceAll("_", " ")}</span>'</p>
         </div>
     );

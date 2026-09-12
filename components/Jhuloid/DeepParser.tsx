@@ -34,6 +34,7 @@ export function PrimaryParser({ block, expandContent }: PrimaryProps): React.JSX
                 }
             }
         }
+        handleResize();
         window.addEventListener("resize", handleResize);
         return () => { window.removeEventListener("resize", handleResize); }
     }, [isMounted]);

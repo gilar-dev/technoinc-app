@@ -6,15 +6,15 @@ import { Schema, SetState, History } from "@/utils/typeUtils";
 export interface ArticleData {
     title: string;
     id: number;
-    description: string;
+    desc: string;
     cover: string;
-    public_id: string;
-    version: number;
-    classification: "Start" | "GA" | "FA";
-    category: string[];
+    p_id: string;
+    ver: number;
+    cls: "Start" | "GA" | "FA";
+    cat: string[];
     view: number;
-    history: History[];
-    wiki_content: Schema;
+    his: History[];
+    content: Schema;
     // Temporary properties
     raw_file?: File | undefined;
 }
@@ -45,15 +45,15 @@ export default function ArticleDataProvider({ children }: { children: React.Reac
     const [articleData, setArticleData] = useState<ArticleData>({
         title: "",
         id: 0,
-        description: "",
+        desc: "",
         cover: "",
-        public_id: "",
-        version: 0,
-        classification: "Start",
-        category: [],
+        p_id: "",
+        ver: 0,
+        cls: "Start",
+        cat: [],
         view: 0,
-        history: [],
-        wiki_content: []
+        his: [],
+        content: []
     });
     const [toDelete, setToDelete] = useState<string[]>([]);
     const [categoryForm, setCategoryForm] = useState<CategoryForm>({

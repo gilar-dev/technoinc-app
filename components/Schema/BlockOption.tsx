@@ -16,15 +16,15 @@ export default function BlockOption({ index }: BlockOptionProps) {
     // Swapping or moving block to up or down within wiki content
     const optMoveBlock = (direction: "up" | "down", index: number): void => {
         if (direction === "up" && index === 0) return;
-        else if (direction === "down" && index === data.wiki_content.length - 1) return;
+        else if (direction === "down" && index === data.content.length - 1) return;
 
-        const modifiedContent = [...data.wiki_content];
+        const modifiedContent = [...data.content];
         const currentblock = modifiedContent[index];
         const targetBlock = direction === "up" ? index - 1 : index + 1;
 
         modifiedContent[index] = modifiedContent[targetBlock];
         modifiedContent[targetBlock] = currentblock;
-        setData({ ...data, wiki_content: modifiedContent });
+        setData({ ...data, content: modifiedContent });
     }
 
     // Adding new block to wiki content
@@ -35,25 +35,25 @@ export default function BlockOption({ index }: BlockOptionProps) {
 
     // Modifying block from wiki content
     const optModifyBlock = (action: ModifyBlockAction, index: number): void => {
-        const modifiedContent = [...data.wiki_content];
+        const modifiedContent = [...data.content];
         if (action === "copy") {
             blockStored.set(modifiedContent[index]);
         } else if (action === "cut") {
             blockStored.set(modifiedContent[index]);
-            setData({ ...data, wiki_content: modifiedContent.toSpliced(index, 1) });
+            setData({ ...data, content: modifiedContent.toSpliced(index, 1) });
         } else if (action === "paste") {
             if (!blockStored.block) return;
-            setData({ ...data, wiki_content: modifiedContent.toSpliced(index, 1, blockStored.block) });
+            setData({ ...data, content: modifiedContent.toSpliced(index, 1, blockStored.block) });
         } else if (action === "paste-below") {
             if (!blockStored.block) return;
-            setData({ ...data, wiki_content: modifiedContent.toSpliced(index + 1, 0, blockStored.block) });
+            setData({ ...data, content: modifiedContent.toSpliced(index + 1, 0, blockStored.block) });
         }
     }
 
     // Deleting block from wiki content
     const optDeleteBlock = (index: number): void => {
-        const modifiedContent = [...data.wiki_content];
-        setData({ ...data, wiki_content: modifiedContent.toSpliced(index, 1) });
+        const modifiedContent = [...data.content];
+        setData({ ...data, content: modifiedContent.toSpliced(index, 1) });
     }
 
     return (
@@ -69,8 +69,8 @@ export default function BlockOption({ index }: BlockOptionProps) {
             {/* Option menu */}
             {blockOpt.selected === index && (
                 <div className={`
-                    absolute left-0 outline-2 outline-blue-500 bg-menu-form-bg
-                    ${blockOpt.selected === 0 ? "bottom-0 translate-y-full" : "top-0 -translate-y-full"}
+                    absolute -left-px border-2 border-blue-500 bg-menu-form-bg
+                    ${blockOpt.selected === 0 ? "bottom-0 z-1 translate-y-full" : "top-0 -translate-y-full"}
                 `}>
                     <ul className="flex items-center gap-1 text-foreground">
                         {/* Move action */}
@@ -84,7 +84,7 @@ export default function BlockOption({ index }: BlockOptionProps) {
                         <li>
                             <button
                                 title="Move down"
-                                className={`p-2 ${index === data.wiki_content.length - 1 ? "cursor-not-allowed text-gray-500/50" : "cursor-pointer hover:text-blue-500"}`}
+                                className={`p-2 ${index === data.content.length - 1 ? "cursor-not-allowed text-gray-500/50" : "cursor-pointer hover:text-blue-500"}`}
                                 onClick={() => optMoveBlock("down", index)}
                             ><i className="fa-solid fa-angle-down"></i></button>
                         </li>
