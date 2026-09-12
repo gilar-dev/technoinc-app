@@ -31,7 +31,7 @@ export default function CategoryForm() {
     const debounceQuery = useDebounce(input);
 
     const checkConditions = (category: string): boolean => {
-        return !data.category.includes(category) || createCategory.create;
+        return !data.cat.includes(category) || createCategory.create;
     }
 
     useEffect(() => {
@@ -128,11 +128,11 @@ export default function CategoryForm() {
                                         onClick={async () => {
                                             if (createCategory.create) {
                                                 const process = await dbCreateCategory(createCategory.createInput, category.category);
-                                                if (process) setData({ ...data, category: [...data.category, createCategory.createInput] });
+                                                if (process) setData({ ...data, cat: [...data.cat, createCategory.createInput] });
                                                 setCategoryForm({ ...categoryForm, isOpen: false });
                                                 return;
                                             }
-                                            setData({ ...data, category: [...data.category, category.category] });
+                                            setData({ ...data, cat: [...data.cat, category.category] });
                                             setCategoryForm({ ...categoryForm, isOpen: false });
                                         }}
                                     ><i className="fa-solid fa-plus text-[1.2em]"></i></button>

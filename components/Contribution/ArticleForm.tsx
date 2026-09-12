@@ -13,7 +13,7 @@ interface ArticleFormProps {
 export default function ArticleForm({ formData = undefined }: ArticleFormProps) {
     const { data, setData, categoryForm, setCategoryForm } = useArticleData();
     const [useProvider, setUseProvider] = useState<boolean>(false);
-    const category = formData && !useProvider ? formData.category : data.category;
+    const category = formData && !useProvider ? formData.cat : data.cat;
 
     useEffect(() => {
         return () => {
@@ -52,9 +52,9 @@ export default function ArticleForm({ formData = undefined }: ArticleFormProps) 
                 <textarea
                     name="article-brief-input"
                     placeholder="Description (optional)"
-                    value={formData && !useProvider ? formData.description : data.description}
+                    value={formData && !useProvider ? formData.desc : data.desc}
                     className="peer mt-2 min-h-2 field-sizing-content resize-none rounded-sm border border-transparent bg-foreground/5 p-2 text-[1em] outline-none transition-colors placeholder:text-foreground/45 focus:border-sidebar-accent"
-                    onChange={(e) => setData({ ...data, description: e.currentTarget.value })}
+                    onChange={(e) => setData({ ...data, desc: e.currentTarget.value })}
 
                 />
                 <div className="self-center h-0.75 w-0 bg-sidebar-accent transition-[width] duration-150 ease-in-out peer-focus:w-full"></div>
@@ -84,7 +84,7 @@ export default function ArticleForm({ formData = undefined }: ArticleFormProps) 
                                 <button
                                     title="Delete category"
                                     className="cursor-pointer"
-                                    onClick={() => setData({ ...data, category: data.category.toSpliced(index, 1) })}
+                                    onClick={() => setData({ ...data, cat: data.cat.toSpliced(index, 1) })}
                                 >
                                     <i className="fa-solid fa-xmark"></i>
                                 </button>
@@ -131,7 +131,7 @@ export default function ArticleForm({ formData = undefined }: ArticleFormProps) 
                 <input
                     id="article-version-input"
                     type="text"
-                    value={`${formData && !useProvider ? formData.version : data.version} (readonly)`}
+                    value={`${formData && !useProvider ? formData.ver : data.ver} (readonly)`}
                     readOnly
                     className="mt-2 rounded-sm border border-sidebar-border bg-foreground/5 p-2 outline-none"
                 />

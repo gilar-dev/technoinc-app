@@ -13,13 +13,13 @@ export default function BlockMenu() {
 
     const addContentBlock = (block: Content): void => {
         if (blockMenu.insert) {
-            const modifiedContent = [...data.wiki_content];
-            setData({ ...data, wiki_content: modifiedContent.toSpliced(blockMenu.insert + 1, 0, block) });
+            const modifiedContent = [...data.content];
+            setData({ ...data, content: modifiedContent.toSpliced(blockMenu.insert + 1, 0, block) });
             blockMenu.setInsert(null);
             blockMenu.set(false);
             return;
         }
-        setData({ ...data, wiki_content: [...data.wiki_content, block] });
+        setData({ ...data, content: [...data.content, block] });
         blockMenu.set(false);
         const mainContainer = document.querySelector("main");
         if (mainContainer) mainContainer.scrollIntoView({ block: "end", behavior: "smooth" });

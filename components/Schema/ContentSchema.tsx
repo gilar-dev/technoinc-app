@@ -21,7 +21,7 @@ export default function ContentSchema() {
 
     return (
         <main data-content-schema className="mx-3 mb-15 scroll-mb-50 lg:mx-14 xl:mx-21">
-            {data.wiki_content.map((block, index) => (
+            {data.content.map((block, index) => (
                 <BlockRenderer key={`block-${index}`} block={block} index={index} />
             ))}
         </main>
