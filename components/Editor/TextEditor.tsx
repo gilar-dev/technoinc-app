@@ -53,7 +53,7 @@ export default function TextEditor() {
     };
 
     return (
-        <div className="sticky top-18 m-3 flex h-12 items-center justify-between overflow-hidden rounded-md border border-sidebar-border bg-menu-form-bg shadow-sm shadow-black/10 lg:mx-14 xl:mx-21">
+        <div className="m-3 sticky top-18 z-2 flex h-12 items-center justify-between overflow-hidden rounded-md border border-sidebar-border bg-menu-form-bg shadow-sm shadow-black/10 lg:mx-14 xl:mx-21">
             {editMode && (
                 <div className="h-full w-full text-center md:w-[50%]">
                     <button

@@ -17,17 +17,17 @@ interface Params {
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
     const { contentID } = await params;
     const cleanContentID = decodeURIComponent(contentID).replace(/(_+)|( +)/g, "_");
-    const articleData = await dbGetArticleData(contentID);
+    const articleData = await dbGetArticleData(cleanContentID);
 
-    if (!articleData) return { title: `${cleanContentID} - TechnoInc MC Wiki` }
+    if (!articleData) return { title: `${cleanContentID.replaceAll("_", " ")} - TechnoInc MC Wiki` }
     return {
-        title: `${articleData.title} - TechnoInc MC Wiki`,
+        title: `${articleData.title.replaceAll("_", " ")} - TechnoInc MC Wiki`,
         description: articleData.desc,
-        metadataBase: new URL(`https://technoinc.world/wiki/${articleData.title.replaceAll(" ", "_")}`),
+        metadataBase: new URL(`https://technoinc.world/wiki/${articleData.title}`),
         openGraph: {
             type: "website",
-            url: `https://technoinc.world/wiki/${articleData.title.replaceAll(" ", "_")}`,
-            title: `${articleData.title} - TechnoInc MC Wiki`,
+            url: `https://technoinc.world/wiki/${articleData.title}`,
+            title: `${articleData.title.replaceAll("_", " ")} - TechnoInc MC Wiki`,
             description: articleData.desc,
             siteName: "TechnoInc MC Wiki",
             images: [{ url: articleData.cover, width: 800, height: 600, alt: articleData.title }]
