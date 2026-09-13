@@ -9,3 +9,11 @@ export function cleanText(text: string): string {
 export function capitalize(text: string): string {
     return text.charAt(0).toUpperCase() + text.slice(1);
 }
+
+export function reformatURI(text: string):string {
+    const reformat = text
+        .replace(/(_+)|( +)/g, "_")
+        .replace(/^_+|_+$/g, "")
+        .replace(/^(%20)+|(%20)+$/g, "");
+    return reformat;
+}

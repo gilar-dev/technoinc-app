@@ -85,7 +85,7 @@ export default function TextEditor() {
                 <button
                     type="button"
                     title="Publish"
-                    className="h-full w-full cursor-pointer bg-blue-500/30 text-blue-500 transition-colors duration-150 ease-in-out hover:bg-blue-500 hover:text-white"
+                    className="h-full w-full cursor-pointer bg-blue-500/30 text-blue-500 transition-colors duration-150 ease-in-out hover:text-white hover:bg-blue-500"
                 >
                     <i className="fa-solid fa-angle-right" />
                 </button>

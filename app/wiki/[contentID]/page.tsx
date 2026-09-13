@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import Jhuloid from "@/components/Jhuloid/Jhuloid";
 import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
 import { HeadingHolder, MissingArticle, RedirectNotice } from "./Components";
+import { reformatURI } from "@/utils/textUtils";
 import { getLinks } from "@/utils/parserUtils";
 import { dbGetArticleData, dbGetExistingLinks } from "@/utils/databaseutils";
 
@@ -16,17 +17,18 @@ interface Params {
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
     const { contentID } = await params;
-    const cleanContentID = decodeURIComponent(contentID).replace(/(_+)|( +)/g, "_");
-    const articleData = await dbGetArticleData(cleanContentID);
+    const formattedURI = reformatURI(decodeURIComponent(contentID));
+    const cleanURI = formattedURI.replaceAll("_", " ");
+    const articleData = await dbGetArticleData(formattedURI);
 
-    if (!articleData) return { title: `${cleanContentID.replaceAll("_", " ")} - TechnoInc MC Wiki` }
+    if (!articleData) return { title: `${cleanURI} - TechnoInc MC Wiki` }
     return {
         title: `${articleData.title.replaceAll("_", " ")} - TechnoInc MC Wiki`,
         description: articleData.desc,
         metadataBase: new URL(`https://technoinc.world/wiki/${articleData.title}`),
         openGraph: {
             type: "website",
-            url: `https://technoinc.world/wiki/${articleData.title}`,
+            url: `https://technoinc-next.netlify.app/wiki/${articleData.title}`,
             title: `${articleData.title.replaceAll("_", " ")} - TechnoInc MC Wiki`,
             description: articleData.desc,
             siteName: "TechnoInc MC Wiki",
@@ -39,16 +41,16 @@ export default async function WikiPage({ params }: Params) {
     const { contentID } = await params;
     const cookieStore = await cookies();
     const redirectedURL = cookieStore.get("x-user-previous-url")?.value;
-    const reformatURI = decodeURIComponent(contentID).replace(/(_+)|( +)/g, "_");
-    const cleanURI = reformatURI.replaceAll("_", " ");
-    const articleData = await dbGetArticleData(reformatURI);
+    const formattedURI = reformatURI(decodeURIComponent(contentID));
+    const cleanURI = formattedURI.replaceAll("_", " ");
+    const articleData = await dbGetArticleData(formattedURI);
     const links = articleData ? getLinks(articleData.content) : [];
     const existingLinks = links ? await dbGetExistingLinks(links) : undefined;
 
     if (articleData) {
         // Redirect to the correct URL if the contentID in the URL does not match the article title
-        if (decodeURIComponent(contentID) !== reformatURI || articleData.title !== reformatURI) {
-            redirect(`/wiki/${articleData.title.replaceAll(" ", "_")}`, "replace");
+        if (decodeURIComponent(contentID) !== formattedURI || articleData.title !== formattedURI) {
+            redirect(`/wiki/${articleData.title}`, "replace");
         }
     }
 
