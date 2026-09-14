@@ -41,6 +41,7 @@ export default async function WikiPage({ params }: Params) {
     const { contentID } = await params;
     const cookieStore = await cookies();
     const redirectedURL = cookieStore.get("x-user-previous-url")?.value;
+    console.log(redirectedURL);
     const formattedURI = reformatURI(decodeURIComponent(contentID));
     const cleanURI = formattedURI.replaceAll("_", " ");
     const articleData = await dbGetArticleData(formattedURI);

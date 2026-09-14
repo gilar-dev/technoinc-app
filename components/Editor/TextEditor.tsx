@@ -1,9 +1,11 @@
-"use client";
+"use client"; // Client-side rendering directive for Next.js
 
 import { useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 import { useArticleData } from "@/contexts/ArticleDataProvider";
 import { useEditor } from "@/contexts/EditorProvider";
+import uploadArticle from "@/libs/upload-article";
 
 const TOOLBAR_BUTTON_CLASS = "h-full w-full cursor-pointer text-foreground transition-colors duration-150 ease-in-out hover:bg-sidebar-hover";
 const DISABLED_BUTTON_CLASS = `${TOOLBAR_BUTTON_CLASS} text-foreground/30`;
@@ -47,10 +49,14 @@ export default function TextEditor() {
         });
     };
 
-    const handleButtonMouseDown = (event: React.MouseEvent<HTMLButtonElement>, prefix: string, suffix: string) => {
-        event.preventDefault();
-        addSyntax(prefix, suffix);
-    };
+    const processToPublish = async (): Promise<void> => {
+        if (!editMode) {
+            const process = await uploadArticle(data);
+            if (process.success) toast.success(process.message, { className: "text-foreground! bg-menu-form-bg!" });
+            else toast.error(process.message, { className: "text-foreground! bg-menu-form-bg!" });
+            return;
+        }
+    }
 
     return (
         <div className="m-3 sticky top-18 z-2 flex h-12 items-center justify-between overflow-hidden rounded-md border border-sidebar-border bg-menu-form-bg shadow-sm shadow-black/10 lg:mx-14 xl:mx-21">
@@ -74,7 +80,7 @@ export default function TextEditor() {
                         type="button"
                         title={title}
                         className={selection.selected ? TOOLBAR_BUTTON_CLASS : DISABLED_BUTTON_CLASS}
-                        onMouseDown={(event) => handleButtonMouseDown(event, prefix, suffix)}
+                        onMouseDown={(e) => { e.preventDefault(); addSyntax(prefix, suffix); }}
                     >
                         <i className={icon} />
                     </button>
@@ -86,6 +92,7 @@ export default function TextEditor() {
                     type="button"
                     title="Publish"
                     className="h-full w-full cursor-pointer bg-blue-500/30 text-blue-500 transition-colors duration-150 ease-in-out hover:text-white hover:bg-blue-500"
+                    onClick={() => processToPublish()}
                 >
                     <i className="fa-solid fa-angle-right" />
                 </button>

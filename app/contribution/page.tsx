@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Menubar from "@/components/Menubar";
 import Sidebar from "@/components/Sidebar";
 import EditorProvider from "@/contexts/EditorProvider";
+import ToastProvider from "@/contexts/ToastProvider";
 import ArticleForm from "@/components/Contribution/ArticleForm";
 import TextEditor from "@/components/Editor/TextEditor";
 import ContentSchema from "@/components/Schema/ContentSchema";
@@ -26,12 +27,14 @@ export default function ContributionPage() {
                 <Sidebar />
             </div>
             <EditorProvider>
-                <ContributionHeader />
-                <ArticleForm />
-                <TextEditor />
-                <ContentSchema />
-                <BlockTools />
-                <BlockMenu />
+                <ToastProvider>
+                    <ContributionHeader />
+                    <ArticleForm />
+                    <TextEditor />
+                    <ContentSchema />
+                    <BlockTools />
+                    <BlockMenu />
+                </ToastProvider>
             </EditorProvider>
             <Footer />
         </div>

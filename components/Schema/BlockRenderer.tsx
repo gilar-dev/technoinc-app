@@ -84,13 +84,13 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
             return (
                 <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""}`}>
                     <BlockOption index={index} />
-                    <div className="w-full overflow-hidden font-['Inter'] font-normal text-[15px]">
+                    <div className="w-full overflow-hidden font-['Inter'] font-normal text-[15px] flex">
                         <textarea
                             name="gen-paragraph-type"
                             placeholder="Paragraph"
                             aria-label={`Paragraph block ${index}`}
                             value={block.text}
-                            className="w-full p-1 text-[15px] resize-none field-sizing-content leading-relaxed whitespace-pre-wrap outline-none"
+                            className="w-full px-1 resize-none field-sizing-content leading-relaxed whitespace-pre-wrap outline-none"
                             onChange={(e) => handleChange(index, "text", e.currentTarget.value)}
                             onSelect={(e) => handleSelection(e.currentTarget, "text")}
                             onBlur={() => setSelection({ ...selection, selected: false })}
@@ -103,7 +103,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                 <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""}`}>
                     <BlockOption index={index} />
                     <div className="w-full p-1 font-['Inter'] flex justify-center items-center">
-                        <div className="max-w-[60%] flex flex-col gap-3">
+                        <div className="max-w-[60%] overflow-hidden flex flex-col gap-3">
                             <img
                                 src={block.src || undefined}
                                 alt={block.description}

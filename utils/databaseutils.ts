@@ -4,14 +4,20 @@ interface Status {
     status: "Success" | "Error";
 }
 
-interface ArticleDataResult extends Status {
-    article: ArticleData;
-}
-
-function getAPIUrl(): string {
+export function getAPIUrl(): string {
     const apiUrl = process.env.NEXT_PUBLIC_TECHNOINC_BACKEND_API;
     if (!apiUrl) throw new Error("NEXT_PUBLIC_TECHNOINC_BACKEND_API is not configured");
     return apiUrl.replace(/\/$/, "");
+}
+
+export function getUploadPreset(): string {
+    const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+    if (!uploadPreset) throw new Error("NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET is not configured");
+    return uploadPreset;
+}
+
+interface ArticleDataResult extends Status {
+    article: ArticleData;
 }
 
 /**
@@ -27,7 +33,6 @@ export async function dbGetArticleData(contentID: string): Promise<ArticleData |
         });
         if (response.status === 404) return undefined;
         if (!response.ok) throw new Error(`Failed to fetch article content (${response.status})`);
-
         const result: ArticleDataResult | undefined = await response.json();
         return result?.article;
     }
@@ -46,7 +51,7 @@ interface CreateCategoryResult extends Status {
  * @param parent string
  * @returns boolean | undefined
  */
-export async function dbCreateCategory(category: string, parent: string): Promise<boolean | undefined> {
+export async function dbCreateCategory(category: string, parent: string): Promise<boolean> {
     try {
         const API_URL = getAPIUrl();
         const response = await fetch(`${API_URL}/api/v1/wiki/category/create`, {
@@ -60,9 +65,15 @@ export async function dbCreateCategory(category: string, parent: string): Promis
         return result.status === "Success";
     } catch (error) {
         console.error(error);
+        return false;
     }
 }
 
+/**
+ * Get all of existing links of articles from article content
+ * @param links - Array of captured links in content (string)
+ * @returns - Returns array of available links or undefined
+ */
 export async function dbGetExistingLinks(links: string[]): Promise<string[] | undefined> {
     try {
         const API_URL = getAPIUrl();
@@ -76,5 +87,18 @@ export async function dbGetExistingLinks(links: string[]): Promise<string[] | un
         return result.existing.map((link: string) => link.replaceAll(" ", "_"));
     } catch (error) {
         console.error(error);
+    }
+}
+
+export async function dbGetUniversalID(): Promise<number> {
+    try {
+        const API_URL = getAPIUrl();
+        const response = await fetch(`${API_URL}/api/v1/wiki/universal-id/get`);
+        if (!response.ok) throw new Error(`${response}`);
+        const result: { status: string; universal_id: number } = await response.json();
+        return result.universal_id;
+    } catch (error) {
+        console.error(error);
+        return 0;
     }
 }
