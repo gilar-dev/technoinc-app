@@ -16,12 +16,6 @@ export default function ArticleForm({ formData = undefined }: ArticleFormProps) 
     const category = formData && !useProvider ? formData.cat : data.cat;
 
     useEffect(() => {
-        return () => {
-            if (data.cover.startsWith("blob:")) URL.revokeObjectURL(data.cover);
-        };
-    }, [data.cover]);
-
-    useEffect(() => {
         if (!formData) return;
         setData(formData);
         setUseProvider(true);

@@ -1,6 +1,8 @@
 import type { ArticleData } from "@/contexts/ArticleDataProvider";
 import type { Schema } from "@/utils/typeUtils";
+import type { UploadToCloudResults } from "@/utils/storageUtils";
 import { reformatURI } from "@/utils/textUtils";
+import { createArticle } from "./contribution";
 import { uploadToCloud, uploadPackage } from "@/utils/storageUtils";
 import { getAPIUrl, getUploadPreset, dbGetUniversalID } from "@/utils/databaseutils";
 
@@ -12,6 +14,7 @@ interface UploadArticleReturn {
 /**
  * Upload new article to database after being created
  * @param articleData - article data (metadata and content)
+ * @returns - UploadArticleReturn = { succes: boolean, message: string }
  */
 export default async function uploadArticle(articleData: ArticleData): Promise<UploadArticleReturn> {
     const safeClonedData = structuredClone(articleData);
@@ -32,7 +35,26 @@ export default async function uploadArticle(articleData: ArticleData): Promise<U
     // Check image type block and upload the files to cloud storage
     const coverFile = safeClonedData.raw_file as File;
     const imageIndexes = getImageBlockIndexes(safeClonedData.content);
-    uploadImages(coverFile, safeClonedData.content, imageIndexes, universalID);
+    const uploadProcess = await uploadImages(coverFile, safeClonedData.content, imageIndexes, universalID);
+    if (!uploadProcess) return { success: false, message: "Failed to upload images" }
+
+    // Modify current content image src urls with secure cloud urls
+    const modifiedContent = replaceImageSources(
+        imageIndexes, safeClonedData.content, uploadProcess.public_ids, uploadProcess.secure_urls
+    );
+    const finalArticlePayload: ArticleData = {
+        ...safeClonedData,
+        id: universalID + 1,
+        cover: uploadProcess.secure_urls[0],
+        p_id: uploadProcess.public_ids[0],
+        content: modifiedContent
+    }
+    delete finalArticlePayload["raw_file"];
+    console.log(finalArticlePayload);
+    // Start creating new article payload in database
+    const createProcess = await createArticle(finalArticlePayload);
+    if (!createProcess) return { success: false, message: "Failed to create article" }
+    console.log(createProcess);
 
     // Return success if passed all checks
     return { success: true, message: "Article successfully created" }
@@ -52,24 +74,27 @@ async function checkTitleExistence(title: string): Promise<boolean> {
     }
 }
 
-async function uploadImages(coverFile: File, content: Schema, images: number[], universalID: number): Promise<void> {
+async function uploadImages(
+    coverFile: File,
+    content: Schema,
+    images: number[],
+    universalID: number
+): Promise<UploadToCloudResults | undefined> {
     const imageFiles: File[] = [coverFile];
-    const imageFormData: FormData[] = [];
-    const uploadPreset = getUploadPreset();
     if (images.length > 0) for (const index of images) imageFiles.push(content[index].raw_file);
-    for (const file of imageFiles) {
-        const processPackage = uploadPackage(file, { folder: `Article_${universalID}`, uploadPreset: uploadPreset });
-        imageFormData.push(processPackage);
-    }
+    const imageFormData = uploadPackage(imageFiles,
+        { folder: `Article_${universalID + 1}`, uploadPreset: getUploadPreset() }
+    );
     // Start uploading images to cloud storage
     const uploadProcess = await uploadToCloud(imageFormData);
+    return uploadProcess;
 }
 
 function checkMetadataValues(metadata: ArticleData): string {
     if (!metadata.title.trim()) return "Title can't be empty";
     if (metadata.cat.length === 0) return "Category should be added at least one";
     if (!metadata.cover.trim()) return "Cover can't be empty";
-    return "Pass"
+    return "Pass";
 }
 
 function checkContentValues(content: Schema): string {
@@ -115,4 +140,18 @@ function getImageBlockIndexes(content: Schema): number[] {
         if (block.type.includes("image")) images.push(index);
     });
     return images;
+}
+
+function replaceImageSources(
+    imageIndex: number[],
+    content: Schema,
+    public_ids: string[],
+    secure_urls: string[]
+): Schema {
+    imageIndex.forEach((imgIndex, index) => {
+        content[imgIndex]["public_id"] = public_ids[index + 1];
+        content[imgIndex]["src"] = secure_urls[index + 1];
+        delete content[imgIndex]["raw_file"];
+    });
+    return content;
 }
