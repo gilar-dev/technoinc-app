@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useArticleData } from "@/contexts/ArticleDataProvider";
 import { useDebounce } from "@/utils/hookUtils";
-import { dbCreateCategory } from "@/utils/databaseutils";
+import { dbCreateCategory } from "@/libs/database";
 import { capitalize, formattedText, cleanText } from "@/utils/textUtils";
 
 interface CreateCategoryProps {

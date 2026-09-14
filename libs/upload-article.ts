@@ -1,10 +1,10 @@
-import type { ArticleData } from "@/contexts/ArticleDataProvider";
 import type { Schema } from "@/utils/typeUtils";
+import type { ArticleData } from "@/contexts/ArticleDataProvider";
 import type { UploadToCloudResults } from "@/utils/storageUtils";
 import { reformatURI } from "@/utils/textUtils";
 import { createArticle } from "./contribution";
 import { uploadToCloud, uploadPackage } from "@/utils/storageUtils";
-import { getAPIUrl, getUploadPreset, dbGetUniversalID } from "@/utils/databaseutils";
+import { getAPIUrl, getUploadPreset, dbGetUniversalID, dbIncreaeUniversalID } from "./database";
 
 interface UploadArticleReturn {
     success: boolean;
@@ -18,6 +18,7 @@ interface UploadArticleReturn {
  */
 export default async function uploadArticle(articleData: ArticleData): Promise<UploadArticleReturn> {
     const safeClonedData = structuredClone(articleData);
+    const formattedTitle = reformatURI(safeClonedData.title);
     const universalID = await dbGetUniversalID();
 
     // Check article metadata completeness
@@ -25,7 +26,7 @@ export default async function uploadArticle(articleData: ArticleData): Promise<U
     if (metadataComplete !== "Pass") return { success: false, message: metadataComplete }
 
     // Check article title existence in database
-    const titleExists = await checkTitleExistence(reformatURI(safeClonedData.title));
+    const titleExists = await checkTitleExistence(formattedTitle);
     if (titleExists) return { success: false, message: "Article title is already exist" }
 
     // Check article content values
@@ -44,17 +45,20 @@ export default async function uploadArticle(articleData: ArticleData): Promise<U
     );
     const finalArticlePayload: ArticleData = {
         ...safeClonedData,
+        title: formattedTitle,
         id: universalID + 1,
         cover: uploadProcess.secure_urls[0],
         p_id: uploadProcess.public_ids[0],
         content: modifiedContent
     }
     delete finalArticlePayload["raw_file"];
-    console.log(finalArticlePayload);
+    
     // Start creating new article payload in database
     const createProcess = await createArticle(finalArticlePayload);
     if (!createProcess) return { success: false, message: "Failed to create article" }
-    console.log(createProcess);
+
+    // Update universal id by increasing it to one
+    await dbIncreaeUniversalID();
 
     // Return success if passed all checks
     return { success: true, message: "Article successfully created" }

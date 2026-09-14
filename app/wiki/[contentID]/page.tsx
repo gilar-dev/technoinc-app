@@ -9,7 +9,7 @@ import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
 import { HeadingHolder, MissingArticle, RedirectNotice } from "./Components";
 import { reformatURI } from "@/utils/textUtils";
 import { getLinks } from "@/utils/parserUtils";
-import { dbGetArticleData, dbGetExistingLinks } from "@/utils/databaseutils";
+import { dbGetArticleData, dbGetExistingLinks } from "@/libs/database";
 
 interface Params {
     params: Promise<{ contentID: string }>;
@@ -41,7 +41,6 @@ export default async function WikiPage({ params }: Params) {
     const { contentID } = await params;
     const cookieStore = await cookies();
     const redirectedURL = cookieStore.get("x-user-previous-url")?.value;
-    console.log(redirectedURL);
     const formattedURI = reformatURI(decodeURIComponent(contentID));
     const cleanURI = formattedURI.replaceAll("_", " ");
     const articleData = await dbGetArticleData(formattedURI);

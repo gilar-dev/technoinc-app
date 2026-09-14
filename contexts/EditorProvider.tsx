@@ -22,9 +22,10 @@ interface EditorTypes {
     editMode: boolean;
     selection: Selection;
     setSelection: SetState<Selection>;
-    blockOpt: { selected: number | null; set: SetState<number | null>; };
-    blockStored: { block: Content | null; set: SetState<Content | null>; };
-    blockMenu: { show: boolean; set: SetState<boolean>; insert: number | null; setInsert: SetState<number | null>; };
+    blockOpt: { selected: number | null; set: SetState<number | null>; }
+    blockStored: { block: Content | null; set: SetState<Content | null>; }
+    blockMenu: { show: boolean; set: SetState<boolean>; insert: number | null; setInsert: SetState<number | null>; }
+    pendingDelete: { images: string[]; setImages: SetState<string[]>; }
 }
 
 const EditorContext = createContext<EditorTypes | undefined>(undefined);
@@ -40,6 +41,7 @@ export default function EditorProvider({ children, editMode = false }: EditorPro
     const [blockMenu, setBlockMenu] = useState<boolean>(false);
     const [blockInsert, setBlockInsert] = useState<number | null>(null);
     const [blockStored, setBlockStored] = useState<Content | null>(null);
+    const [pendingDelete, setPendingDelete] = useState<string[]>([]);
     const [selection, setSelection] = useState<Selection>({
         selected: false, blockIndex: 0, key: "", start: 0, end: 0, done: false
     });
@@ -51,7 +53,8 @@ export default function EditorProvider({ children, editMode = false }: EditorPro
             setSelection: setSelection,
             blockOpt: { selected: block, set: setblock },
             blockStored: { block: blockStored, set: setBlockStored },
-            blockMenu: { show: blockMenu, set: setBlockMenu, insert: blockInsert, setInsert: setBlockInsert }
+            blockMenu: { show: blockMenu, set: setBlockMenu, insert: blockInsert, setInsert: setBlockInsert },
+            pendingDelete: { images: pendingDelete, setImages: setPendingDelete }
         }}>
             {children}
         </EditorContext.Provider>

@@ -1,10 +1,11 @@
 "use client"; // Client-side rendering directive for Next.js
 
-import { useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useMemo } from "react";
+import { useRouter, redirect } from "next/navigation";
 import { toast } from "react-toastify";
 import { useArticleData } from "@/contexts/ArticleDataProvider";
 import { useEditor } from "@/contexts/EditorProvider";
+import { reformatURI } from "@/utils/textUtils";
 import uploadArticle from "@/libs/upload-article";
 
 const TOOLBAR_BUTTON_CLASS = "h-full w-full cursor-pointer text-foreground transition-colors duration-150 ease-in-out hover:bg-sidebar-hover";
@@ -13,6 +14,7 @@ const DISABLED_BUTTON_CLASS = `${TOOLBAR_BUTTON_CLASS} text-foreground/30`;
 export default function TextEditor() {
     const { data, setData } = useArticleData();
     const { editMode, selection, setSelection } = useEditor();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const router = useRouter();
 
     const syntaxActions = useMemo(() => [
@@ -50,13 +52,23 @@ export default function TextEditor() {
     };
 
     const processToPublish = async (): Promise<void> => {
+        if (isLoading) return;
+        setIsLoading(true);
         if (!editMode) {
             const process = await uploadArticle(data);
-            if (process.success) toast.success(process.message, { className: "text-foreground! bg-menu-form-bg!" });
+            if (process.success) {
+                toast.success(process.message, { className: "text-foreground! bg-menu-form-bg!" });
+                redirect(`/wiki/${reformatURI(data.title)}`, "replace");
+            }
             else toast.error(process.message, { className: "text-foreground! bg-menu-form-bg!" });
-            return;
+            setIsLoading(false);
+        } else {
         }
     }
+
+    useEffect(() => {
+        document.body.style.overflow = isLoading ? "hidden" : "visible";
+    }, [isLoading]);
 
     return (
         <div className="m-3 sticky top-18 z-2 flex h-12 items-center justify-between overflow-hidden rounded-md border border-sidebar-border bg-menu-form-bg shadow-sm shadow-black/10 lg:mx-14 xl:mx-21">
@@ -97,6 +109,12 @@ export default function TextEditor() {
                     <i className="fa-solid fa-angle-right" />
                 </button>
             </div>
+            {isLoading && (
+                <>
+                    <span className="w-[10%] h-1 absolute bottom-0 rounded-sm bg-blue-500 animate-[loading_1s_linear_infinite]"></span>
+                    <div className="w-full h-full fixed top-0 left-0"></div>
+                </>
+            )}
         </div>
     );
 }

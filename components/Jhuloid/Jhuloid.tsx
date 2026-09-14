@@ -37,7 +37,7 @@ export default function Jhuloid({ articleData, existingLinks = [] }: JhuloidProp
 
     return (
         <JhuloidEngine.Provider value={{ existingLinks: existingLinks }}>
-            <main className="p-3 mb-5">
+            <main className="mb-5 p-3 flow-root">
                 {contents.map((block, index) => {
                     if (!Array.isArray(block)) return (
                         <WikiRenderer key={index} block={block} />

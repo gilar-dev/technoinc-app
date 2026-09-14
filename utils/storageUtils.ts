@@ -1,4 +1,4 @@
-import { getAPIUrl } from "./databaseutils";
+import { getAPIUrl } from "@/libs/database";
 
 interface UploadConfig {
     folder: string;

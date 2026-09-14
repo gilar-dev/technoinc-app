@@ -173,6 +173,7 @@ img {
     background: linear-gradient(to top, #b4b4b4b3 50%, #00000000 0);
 }
 
+/* Animation keyframes */
 @keyframes showUp {
     0% {
         bottom: 0;
@@ -186,5 +187,15 @@ img {
     100% {
         bottom: 0;
         display: none;
+    }
+}
+
+@keyframes loading {
+    from {
+        left: 0;
+    }
+
+    to {
+        left: 100%;
     }
 }

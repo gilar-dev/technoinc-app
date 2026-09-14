@@ -4,6 +4,8 @@ export type CSON = { [key: string]: any; }
 export type Content = { [key: string]: any; };
 export type Schema = Content[];
 export type SetState<T> = Dispatch<SetStateAction<T>>;
+export type Classification = "Start" | "GA" | "FA";
+export type EditPermission = "";
 
 export interface History {
     user: string;

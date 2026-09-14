@@ -9,7 +9,7 @@ import BlockMenu from "@/components/Editor/BlockMenu";
 import Footer from "@/components/Footer";
 import { ContributionHeader, MissingArticle } from "../../Components";
 import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
-import { dbGetArticleData } from "@/utils/databaseutils";
+import { dbGetArticleData } from "@/libs/database";
 
 interface PageProps {
     params: Promise<{ contentID: string }>;
@@ -32,8 +32,8 @@ export default async function ContributionEditPage({ params }: PageProps) {
                 <MissingArticle title={cleanContentID} />
             ) : (
                 <EditorProvider editMode={true}>
-                    <ContributionHeader title={articleData.title} />
-                    <ArticleForm formData={articleData} />
+                    <ContributionHeader title={articleData.title.replaceAll("_", " ")} />
+                    <ArticleForm formData={{ ...articleData, title: articleData.title.replaceAll("_", " ") }} />
                     <TextEditor />
                     <ContentSchema />
                     <BlockTools />

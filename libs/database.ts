@@ -1,4 +1,5 @@
 import type { ArticleData } from "@/contexts/ArticleDataProvider";
+import type { Schema, History } from "@/utils/typeUtils";
 
 interface Status {
     status: "Success" | "Error";
@@ -17,7 +18,9 @@ export function getUploadPreset(): string {
 }
 
 interface ArticleDataResult extends Status {
-    article: ArticleData;
+    article: ArticleData & {
+        content: string;
+    }
 }
 
 /**
@@ -28,13 +31,16 @@ interface ArticleDataResult extends Status {
 export async function dbGetArticleData(contentID: string): Promise<ArticleData | undefined> {
     try {
         const API_URL = getAPIUrl();
-        const response = await fetch(`${API_URL}/api/v1/wiki/get/${encodeURIComponent(contentID)}`, {
-            cache: "no-store"
-        });
+        const response = await fetch(
+            `${API_URL}/api/v1/wiki/get/${encodeURIComponent(contentID)}`,
+            { cache: "no-store" }
+        );
         if (response.status === 404) return undefined;
         if (!response.ok) throw new Error(`Failed to fetch article content (${response.status})`);
-        const result: ArticleDataResult | undefined = await response.json();
-        return result?.article;
+        const result: ArticleDataResult | null = await response.json();
+        if (!result) return;
+        const parsedContent: Schema = JSON.parse(result.article.content);
+        return { ...result.article, content: parsedContent };
     }
     catch (error) {
         console.error(error);
@@ -100,5 +106,25 @@ export async function dbGetUniversalID(): Promise<number> {
     } catch (error) {
         console.error(error);
         return 0;
+    }
+}
+
+interface IncreaseUniversalIDResults {
+    status: string;
+    message: string;
+}
+
+export async function dbIncreaeUniversalID(): Promise<IncreaseUniversalIDResults | undefined> {
+    try {
+        const API_URL = getAPIUrl();
+        const response = await fetch(`${API_URL}/api/v1/wiki/universal-id/increase`, {
+            method: "PUT",
+            cache: "no-store"
+        });
+        if (!response.ok) throw new Error(`${response}`);
+        const result: IncreaseUniversalIDResults = await response.json();
+        return result;
+    } catch (error) {
+        console.error(error);
     }
 }

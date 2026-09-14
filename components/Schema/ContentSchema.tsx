@@ -1,6 +1,6 @@
 "use client"; // Client-side rendering directive for Next.js
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useArticleData } from "@/contexts/ArticleDataProvider";
 import { useEditor } from "@/contexts/EditorProvider";
 import BlockRenderer from "./BlockRenderer";

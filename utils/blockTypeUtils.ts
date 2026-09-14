@@ -27,6 +27,7 @@ export interface GenImage {
     public_id: string;
     description: string;
     raw_file?: File;
+    prev_src?: string;
 }
 
 // Infobox block types
@@ -49,6 +50,7 @@ export interface IbImage {
     public_id: string;
     description: string;
     raw_file?: File;
+    prev_src?: string;
 }
 
 // Export grouped blocks

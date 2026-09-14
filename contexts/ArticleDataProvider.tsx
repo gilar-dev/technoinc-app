@@ -1,7 +1,7 @@
 "use client"; // Client-side rendering directive for Next.js
 
 import { createContext, useContext, useState } from "react";
-import { Schema, SetState, History } from "@/utils/typeUtils";
+import { Schema, SetState, History, Classification, EditPermission } from "@/utils/typeUtils";
 
 export interface ArticleData {
     title: string;
@@ -10,9 +10,10 @@ export interface ArticleData {
     cover: string;
     p_id: string;
     ver: number;
-    cls: "Start" | "GA" | "FA";
+    cls: Classification;
     cat: string[];
     view: number;
+    edit: EditPermission;
     his: History[];
     content: Schema;
     // Temporary properties
@@ -52,6 +53,7 @@ export default function ArticleDataProvider({ children }: { children: React.Reac
         cls: "Start",
         cat: [],
         view: 0,
+        edit: "",
         his: [],
         content: []
     });

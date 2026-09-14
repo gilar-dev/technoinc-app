@@ -12,11 +12,12 @@ interface BlockRendererProps {
 
 export default function BlockRenderer({ block, index }: BlockRendererProps) {
     const { data, setData } = useArticleData();
-    const { blockOpt, selection, setSelection } = useEditor();
+    const { editMode, blockOpt, selection, setSelection, pendingDelete } = useEditor();
 
     const checkNextType = (type: string): boolean => {
-        if (!data.content[index + 1]) return false;
-        return data.content[index + 1]["type"].includes(type);
+        const content = [...data.content];
+        if (!content[index + 1]) return false;
+        return content[index + 1]["type"].includes(type);
     }
 
     const handleChange = (index: number, key: string, value: string): void => {
@@ -40,8 +41,27 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
         const imageFile = images[0];
         const imagepreview = URL.createObjectURL(imageFile);
         const modifiedContent = [...data.content];
+
+        if (editMode) {
+            modifiedContent[index]["prev_src"] = modifiedContent[index]["src"];
+            if (!pendingDelete.images.includes(modifiedContent[index]["public_id"]))
+                pendingDelete.setImages((prev) => [...prev, modifiedContent[index]["public_id"]]);
+        }
+
         modifiedContent[index]["raw_file"] = imageFile;
         modifiedContent[index]["src"] = imagepreview;
+        setData({ ...data, content: modifiedContent });
+    }
+
+    const restoreImage = (): void => {
+        const modifiedContent = [...data.content];
+
+        modifiedContent[index]["src"] = modifiedContent[index]["prev_src"];
+        delete modifiedContent[index]["prev_src"]
+        delete modifiedContent[index]["raw_file"]
+
+        const updatePending = pendingDelete.images.filter((img) => img !== modifiedContent[index]["public_id"]);
+        pendingDelete.setImages(updatePending);
         setData({ ...data, content: modifiedContent });
     }
 
@@ -119,8 +139,13 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                             />
                             <label
                                 htmlFor={`image-input-${index}`}
-                                className="mx-auto p-1 text-[0.9em] border-2 border-sidebar-border "
+                                className="mx-auto p-1 cursor-pointer text-[0.9em] border-2 border-sidebar-border "
                             >Choose image</label>
+                            {block.prev_src !== undefined && (
+                                <button
+                                    title="Restore image"
+                                ><i className="fa-solid fa-rotate-left"></i></button>
+                            )}
                             <textarea
                                 name="gen-image-type"
                                 aria-label={`Image block ${index}`}
@@ -178,7 +203,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                 <div className={`flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""} ${checkNextType("ib") ? "" : "mb-3"}`}>
                     <BlockOption index={index} />
                     <div className="w-full overflow-hidden font-basic text-[0.9em] flex border border-border bg-infobox-bg">
-                        <div className="w-full flex">
+                        <div className="w-[45%] overflow-hidden flex">
                             <textarea
                                 name="ib-info-head-type"
                                 placeholder="Ib Head"
@@ -188,7 +213,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                                 onChange={(e) => handleChange(index, "head", e.currentTarget.value)}
                             />
                         </div>
-                        <div className="w-full flex">
+                        <div className="w-[55%] overflow-hidden flex">
                             <textarea
                                 name="ib-info-data-type"
                                 placeholder="Ib Data"
@@ -224,8 +249,15 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                             />
                             <label
                                 htmlFor={`ib-image-input-${index}`}
-                                className="mx-auto p-1 text-[0.9em] border-2 border-sidebar-border "
+                                className="mx-auto p-1 cursor-pointer text-[0.9em] border-2 border-sidebar-border "
                             >Choose image</label>
+                            {block.prev_src !== undefined && (
+                                <button
+                                    title="Restore image"
+                                    className="cursor-pointer"
+                                    onClick={() => restoreImage()}
+                                ><i className="fa-solid fa-rotate-left"></i></button>
+                            )}
                             <textarea
                                 name="ib-image-type"
                                 aria-label={`Ib image block ${index}`}
