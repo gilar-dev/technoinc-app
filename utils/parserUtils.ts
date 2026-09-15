@@ -26,7 +26,7 @@ export function getLinks(schema: Schema) {
     for (const match of stringifySchema.matchAll(regex)) {
         const linkUrl = match[2].split("/")[2];
         if (linkUrl && !links.includes(linkUrl)) {
-            links.push(linkUrl.replaceAll("_", " "));
+            links.push(linkUrl);
         }
     }
     return links;

@@ -27,6 +27,29 @@ export async function uploadToCloud(fileForms: FormData): Promise<UploadToCloudR
     }
 }
 
+interface DeleteConfig {
+    folder_name: string;
+    public_ids: string[];
+    delete_folder?: boolean;
+}
+
+export async function deleteFromCloud(batch: DeleteConfig): Promise<boolean> {
+    try {
+        const API_URL = getAPIUrl();
+        const response = await fetch(`${API_URL}/api/v1/cloudinary/delete`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(batch),
+            cache: "no-store"
+        });
+        if (!response.ok) throw new Error(`${response}`);
+        return true;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+}
+
 export function uploadPackage(rawFile: File[], config: UploadConfig): FormData {
     const dataPackage = new FormData();
     for (const file of rawFile) dataPackage.append("file", file);

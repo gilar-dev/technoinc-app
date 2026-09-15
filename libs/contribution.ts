@@ -8,8 +8,8 @@ interface CreateArticleResults {
 
 export async function createArticle(articlePayload: ArticleData): Promise<CreateArticleResults | undefined> {
     try {
-        const stringifiedContent = JSON.stringify(articlePayload.content);
         const API_URL = getAPIUrl();
+        const stringifiedContent = JSON.stringify(articlePayload.content);
         const response = await fetch(`${API_URL}/api/v1/contribution/upload`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -21,5 +21,27 @@ export async function createArticle(articlePayload: ArticleData): Promise<Create
         return result;
     } catch (error) {
         console.error(error);
+    }
+}
+
+interface UpdateArticleResults {
+    success: boolean;
+}
+
+export async function updateArticle(articlePayload: ArticleData): Promise<UpdateArticleResults> {
+    try {
+        const API_URL = getAPIUrl();
+        const stringifiedContent = JSON.stringify(articlePayload.content);
+        const response = await fetch(`${API_URL}/api/v1/contribution/update`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ...articlePayload, content: stringifiedContent }),
+            cache: "no-store"
+        });
+        if (!response.ok) throw new Error(`${response}`);
+        return { success: true };
+    } catch (error) {
+        console.error(error);
+        return { success: false }
     }
 }

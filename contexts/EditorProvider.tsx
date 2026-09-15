@@ -2,11 +2,13 @@
 
 import { createContext, useContext, useState } from "react";
 import type { Content } from "@/utils/typeUtils";
+import type { ArticleData, } from "./ArticleDataProvider";
 import { SetState } from "@/utils/typeUtils";
 
 interface EditorProviderProps {
     children: React.ReactNode;
     editMode?: boolean;
+    currentData?: ArticleData;
 }
 
 interface Selection {
@@ -20,12 +22,12 @@ interface Selection {
 
 interface EditorTypes {
     editMode: boolean;
+    currentData: ArticleData | undefined;
     selection: Selection;
     setSelection: SetState<Selection>;
     blockOpt: { selected: number | null; set: SetState<number | null>; }
     blockStored: { block: Content | null; set: SetState<Content | null>; }
     blockMenu: { show: boolean; set: SetState<boolean>; insert: number | null; setInsert: SetState<number | null>; }
-    pendingDelete: { images: string[]; setImages: SetState<string[]>; }
 }
 
 const EditorContext = createContext<EditorTypes | undefined>(undefined);
@@ -36,12 +38,11 @@ export function useEditor() {
     return context;
 }
 
-export default function EditorProvider({ children, editMode = false }: EditorProviderProps) {
+export default function EditorProvider({ children, editMode = false, currentData = undefined }: EditorProviderProps) {
     const [block, setblock] = useState<number | null>(null);
     const [blockMenu, setBlockMenu] = useState<boolean>(false);
     const [blockInsert, setBlockInsert] = useState<number | null>(null);
     const [blockStored, setBlockStored] = useState<Content | null>(null);
-    const [pendingDelete, setPendingDelete] = useState<string[]>([]);
     const [selection, setSelection] = useState<Selection>({
         selected: false, blockIndex: 0, key: "", start: 0, end: 0, done: false
     });
@@ -49,12 +50,12 @@ export default function EditorProvider({ children, editMode = false }: EditorPro
     return (
         <EditorContext.Provider value={{
             editMode: editMode,
+            currentData: currentData,
             selection: selection,
             setSelection: setSelection,
             blockOpt: { selected: block, set: setblock },
             blockStored: { block: blockStored, set: setBlockStored },
             blockMenu: { show: blockMenu, set: setBlockMenu, insert: blockInsert, setInsert: setBlockInsert },
-            pendingDelete: { images: pendingDelete, setImages: setPendingDelete }
         }}>
             {children}
         </EditorContext.Provider>

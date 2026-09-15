@@ -18,6 +18,7 @@ export interface ArticleData {
     content: Schema;
     // Temporary properties
     raw_file?: File | undefined;
+    prev_src?: string;
 }
 
 interface CategoryForm {
@@ -53,7 +54,7 @@ export default function ArticleDataProvider({ children }: { children: React.Reac
         cls: "Start",
         cat: [],
         view: 0,
-        edit: "",
+        edit: "free",
         his: [],
         content: []
     });

@@ -6,14 +6,15 @@ import { toast } from "react-toastify";
 import { useArticleData } from "@/contexts/ArticleDataProvider";
 import { useEditor } from "@/contexts/EditorProvider";
 import { reformatURI } from "@/utils/textUtils";
-import uploadArticle from "@/libs/upload-article";
+import uploadArticleWiki from "@/libs/upload-article";
+import updateArticleWiki from "@/libs/update-article";
 
 const TOOLBAR_BUTTON_CLASS = "h-full w-full cursor-pointer text-foreground transition-colors duration-150 ease-in-out hover:bg-sidebar-hover";
 const DISABLED_BUTTON_CLASS = `${TOOLBAR_BUTTON_CLASS} text-foreground/30`;
 
 export default function TextEditor() {
-    const { data, setData } = useArticleData();
-    const { editMode, selection, setSelection } = useEditor();
+    const { data, setData, toDelete } = useArticleData();
+    const { editMode, currentData, selection, setSelection } = useEditor();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const router = useRouter();
 
@@ -55,7 +56,7 @@ export default function TextEditor() {
         if (isLoading) return;
         setIsLoading(true);
         if (!editMode) {
-            const process = await uploadArticle(data);
+            const process = await uploadArticleWiki(data);
             if (process.success) {
                 toast.success(process.message, { className: "text-foreground! bg-menu-form-bg!" });
                 redirect(`/wiki/${reformatURI(data.title)}`, "replace");
@@ -63,6 +64,11 @@ export default function TextEditor() {
             else toast.error(process.message, { className: "text-foreground! bg-menu-form-bg!" });
             setIsLoading(false);
         } else {
+            const process = await updateArticleWiki(data, currentData, toDelete);
+            if (process.success) {
+                console.log(process.message);
+            } else console.log(process.message);
+            setIsLoading(false);
         }
     }
 

@@ -10,8 +10,8 @@ interface BlockOptionProps {
 type ModifyBlockAction = "copy" | "cut" | "paste" | "paste-below";
 
 export default function BlockOption({ index }: BlockOptionProps) {
-    const { data, setData } = useArticleData();
-    const { blockOpt, blockStored, blockMenu } = useEditor();
+    const { data, setData, toDelete, setToDelete } = useArticleData();
+    const { editMode, blockOpt, blockStored, blockMenu } = useEditor();
 
     // Swapping or moving block to up or down within wiki content
     const optMoveBlock = (direction: "up" | "down", index: number): void => {
@@ -53,6 +53,10 @@ export default function BlockOption({ index }: BlockOptionProps) {
     // Deleting block from wiki content
     const optDeleteBlock = (index: number): void => {
         const modifiedContent = [...data.content];
+        if (editMode) {
+            if (!toDelete.includes(modifiedContent[index]["p_id"]))
+                setToDelete([...toDelete, modifiedContent[index]["p_id"]]);
+        }
         setData({ ...data, content: modifiedContent.toSpliced(index, 1) });
     }
 

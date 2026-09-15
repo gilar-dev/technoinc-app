@@ -5,7 +5,7 @@ export type Content = { [key: string]: any; };
 export type Schema = Content[];
 export type SetState<T> = Dispatch<SetStateAction<T>>;
 export type Classification = "Start" | "GA" | "FA";
-export type EditPermission = "";
+export type EditPermission = "free" | "strict";
 
 export interface History {
     user: string;

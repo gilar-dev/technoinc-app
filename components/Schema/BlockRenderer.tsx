@@ -11,8 +11,8 @@ interface BlockRendererProps {
 }
 
 export default function BlockRenderer({ block, index }: BlockRendererProps) {
-    const { data, setData } = useArticleData();
-    const { editMode, blockOpt, selection, setSelection, pendingDelete } = useEditor();
+    const { data, setData, toDelete, setToDelete } = useArticleData();
+    const { editMode, blockOpt, selection, setSelection } = useEditor();
 
     const checkNextType = (type: string): boolean => {
         const content = [...data.content];
@@ -44,8 +44,8 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
 
         if (editMode) {
             modifiedContent[index]["prev_src"] = modifiedContent[index]["src"];
-            if (!pendingDelete.images.includes(modifiedContent[index]["public_id"]))
-                pendingDelete.setImages((prev) => [...prev, modifiedContent[index]["public_id"]]);
+            if (!toDelete.includes(modifiedContent[index]["public_id"]))
+                setToDelete([...toDelete, modifiedContent[index]["public_id"]]);
         }
 
         modifiedContent[index]["raw_file"] = imageFile;
@@ -60,8 +60,8 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
         delete modifiedContent[index]["prev_src"]
         delete modifiedContent[index]["raw_file"]
 
-        const updatePending = pendingDelete.images.filter((img) => img !== modifiedContent[index]["public_id"]);
-        pendingDelete.setImages(updatePending);
+        const updatePending = toDelete.filter((img) => img !== modifiedContent[index]["public_id"]);
+        setToDelete(updatePending);
         setData({ ...data, content: modifiedContent });
     }
 

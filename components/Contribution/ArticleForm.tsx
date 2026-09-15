@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import type { ArticleData } from "@/contexts/ArticleDataProvider";
 import { useArticleData } from "@/contexts/ArticleDataProvider";
+import { useEditor } from "@/contexts/EditorProvider";
 import CategoryForm from "./CategoryForm";
 import { cleanText } from "@/utils/textUtils";
 
@@ -11,9 +12,42 @@ interface ArticleFormProps {
 }
 
 export default function ArticleForm({ formData = undefined }: ArticleFormProps) {
-    const { data, setData, categoryForm, setCategoryForm } = useArticleData();
+    const { data, setData, categoryForm, setCategoryForm, toDelete, setToDelete } = useArticleData();
+    const { editMode } = useEditor();
     const [useProvider, setUseProvider] = useState<boolean>(false);
     const category = formData && !useProvider ? formData.cat : data.cat;
+
+    const handleImageInput = (files: FileList | null): void => {
+        if (!files) return;
+        const selectedFile = files[0];
+        const previewImage = URL.createObjectURL(selectedFile);
+        const modifiedData = structuredClone(data);
+
+        if (editMode) {
+            modifiedData.prev_src = modifiedData.cover;
+            if (!toDelete.includes(modifiedData.p_id)) setToDelete([...toDelete, modifiedData.p_id]);
+        }
+
+        if (modifiedData.cover.startsWith("blob:")) URL.revokeObjectURL(modifiedData.cover);
+        modifiedData.cover = previewImage;
+        modifiedData.raw_file = selectedFile;
+        setData(modifiedData);
+    }
+
+    const restoreImage = (): void => {
+        const modifiedData = structuredClone(data);
+        const prevSource = modifiedData.prev_src;
+        if (!prevSource) return;
+
+        if (modifiedData.cover.startsWith("blob:")) URL.revokeObjectURL(modifiedData.cover);
+        modifiedData.cover = prevSource;
+        delete modifiedData.prev_src;
+        delete modifiedData.raw_file;
+
+        const updatePending = toDelete.filter((imageID) => imageID !== modifiedData.p_id);
+        setToDelete(updatePending);
+        setData(modifiedData);
+    }
 
     useEffect(() => {
         if (!formData) return;
@@ -33,7 +67,7 @@ export default function ArticleForm({ formData = undefined }: ArticleFormProps) 
                     className="peer mt-2 min-h-2 field-sizing-content resize-none rounded-sm border border-transparent bg-foreground/5 p-2 text-[1.3em] outline-none transition-colors placeholder:text-foreground/45 focus:border-sidebar-accent"
                     onChange={(e) => {
                         const value = e.currentTarget.value;
-                        const invalidChars = "!@#$%^&*=+[]{}|\\/?<>~";
+                        const invalidChars: string = "!@#$%^&*=+[]{}|\\/?<>~_";
                         if (invalidChars.includes(value[value.length - 1])) return;
                         setData({ ...data, title: value })
                     }}
@@ -95,14 +129,7 @@ export default function ArticleForm({ formData = undefined }: ArticleFormProps) 
                         type="file"
                         accept="image/jpeg, image/png, image/webp, .jpg, .jpeg, .png, .webp"
                         className="hidden"
-                        onChange={(e) => {
-                            const files = e.currentTarget.files
-                            if (!files) return;
-                            const selectedFile = files[0];
-                            const previewImage = URL.createObjectURL(selectedFile);
-                            if (data.cover.startsWith("blob:")) URL.revokeObjectURL(data.cover);
-                            setData({ ...data, cover: previewImage, raw_file: selectedFile });
-                        }}
+                        onChange={(e) => handleImageInput(e.target.files)}
                     />
                     <label
                         htmlFor="article-cover-input"
@@ -110,13 +137,21 @@ export default function ArticleForm({ formData = undefined }: ArticleFormProps) 
                         className="flex cursor-pointer items-center gap-2 rounded-sm border border-sidebar-border bg-sidebar-panel px-2 py-1 text-sm hover:bg-sidebar-hover transition-colors duration-150 ease-in-out"
                     >Choose cover</label>
                 </div>
-                <div className="p-1 flex justify-center items-center">
+                <div className="p-1 flex flex-col items-center justify-center gap-3">
                     <div className="w-[70%] p-1 flex justify-center items-center border border-border lg:w-[50%]">
                         <img
                             src={formData && !useProvider ? formData.cover : data.cover || undefined}
+                            draggable={false}
                             className="min-w-full cursor-pointer object-cover"
                         />
                     </div>
+                    {data.prev_src !== undefined && (
+                        <button
+                            title="Restore image"
+                            className="p-1 cursor-pointer flex items-center gap-1 rounded-sm border-2 border-sidebar-border bg-sidebar-panel"
+                            onClick={() => restoreImage()}
+                        ><i className="fa-solid fa-rotate-left"></i><span>Restore</span></button>
+                    )}
                 </div>
             </div>
             {/* Article version input (readonly) */}
