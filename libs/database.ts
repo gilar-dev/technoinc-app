@@ -1,5 +1,5 @@
 import type { ArticleData } from "@/contexts/ArticleDataProvider";
-import type { Schema, History } from "@/utils/typeUtils";
+import type { Schema } from "@/utils/typeUtils";
 
 interface Status {
     status: "Success" | "Error";
@@ -17,28 +17,41 @@ export function getUploadPreset(): string {
     return uploadPreset;
 }
 
+type ArticleField = Exclude<keyof ArticleData, "content" | "raw_file" | "prev_src">;
+
 interface ArticleDataResult extends Status {
-    article: ArticleData & {
+    article: Omit<ArticleData, "content"> & {
         content: string;
     }
 }
+
+export function dbGetArticleData(contentID: string): Promise<ArticleData | undefined>;
+export function dbGetArticleData<K extends ArticleField>(
+    contentID: string,
+    field: K
+): Promise<ArticleData[K] | undefined>;
 
 /**
  * Get article data from database by article title "contentID"
  * @param contentID string
  * @returns ArticleData | undefined
  */
-export async function dbGetArticleData(contentID: string): Promise<ArticleData | undefined> {
+export async function dbGetArticleData<K extends ArticleField>(
+    contentID: string,
+    field?: K
+): Promise<ArticleData | ArticleData[K] | undefined> {
     try {
         const API_URL = getAPIUrl();
+        const query = field ? `?field=${encodeURIComponent(field)}` : "";
         const response = await fetch(
-            `${API_URL}/api/v1/wiki/get/${encodeURIComponent(contentID)}`,
+            `${API_URL}/api/v1/wiki/get/${encodeURIComponent(contentID)}${query}`,
             { cache: "no-store" }
         );
         if (response.status === 404) return undefined;
         if (!response.ok) throw new Error(`Failed to fetch article content (${response.status})`);
         const result: ArticleDataResult | null = await response.json();
         if (!result) return;
+        if (field) return result.article as unknown as ArticleData[K];
         const parsedContent: Schema = JSON.parse(result.article.content);
         return { ...result.article, content: parsedContent };
     }

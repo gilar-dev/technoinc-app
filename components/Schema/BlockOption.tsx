@@ -54,8 +54,8 @@ export default function BlockOption({ index }: BlockOptionProps) {
     const optDeleteBlock = (index: number): void => {
         const modifiedContent = [...data.content];
         if (editMode) {
-            if (!toDelete.includes(modifiedContent[index]["p_id"]))
-                setToDelete([...toDelete, modifiedContent[index]["p_id"]]);
+            if (!toDelete.includes(modifiedContent[index]["public_id"]))
+                setToDelete([...toDelete, modifiedContent[index]["public_id"]]);
         }
         setData({ ...data, content: modifiedContent.toSpliced(index, 1) });
     }

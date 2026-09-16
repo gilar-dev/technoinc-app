@@ -1,10 +1,5 @@
 import { getAPIUrl } from "@/libs/database";
 
-interface UploadConfig {
-    folder: string;
-    uploadPreset: string;
-}
-
 export interface UploadToCloudResults {
     status: string;
     public_ids: string[];
@@ -48,6 +43,11 @@ export async function deleteFromCloud(batch: DeleteConfig): Promise<boolean> {
         console.error(error);
         return false;
     }
+}
+
+interface UploadConfig {
+    folder: string;
+    uploadPreset: string;
 }
 
 export function uploadPackage(rawFile: File[], config: UploadConfig): FormData {

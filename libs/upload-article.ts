@@ -7,7 +7,8 @@ import {
     checkTitleExistence,
     checkContentValues,
     getImageBlockIndexes,
-    uploadImages,
+    uploadCoverImage,
+    uploadContentImages,
     replaceImageSources
 } from "./publish-materials";
 
@@ -38,22 +39,26 @@ export default async function uploadArticleWiki(articleData: ArticleData): Promi
     const contentComplete = checkContentValues(safeClonedData.content);
     if (contentComplete !== "Pass") return { success: false, message: contentComplete }
 
-    // Check image type block and upload the files to cloud storage
-    const coverFile = safeClonedData.raw_file;
-    const imageIndexes = getImageBlockIndexes(safeClonedData.content);
-    const uploadProcess = await uploadImages(coverFile, safeClonedData.content, imageIndexes, universalID, true);
-    if (!uploadProcess) return { success: false, message: "Failed to upload images" }
+    // Check cover raw file and upload the file to cloud storage
+    const coverFile = await uploadCoverImage(safeClonedData.raw_file, universalID + 1);
+    if (!coverFile) return { success: false, message: "Failed to upload cover image" }
 
-    // Modify current content image src urls with secure cloud urls
-    const modifiedContent = replaceImageSources(
-        imageIndexes, safeClonedData.content, uploadProcess.public_ids, uploadProcess.secure_urls
-    );
+    // Check image file if exist and start uploading its files
+    const imageIndexes = getImageBlockIndexes(safeClonedData.content);
+    const contentFiles = await uploadContentImages(safeClonedData.content, imageIndexes, universalID + 1);
+    if (contentFiles && contentFiles.status === "Error") return { success: false, message: "Failed to upload content images" }
+
+    // Modify current content image src urls with secure cloud urls if exist
+    const modifiedContent = contentFiles
+        ? replaceImageSources(safeClonedData.content, imageIndexes, contentFiles.public_ids, contentFiles.secure_urls)
+        : safeClonedData.content
+
     const finalArticlePayload: ArticleData = {
         ...safeClonedData,
         title: formattedTitle,
         id: universalID + 1,
-        cover: uploadProcess.secure_urls[0],
-        p_id: uploadProcess.public_ids[0],
+        cover: coverFile.secure_urls[0],
+        p_id: coverFile.public_ids[0],
         content: modifiedContent
     }
     delete finalArticlePayload.raw_file;

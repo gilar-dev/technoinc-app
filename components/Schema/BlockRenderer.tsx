@@ -43,9 +43,12 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
         const modifiedContent = [...data.content];
 
         if (editMode) {
-            modifiedContent[index]["prev_src"] = modifiedContent[index]["src"];
-            if (!toDelete.includes(modifiedContent[index]["public_id"]))
-                setToDelete([...toDelete, modifiedContent[index]["public_id"]]);
+            if (modifiedContent[index]["src"].trim()) {
+                console.log(true);
+                modifiedContent[index]["prev_src"] = modifiedContent[index]["src"];
+                if (!toDelete.includes(modifiedContent[index]["public_id"]))
+                    setToDelete([...toDelete, modifiedContent[index]["public_id"]]);
+            }
         }
 
         modifiedContent[index]["raw_file"] = imageFile;

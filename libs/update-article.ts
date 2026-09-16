@@ -1,15 +1,15 @@
-import type { Schema } from "@/utils/typeUtils";
 import type { ArticleData } from "@/contexts/ArticleDataProvider";
-import type { UploadToCloudResults } from "./storage";
 import { reformatURI } from "@/utils/textUtils";
-import { deleteFromCloud } from "./storage";
 import { updateArticle } from "./contribution";
+import { deleteFromCloud } from "./storage";
+import { dbGetArticleData } from "./database";
 import {
     checkMetadataValues,
     checkTitleExistence,
     checkContentValues,
     getImageBlockIndexes,
-    uploadImages,
+    uploadCoverImage,
+    uploadContentImages,
     replaceImageSources
 } from "./publish-materials";
 
@@ -29,10 +29,14 @@ export default async function updateArticleWiki(
     storedData: ArticleData | undefined,
     pendingDelete: string[]
 ): Promise<UpdateArticleReturns> {
-    console.log(pendingDelete);
     const safeClonedData = structuredClone(articleData);
     const formattedTitle = reformatURI(safeClonedData.title);
     const storedTitle = storedData ? reformatURI(storedData.title) : "";
+    
+    // Check if current version matches with the latest version
+    const latestVersion = await dbGetArticleData(storedTitle, "ver");
+    if (latestVersion === undefined) return { success: false, message: "Failed to get latest version" }
+    if (safeClonedData.ver !== latestVersion) return { success: false, message: "Outdated version"  }
 
     // Check article metadata completeness
     const metadataComplete = checkMetadataValues(safeClonedData);
@@ -47,7 +51,7 @@ export default async function updateArticleWiki(
     const contentComplete = checkContentValues(safeClonedData.content);
     if (contentComplete !== "Pass") return { success: false, message: contentComplete }
 
-    // Check image change if exist, then delete it
+    // Check image change in pending to delete, then delete it if exist
     if (pendingDelete.length > 0) {
         const deleteProcess = await deleteFromCloud(
             { folder_name: `Article_${safeClonedData.id}`, public_ids: pendingDelete }
@@ -55,29 +59,27 @@ export default async function updateArticleWiki(
         if (!deleteProcess) return { success: false, message: "Failed to delete previous images" }
     }
 
-    // Check image type block and upload it only when it has raw file
-    const coverFile = safeClonedData.raw_file;
+    // Check cover file and upload it if it changed
+    const coverFile = await uploadCoverImage(safeClonedData.raw_file, safeClonedData.id);
+    if (coverFile && coverFile.status === "Error") return { success: false, message: "Failed to upload image cover" }
+
+    // Check image content files if there is a change
     const imageIndexes = getImageBlockIndexes(safeClonedData.content);
-    const hasRawFile = safeClonedData.content.some((block) => block.raw_file !== undefined);
-    let uploadProcess: UploadToCloudResults | undefined;
-    let modifiedContent: Schema | undefined;
-    if (imageIndexes.length > 0 && hasRawFile) {
-        uploadProcess = await uploadImages(
-            coverFile, safeClonedData.content, imageIndexes, safeClonedData.id
-        );
-        if (!uploadProcess) return { success: false, message: "Failed to upload images" }
-        modifiedContent = replaceImageSources(
-            imageIndexes, safeClonedData.content, uploadProcess.public_ids, uploadProcess.secure_urls
-        );
-    }
+    const contentFiles = await uploadContentImages(safeClonedData.content, imageIndexes, safeClonedData.id);
+    if (contentFiles && contentFiles.status === "Error") return { success: false, message: "Failed to upload content images" }
+
+    // Replace current content data with modified content if exist
+    const modifiedContent = contentFiles
+        ? replaceImageSources(safeClonedData.content, imageIndexes, contentFiles.public_ids, contentFiles.secure_urls)
+        : safeClonedData.content
 
     // Modify current content image src urls with secure cloud urls if exist
     const finalArticlePayload: ArticleData = {
         ...safeClonedData,
         title: formattedTitle,
-        cover: uploadProcess?.secure_urls[0] || safeClonedData.cover,
-        p_id: uploadProcess?.public_ids[0] || safeClonedData.p_id,
-        content: modifiedContent || safeClonedData.content
+        cover: coverFile?.secure_urls[0] || safeClonedData.cover,
+        p_id: coverFile?.public_ids[0] || safeClonedData.p_id,
+        content: modifiedContent
     }
     delete finalArticlePayload.raw_file;
 

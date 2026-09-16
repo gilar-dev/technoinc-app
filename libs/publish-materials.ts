@@ -3,6 +3,7 @@ import type { ArticleData } from "@/contexts/ArticleDataProvider";
 import type { UploadToCloudResults } from "./storage";
 import { uploadPackage, uploadToCloud } from "./storage";
 import { getAPIUrl, getUploadPreset } from "./database";
+import { reformatURI } from "@/utils/textUtils";
 
 // Helper functions
 /**
@@ -23,30 +24,43 @@ export async function checkTitleExistence(title: string): Promise<boolean> {
     }
 }
 
+export async function uploadCoverImage(
+    coverFile: File | undefined,
+    universalID: number
+): Promise<UploadToCloudResults | undefined> {
+    if (!coverFile) return;
+    const preset = getUploadPreset();
+    const bundle = uploadPackage([coverFile], { folder: `Article_${universalID}`, uploadPreset: preset });
+    const uploadProcess = await uploadToCloud(bundle);
+    if (!uploadProcess) return { status: "Error", public_ids: [], secure_urls: [] }
+    return uploadProcess;
+}
+
 /**
  * Asynchronous function to upload images to cloud storage within a folder based on current universal id
- * @param coverFile Raw file of article cover
  * @param content Article content schema
- * @param images list of available image indexes
+ * @param imageIndexes list of available image indexes
  * @param universalID Current wiki universal id (from database)
  * @returns UploadToCloudResults | undefined
  */
-export async function uploadImages(
-    coverFile: File | undefined,
+export async function uploadContentImages(
     content: Schema,
-    images: number[],
-    universalID: number,
-    increaseID: boolean = false
+    imageIndexes: number[],
+    universalID: number
 ): Promise<UploadToCloudResults | undefined> {
+    // Check image indexes length and image has raw file
+    if (imageIndexes.length === 0) return;
+    const hasRawFile = content.some((block) => block.raw_file !== undefined);
+    if (!hasRawFile) return;
+    // Start bundling the file into form data
     const imageFiles: File[] = [];
-    if (coverFile) imageFiles.push(coverFile);
-    if (images.length > 0) for (const index of images) imageFiles.push(content[index].raw_file);
-    const id = increaseID ? universalID++ : universalID;
+    for (const index of imageIndexes) imageFiles.push(content[index].raw_file);
     const imageFormData = uploadPackage(imageFiles,
-        { folder: `Article_${id}`, uploadPreset: getUploadPreset() }
+        { folder: `Article_${universalID}`, uploadPreset: getUploadPreset() }
     );
     // Start uploading images to cloud storage
     const uploadProcess = await uploadToCloud(imageFormData);
+    if (!uploadProcess) return { status: "Error", public_ids: [], secure_urls: [] }
     return uploadProcess;
 }
 
@@ -112,29 +126,30 @@ export function checkContentValues(content: Schema): string {
 export function getImageBlockIndexes(content: Schema): number[] {
     const images: number[] = [];
     content.forEach((block, index) => {
-        if (block.type.includes("image")) images.push(index);
+        if (block.type.includes("image") && block.raw_file !== undefined) images.push(index);
     });
     return images;
 }
 
 /**
  * Replace current local image preview sources with official sources from cloud storage
- * @param imageIndex List of image block indexes
  * @param content Article content schema
+ * @param imageIndex List of image block indexes
  * @param public_ids List of public ids (string[])
  * @param secure_urls List of secure urls (string[])
  * @returns Updated content schema
  */
 export function replaceImageSources(
-    imageIndex: number[],
     content: Schema,
+    imageIndex: number[],
     public_ids: string[],
     secure_urls: string[]
 ): Schema {
     imageIndex.forEach((imgIndex, index) => {
-        content[imgIndex]["public_id"] = public_ids[index + 1];
-        content[imgIndex]["src"] = secure_urls[index + 1];
+        content[imgIndex]["public_id"] = public_ids[index];
+        content[imgIndex]["src"] = secure_urls[index];
         delete content[imgIndex]["raw_file"];
+        delete content[imgIndex]["prev_src"];
     });
     return content;
 }
