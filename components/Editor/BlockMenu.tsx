@@ -12,7 +12,7 @@ export default function BlockMenu() {
     const blockMenuRef = useRef<HTMLDivElement>(null);
 
     const addContentBlock = (block: Content): void => {
-        if (blockMenu.insert) {
+        if (blockMenu.insert !== null) {
             const modifiedContent = [...data.content];
             setData({ ...data, content: modifiedContent.toSpliced(blockMenu.insert + 1, 0, block) });
             blockMenu.setInsert(null);
@@ -32,12 +32,12 @@ export default function BlockMenu() {
             const target = event.target;
             if (!(target instanceof Node) || blockMenuRef.current?.contains(target)) return;
             if (target instanceof Element && target.closest("[data-block-menu-trigger]")) return;
-            if (blockMenu.insert) blockMenu.setInsert(null);
+            if (blockMenu.insert !== null) blockMenu.setInsert(null);
             blockMenu.set(false);
         };
         const closeOnEscape = (event: KeyboardEvent): void => {
             if (event.key === "Escape") {
-                if (blockMenu.insert) blockMenu.setInsert(null);
+                if (blockMenu.insert !== null) blockMenu.setInsert(null);
                 blockMenu.set(false);
             }
         };
@@ -59,7 +59,7 @@ export default function BlockMenu() {
         <div
             ref={blockMenuRef}
             className={`
-                w-full max-h-[40%] mr-3 overflow-auto p-4 fixed bottom-0 left-0 z-2 border-t border-sidebar-border bg-menu-form-bg shadow-[0_-8px_25px_rgba(0,0,0,0.12)] starting:opacity-0 starting:translate-y-full
+                w-full max-h-[50%] mr-3 overflow-auto p-4 fixed bottom-0 left-0 z-2 border-t border-sidebar-border bg-menu-form-bg shadow-[0_-8px_25px_rgba(0,0,0,0.12)] starting:opacity-0 starting:translate-y-full
                 ${blockMenu.show ? "block translate-y-0 opacity-100" : "hidden translate-y-full opacity-0"}
                 transition-all transition-discrete duration-150 ease-in-out md:w-[75%] md:left-[25%]
             `}

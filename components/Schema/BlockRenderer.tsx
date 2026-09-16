@@ -44,7 +44,6 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
 
         if (editMode) {
             if (modifiedContent[index]["src"].trim()) {
-                console.log(true);
                 modifiedContent[index]["prev_src"] = modifiedContent[index]["src"];
                 if (!toDelete.includes(modifiedContent[index]["public_id"]))
                     setToDelete([...toDelete, modifiedContent[index]["public_id"]]);
@@ -70,7 +69,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
 
     switch (block.type) {
         // General block types
-        case "gen-heading-type":
+        case "gen-heading":
             return (
                 <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""}`}>
                     <BlockOption index={index} />
@@ -87,7 +86,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                     </div>
                 </div>
             );
-        case "gen-subheading-type":
+        case "gen-subheading":
             return (
                 <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""}`}>
                     <BlockOption index={index} />
@@ -103,7 +102,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                     </div>
                 </div>
             );
-        case "gen-paragraph-type":
+        case "gen-paragraph":
             return (
                 <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""}`}>
                     <BlockOption index={index} />
@@ -121,7 +120,25 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                     </div>
                 </div>
             );
-        case "gen-image-type":
+        case "gen-notes":
+            return (
+                <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""}`}>
+                    <BlockOption index={index} />
+                    <div className="w-full overflow-hidden font-['Inter'] font-light italic text-[14px] flex bg-infobox-bg">
+                        <textarea
+                            name="gen-paragraph-type"
+                            placeholder="Notes"
+                            aria-label={`Notes block ${index}`}
+                            value={block.text}
+                            className="w-full px-1 resize-none field-sizing-content leading-relaxed whitespace-pre-wrap outline-none"
+                            onChange={(e) => handleChange(index, "text", e.currentTarget.value)}
+                            onSelect={(e) => handleSelection(e.currentTarget, "text")}
+                            onBlur={() => setSelection({ ...selection, selected: false })}
+                        />
+                    </div>
+                </div>
+            );
+        case "gen-image":
             return (
                 <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""}`}>
                     <BlockOption index={index} />
@@ -153,7 +170,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                                 name="gen-image-type"
                                 aria-label={`Image block ${index}`}
                                 placeholder="Image description"
-                                value={block.description ?? ""}
+                                value={block.desc ?? ""}
                                 className="w-full text-[14px] resize-none field-sizing-content leading-relaxed whitespace-pre-wrap outline-none"
                                 onChange={(e) => handleChange(index, "description", e.currentTarget.value)}
                                 onSelect={(e) => handleSelection(e.currentTarget, "description")}
@@ -164,7 +181,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                 </div>
             );
         // Infobox block types
-        case "ib-heading-type":
+        case "ib-heading":
             return (
                 <div className={`flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""} ${checkNextType("ib") ? "" : "mb-3"}`}>
                     <BlockOption index={index} />
@@ -182,7 +199,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                     </div>
                 </div>
             );
-        case "ib-subheading-type":
+        case "ib-subheading":
             return (
                 <div className={`flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""} ${checkNextType("ib") ? "" : "mb-3"}`}>
                     <BlockOption index={index} />
@@ -201,7 +218,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                     </div>
                 </div>
             );
-        case "ib-info-type":
+        case "ib-info":
             return (
                 <div className={`flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""} ${checkNextType("ib") ? "" : "mb-3"}`}>
                     <BlockOption index={index} />
@@ -231,7 +248,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                     </div>
                 </div>
             );
-        case "ib-image-type":
+        case "ib-image":
             return (
                 <div className={`flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""} ${checkNextType("ib") ? "" : "mb-3 py-1"}`}>
                     <BlockOption index={index} />
@@ -239,7 +256,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                         <div className="max-w-[60%] flex flex-col gap-3">
                             <img
                                 src={block.src || undefined}
-                                alt={block.description}
+                                alt={block.desc}
                                 draggable={false}
                                 className="w-full max-h-[22em] border border-border"
                             />
@@ -265,7 +282,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                                 name="ib-image-type"
                                 aria-label={`Ib image block ${index}`}
                                 placeholder="Ib image description"
-                                value={block.description ?? ""}
+                                value={block.desc ?? ""}
                                 className="w-full font-inter font-normal text-[0.85em] tracking-wide resize-none field-sizing-content leading-relaxed whitespace-pre-wrap outline-none"
                                 onChange={(e) => handleChange(index, "description", e.currentTarget.value)}
                                 onSelect={(e) => handleSelection(e.currentTarget, "description")}

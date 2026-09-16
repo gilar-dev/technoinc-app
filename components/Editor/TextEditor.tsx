@@ -66,8 +66,9 @@ export default function TextEditor() {
         } else {
             const process = await updateArticleWiki(data, currentData, toDelete);
             if (process.success) {
-                console.log(process.message);
-            } else console.log(process.message);
+                toast.success(process.message, { className: "text-foreground! bg-menu-form-bg!" });
+                redirect(`/wiki/${reformatURI(data.title)}`, "replace");
+            } else toast.error(process.message, { className: "text-foreground! bg-menu-form-bg!" });
             setIsLoading(false);
         }
     }

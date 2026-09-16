@@ -50,7 +50,7 @@ export function PrimaryParser({ block, expandContent }: PrimaryProps): React.JSX
             </div>
             <div ref={contentRef} className="child pt-2 hidden md:block">
                 {block.map((subBlock: any, subIndex: number) => {
-                    if (!isArray(subBlock) && subBlock.type !== "gen-heading-type") return (
+                    if (!isArray(subBlock) && subBlock.type !== "gen-heading") return (
                         <WikiRenderer key={subIndex} block={subBlock} />
                     );
                     else if (isArray(subBlock) && checkType(subBlock, "ib")) return (
@@ -66,7 +66,7 @@ export function InfoboxParser({ block, index }: InfoboxProps): React.JSX.Element
     const getIBSubheadings = useMemo<number[]>(() => {
         const subheadings: number[] = [];
         for (let pos: number = 0; pos < block.length; pos++) {
-            if (block[pos].type === "ib-subheading-type") subheadings.push(pos);
+            if (block[pos].type === "ib-subheading") subheadings.push(pos);
         }
         return subheadings;
     }, [block]);

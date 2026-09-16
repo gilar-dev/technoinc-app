@@ -42,7 +42,7 @@ export default function Jhuloid({ articleData, existingLinks = [] }: JhuloidProp
                     if (!Array.isArray(block)) return (
                         <WikiRenderer key={index} block={block} />
                     );
-                    else if (block[0].type === "gen-heading-type") return (
+                    else if (block[0].type === "gen-heading") return (
                         <PrimaryParser key={index} block={block} expandContent={expandContent} />
                     );
                     else if (block[0].type.includes("ib")) return (

@@ -1,6 +1,5 @@
 "use client"; // Client-side rendering directive for Next.js
 
-import Link from "next/link";
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect, useRef } from "react";
 
@@ -68,10 +67,10 @@ export default function Menubar({ title = "" }: MenubarProps) {
                     <li title="Contribution">
                         <div className="flex justify-center items-center relative *:absolute">
                             <i className="fa-solid fa-pen-to-square"></i>
-                            <Link
+                            <a
                                 href="/contribution"
                                 className="w-full h-full cursor-pointer"
-                            ></Link>
+                            ></a>
                         </div>
                     </li>
                 </ul>

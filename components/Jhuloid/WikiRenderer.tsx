@@ -8,7 +8,7 @@ interface WikiRendererProps {
 export default function WikiRenderer({ block }: WikiRendererProps) {
     switch (block.type) {
         // General content block types
-        case "gen-heading-type":
+        case "gen-heading":
             return (
                 <h1
                     id={block.heading.replaceAll(" ", "_")}
@@ -17,7 +17,7 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
                     {block.heading}
                 </h1>
             );
-        case "gen-subheading-type":
+        case "gen-subheading":
             return (
                 <h2
                     id={block.subheading.replaceAll(" ", "_")}
@@ -26,20 +26,26 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
                     {block.subheading}
                 </h2>
             );
-        case "gen-paragraph-type":
+        case "gen-paragraph":
             return (
                 <p className="mb-3 font-basic font-normal text-[15px] leading-relaxed whitespace-pre-wrap">
                     <TextParser content={block.text} />
                 </p>
             );
-        case "gen-image-type":
+        case "gen-notes":
+            return (
+                <p className="mb-3 font-basic font-light italic text-[14px] leading-relaxed whitespace-pre-wrap bg-infobox-bg">
+                    <TextParser content={block.text} />
+                </p>
+            );
+        case "gen-image":
             return (
                 <div className="whitespace-pre-wrap flex justify-center items-center md:max-w-[40%] md:float-left">
                     <div className="min-w-[60%] max-w-[90%] p-1 flex flex-col items-center gap-1">
                         <div className="overflow-hidden cursor-pointer relative">
                             <img
                                 src={block.src || undefined}
-                                alt={block.description}
+                                alt={block.desc}
                                 className="w-full transition-transform ease-in-out duration-500 hover:scale-[110%]"
                             />
                             <span className="p-1.25 text-[10px] absolute bottom-2 right-2 self-end rounded-full text-white bg-black/50">
@@ -51,13 +57,13 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
                 </div>
             );
         // Infobox content block types
-        case "ib-heading-type":
+        case "ib-heading":
             return (
                 <div className="font-basic font-medium text-[1.25em] text-center whitespace-pre-wrap md:text-[1em] xl:text-[1.2em]">
                     <TextParser content={block.heading} />
                 </div>
             );
-        case "ib-subheading-type":
+        case "ib-subheading":
             return (
                 <div className="mt-5 p-3 border-t border-border">
                     <h4 className="font-basic font-bold text-center">
@@ -65,7 +71,7 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
                     </h4>
                 </div>
             );
-        case "ib-info-type":
+        case "ib-info":
             return (
                 <div className="p-3 font-basic flex justify-between gap-3">
                     <div className="w-full">
@@ -80,14 +86,14 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
                     </div>
                 </div>
             );
-        case "ib-image-type":
+        case "ib-image":
             return (
                 <div className="whitespace-pre-wrap flex justify-center items-center">
                     <div className="p-3 flex flex-col items-center gap-1">
                         <div className="min-w-[50vw] max-w-full overflow-hidden cursor-pointer relative md:min-w-[25vw]">
                             <img
                                 src={block.src || null}
-                                alt={block.description}
+                                alt={block.desc}
                                 className="w-full transition-transform ease-in-out duration-500 hover:scale-[110%]"
                             />
                             <span className="p-1.25 text-[10px] absolute bottom-2 right-2 self-end rounded-full text-white bg-black/50">

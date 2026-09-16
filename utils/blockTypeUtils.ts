@@ -1,59 +1,66 @@
 export type BlockType =
-    | "gen-heading-type"
-    | "gen-subheading-type"
-    | "gen-paragraph-type"
-    | "gen-image-type"
-    | "ib-heading-type"
-    | "ib-subheading-type"
-    | "ib-info-type"
-    | "ib-image-type";
+    // Generals
+    | "gen-heading"
+    | "gen-subheading"
+    | "gen-paragraph"
+    | "gen-notes"
+    | "gen-image"
+    // Infobox
+    | "ib-heading"
+    | "ib-subheading"
+    | "ib-info"
+    | "ib-image";
 
 // General block types
 export interface GenHeading {
-    type: "gen-heading-type";
+    type: "gen-heading";
     heading: string;
 }
 export interface GenSubheading {
-    type: "gen-subheading-type";
+    type: "gen-subheading";
     subheading: string;
 }
 export interface GenParagraph {
-    type: "gen-paragraph-type";
+    type: "gen-paragraph";
+    text: string;
+}
+export interface GenNotes {
+    type: "gen-notes",
     text: string;
 }
 export interface GenImage {
-    type: "gen-image-type";
+    type: "gen-image";
     src: string;
-    public_id: string;
-    description: string;
+    p_id: string;
+    desc: string;
     raw_file?: File;
     prev_src?: string;
 }
 
 // Infobox block types
 export interface IbHeading {
-    type: "ib-heading-type";
+    type: "ib-heading";
     heading: string;
 }
 export interface IbSubheading {
-    type: "ib-subheading-type";
+    type: "ib-subheading";
     subheading: string;
 }
 export interface IbInfo {
-    type: "ib-info-type";
+    type: "ib-info";
     head: string;
     data: string;
 }
 export interface IbImage {
-    type: "ib-image-type";
+    type: "ib-image";
     src: string;
-    public_id: string;
-    description: string;
+    p_id: string;
+    desc: string;
     raw_file?: File;
     prev_src?: string;
 }
 
 // Export grouped blocks
-export type GeneralBlock = GenHeading | GenSubheading | GenParagraph | GenImage;
+export type GeneralBlock = GenHeading | GenSubheading | GenParagraph | GenNotes | GenImage;
 export type InfoboxBlock = IbHeading | IbSubheading | IbInfo | IbImage;
 export type Block = GeneralBlock | InfoboxBlock;

@@ -8,10 +8,10 @@ export function getContents(schema: Schema | undefined): (string | string[])[] |
     for (let index = 0; index < schema.length; index++) {
         const block = schema[index];
 
-        if (block.type === "gen-heading-type") {
+        if (block.type === "gen-heading") {
             if (subheadings.length > 0) { headings.push(subheadings); subheadings = []; }
             headings.push(block.heading);
-        } else if (block.type === "gen-subheading-type") subheadings.push(block.subheading);
+        } else if (block.type === "gen-subheading") subheadings.push(block.subheading);
     }
     
     if (subheadings.length > 0) { headings.push(subheadings); subheadings = []; }
@@ -38,7 +38,7 @@ export function contentGrouper(content: Schema): Record<string, any>[] {
         const block = content[index];
         const last = group.length - 1;
 
-        if (block.type === "gen-heading-type") {
+        if (block.type === "gen-heading") {
             group.push([{ ...block }]);
             continue;
         }
@@ -49,7 +49,7 @@ export function contentGrouper(content: Schema): Record<string, any>[] {
                 if (group[last][0].type.includes("ib")) {
                     group[last].push(block);
                     continue;
-                } else if (group[last][0].type === "gen-heading-type") {
+                } else if (group[last][0].type === "gen-heading") {
                     if (Array.isArray(group[last][group[last].length - 1])) {
                         if (group[last][group[last].length - 1][0].type.includes("ib")) {
                             group[last][group[last].length - 1].push(block);

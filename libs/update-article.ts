@@ -36,7 +36,7 @@ export default async function updateArticleWiki(
     // Check if current version matches with the latest version
     const latestVersion = await dbGetArticleData(storedTitle, "ver");
     if (latestVersion === undefined) return { success: false, message: "Failed to get latest version" }
-    if (safeClonedData.ver !== latestVersion) return { success: false, message: "Outdated version"  }
+    if (safeClonedData.ver !== latestVersion) return { success: false, message: "Outdated version! Please refresh the page"  }
 
     // Check article metadata completeness
     const metadataComplete = checkMetadataValues(safeClonedData);

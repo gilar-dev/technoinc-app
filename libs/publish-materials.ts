@@ -87,29 +87,34 @@ export function checkContentValues(content: Schema): string {
         const block = content[i];
         const emptyMessage = `This can't be empty at block ${i + 1}`;
         switch (block.type) {
-            case "gen-heading-type":
+            // Generals
+            case "gen-heading":
                 if (!block.heading.trim()) return emptyMessage;
                 break;
-            case "gen-subheading-type":
+            case "gen-subheading":
                 if (!block.subheading.trim()) return emptyMessage;
                 break;
-            case "gen-paragraph-type":
+            case "gen-paragraph":
                 if (!block.text.trim()) return emptyMessage;
                 break;
-            case "gen-image-type":
-                if (!block.src.trim() || !block.description.trim()) return emptyMessage;
+            case "gen-notes":
+                if (!block.text.trim()) return emptyMessage;
                 break;
-            case "ib-heading-type":
+            case "gen-image":
+                if (!block.src.trim() || !block.desc.trim()) return emptyMessage;
+                break;
+            // Infobox
+            case "ib-heading":
                  if (!block.heading.trim()) return emptyMessage;
                 break;
-            case "ib-subheading-type":
+            case "ib-subheading":
                 if (!block.subheading.trim()) return emptyMessage;
                 break;
-            case "ib-info-type":
+            case "ib-info":
                 if (!block.head.trim() || !block.data.trim()) return emptyMessage;
                 break
-            case "ib-image-type":
-                if (!block.src.trim() || !block.description.trim()) return emptyMessage;
+            case "ib-image":
+                if (!block.src.trim() || !block.desc.trim()) return emptyMessage;
                 break;
             default:
                 return "None";
