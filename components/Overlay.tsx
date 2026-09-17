@@ -7,6 +7,6 @@ export default function Overlay() {
 
     if (!isLoading.state) return null;
     return (
-        <div className="w-full h-full fixed top-0 left-0 z-20 bg-red-300/60"></div>
+        <div className="w-full h-full fixed top-0 left-0 z-20 bg-sidebar-accent/20 blur-sm"></div>
     );
 }

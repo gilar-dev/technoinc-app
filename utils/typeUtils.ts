@@ -4,15 +4,12 @@ export type CSON = { [key: string]: any; }
 export type Content = { [key: string]: any; };
 export type Schema = Content[];
 export type SetState<T> = Dispatch<SetStateAction<T>>;
-export type Classification = "Start" | "GA" | "FA";
+export type Classification = "start" | "ga" | "fa";
 export type EditPermission = "free" | "strict";
 
 export interface History {
     user: string;
-    summary: string;
+    sum: string;
     date: string;
-    modify_logs: {
-        status: "add" | "move" | "delete";
-        block: string;
-    }
+    m_logs: [("add" | "move" | "delete"), string];
 }

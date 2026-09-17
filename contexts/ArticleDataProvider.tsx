@@ -51,7 +51,7 @@ export default function ArticleDataProvider({ children }: { children: React.Reac
         cover: "",
         p_id: "",
         ver: 0,
-        cls: "Start",
+        cls: "start",
         cat: [],
         view: 0,
         edit: "free",

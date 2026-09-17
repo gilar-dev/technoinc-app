@@ -34,7 +34,7 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
             );
         case "gen-notes":
             return (
-                <p className="mb-3 font-basic font-light italic text-[14px] leading-relaxed whitespace-pre-wrap bg-infobox-bg">
+                <p className="mb-3 font-basic font-light italic text-[14px] leading-relaxed whitespace-pre-wrap bg-infobox-bg/70">
                     <TextParser content={block.text} />
                 </p>
             );
@@ -59,7 +59,7 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
         // Infobox content block types
         case "ib-heading":
             return (
-                <div className="font-basic font-medium text-[1.25em] text-center whitespace-pre-wrap md:text-[1em] xl:text-[1.2em]">
+                <div className="font-basic font-normal text-center text-[1.25em] leading-relaxed whitespace-pre-wrap md:text-[1em] xl:text-[1.2em]">
                     <TextParser content={block.heading} />
                 </div>
             );
@@ -70,6 +70,12 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
                         <span className="highlight">{block.subheading}</span>
                     </h4>
                 </div>
+            );
+        case "ib-text":
+            return (
+                <p className="mb-3 font-basic font-normal text-center text-[0.9em] leading-relaxed whitespace-pre-wrap">
+                    <TextParser content={block.text} />
+                </p>
             );
         case "ib-info":
             return (

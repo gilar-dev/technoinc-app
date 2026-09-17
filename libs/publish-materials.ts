@@ -1,4 +1,4 @@
-import type { Schema } from "@/utils/typeUtils";
+import type { Schema, History } from "@/utils/typeUtils";
 import type { ArticleData } from "@/contexts/ArticleDataProvider";
 import type { UploadToCloudResults } from "./storage";
 import { uploadPackage, uploadToCloud } from "./storage";
@@ -110,6 +110,9 @@ export function checkContentValues(content: Schema): string {
             case "ib-subheading":
                 if (!block.subheading.trim()) return emptyMessage;
                 break;
+            case "ib-text":
+                if (!block.text.trim()) return emptyMessage;
+                break;
             case "ib-info":
                 if (!block.head.trim() || !block.data.trim()) return emptyMessage;
                 break
@@ -157,4 +160,43 @@ export function replaceImageSources(
         delete content[imgIndex]["prev_src"];
     });
     return content;
+}
+
+/**
+ * Check current article modified data with stored data
+ * @param current Current article data (modified)
+ * @param stored Stored article data
+ * @returns boolean, true if is equal (nothing is changed) else false
+ */
+export function checkIsEqual(current: ArticleData, stored: ArticleData): boolean {
+    let equal: boolean = true;
+    if (reformatURI(current.title) !== stored.title) equal = false;
+    if (current.desc !== stored.desc) equal = false;
+    if (current.cat.length !== stored.cat.length) equal = false;
+    for (let index = 0; index < current.cat.length; index++) {
+        if (current.cat[index] !== stored.cat[index]) equal = false;
+    }
+    if (current.cover !== stored.cover) equal = false;
+    const currentContentStr = JSON.stringify(current.content);
+    const storedContentStr = JSON.stringify(stored.content);
+    if (currentContentStr !== storedContentStr) equal = false;
+    return equal;
+}
+
+export function createDate(): string {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const dateNum = date.getDate();
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    const milisecond = date.getMilliseconds();
+    const dateFormat = `${year}/${month}/${dateNum}`;
+    const timeFormat = `${hour}:${minute}:${milisecond}`;
+    return `${dateFormat}, ${timeFormat}`;
+}
+
+export function createHistory(historyList: History[], newHistory: History): History[] | any {
+    if (historyList.length >= 10) historyList.toSpliced(1, 1);
+    historyList.push(newHistory);
 }

@@ -7,12 +7,12 @@ import "./globals.css";
 
 const inter = Inter({
     variable: "--font-inter",
-    subsets: ["latin"]
+    subsets: ["latin", "cyrillic"]
 });
 
 const montserrat = Montserrat({
     variable: "--font-montserrat",
-    subsets: ["latin"]
+    subsets: ["latin", "cyrillic"]
 });
 
 export const viewport: Viewport = {

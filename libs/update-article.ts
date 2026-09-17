@@ -4,6 +4,7 @@ import { updateArticle } from "./contribution";
 import { deleteFromCloud } from "./storage";
 import { dbGetArticleData } from "./database";
 import {
+    checkIsEqual,
     checkMetadataValues,
     checkTitleExistence,
     checkContentValues,
@@ -37,6 +38,10 @@ export default async function updateArticleWiki(
     const latestVersion = await dbGetArticleData(storedTitle, "ver");
     if (latestVersion === undefined) return { success: false, message: "Failed to get latest version" }
     if (safeClonedData.ver !== latestVersion) return { success: false, message: "Outdated version! Please refresh the page"  }
+
+    // Check equality of current data with stored data
+    const isEqual = checkIsEqual(safeClonedData, storedData as ArticleData);
+    if (isEqual) return { success: false, message: "Nothing is changed" }
 
     // Check article metadata completeness
     const metadataComplete = checkMetadataValues(safeClonedData);
@@ -72,6 +77,9 @@ export default async function updateArticleWiki(
     const modifiedContent = contentFiles
         ? replaceImageSources(safeClonedData.content, imageIndexes, contentFiles.public_ids, contentFiles.secure_urls)
         : safeClonedData.content
+
+    const modifiedHistory = [...safeClonedData.his];
+    if (modifiedHistory.length >= 10) modifiedHistory.toSpliced(1, 1);
 
     // Modify current content image src urls with secure cloud urls if exist
     const finalArticlePayload: ArticleData = {

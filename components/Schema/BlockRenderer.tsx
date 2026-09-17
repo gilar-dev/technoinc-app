@@ -129,7 +129,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
             return (
                 <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""}`}>
                     <BlockOption index={index} />
-                    <div className="w-full overflow-hidden font-['Inter'] font-light italic text-[14px] flex bg-infobox-bg">
+                    <div className="w-full overflow-hidden font-['Inter'] font-light italic text-[14px] flex bg-infobox-bg/70">
                         <textarea
                             name="gen-paragraph-type"
                             placeholder="Notes"
@@ -192,7 +192,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
             return (
                 <div className={`flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""} ${checkNextType("ib") ? "" : "mb-3"}`}>
                     <BlockOption index={index} />
-                    <div className="w-full overflow-hidden font-basic font-medium text-[1.25em] flex flex-col items-center border border-border bg-infobox-bg">
+                    <div className="w-full overflow-hidden font-basic text-[1.25em] flex flex-col items-center border border-border bg-infobox-bg">
                         <textarea
                             name="ib-heading-type"
                             placeholder="Ib Heading"
@@ -220,6 +220,24 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                             className="w-full px-1 text-center resize-none field-sizing-content leading-relaxed whitespace-pre-wrap outline-none"
                             onChange={(e) => handleChange(index, "subheading", e.currentTarget.value)}
                             onSelect={(e) => handleSelection(e.currentTarget, "subheading")}
+                            onBlur={() => setSelection({ ...selection, selected: false })}
+                        />
+                    </div>
+                </div>
+            );
+        case "ib-text":
+            return (
+                <div className={`flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""} ${checkNextType("ib") ? "" : "mb-3"}`}>
+                    <BlockOption index={index} />
+                    <div className="w-full overflow-hidden font-basic text-[0.9em] flex flex-col items-center border border-border bg-infobox-bg">
+                        <textarea
+                            name="ib-text-type"
+                            placeholder="Ib text"
+                            aria-label={`Ib text block ${index}`}
+                            value={block.text}
+                            className="w-full px-1 text-center resize-none field-sizing-content leading-relaxed whitespace-pre-wrap outline-none"
+                            onChange={(e) => handleChange(index, "text", e.currentTarget.value)}
+                            onSelect={(e) => handleSelection(e.currentTarget, "text")}
                             onBlur={() => setSelection({ ...selection, selected: false })}
                         />
                     </div>

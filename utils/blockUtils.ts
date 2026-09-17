@@ -25,6 +25,7 @@ export const blockMenuList: BlockMenuList = {
     infobox: [
         { label: "Ib Heading", icon: "fa-solid fa-heading p-1 border", block: () => ({ type: "ib-heading", heading: "" }) },
         { label: "Ib Subheading", icon: "fa-solid fa-s p-1 border", block: () => ({ type: "ib-subheading", subheading: "" }) },
+        { label: "Ib Text", icon: "fa-solid fa-t", block: () => ({ type: "ib-text", text: "" }) },
         { label: "Ib Info", icon: "fa-solid fa-info p-1 border", block: () => ({ type: "ib-info", head: "", data: "" }) },
         { label: "Ib Image", icon: "fa-solid fa-image p-1 border", block: () => ({ type: "ib-image", src: "", p_id: "", desc: "" }) }
     ]
