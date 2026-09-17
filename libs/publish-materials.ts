@@ -151,7 +151,7 @@ export function replaceImageSources(
     secure_urls: string[]
 ): Schema {
     imageIndex.forEach((imgIndex, index) => {
-        content[imgIndex]["public_id"] = public_ids[index];
+        content[imgIndex]["p_id"] = public_ids[index];
         content[imgIndex]["src"] = secure_urls[index];
         delete content[imgIndex]["raw_file"];
         delete content[imgIndex]["prev_src"];

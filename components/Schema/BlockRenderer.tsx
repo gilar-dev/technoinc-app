@@ -45,8 +45,8 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
         if (editMode) {
             if (modifiedContent[index]["src"].trim()) {
                 modifiedContent[index]["prev_src"] = modifiedContent[index]["src"];
-                if (!toDelete.includes(modifiedContent[index]["public_id"]))
-                    setToDelete([...toDelete, modifiedContent[index]["public_id"]]);
+                if (!toDelete.includes(modifiedContent[index]["p_id"]))
+                    setToDelete([...toDelete, modifiedContent[index]["p_id"]]);
             }
         }
 
@@ -62,7 +62,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
         delete modifiedContent[index]["prev_src"]
         delete modifiedContent[index]["raw_file"]
 
-        const updatePending = toDelete.filter((img) => img !== modifiedContent[index]["public_id"]);
+        const updatePending = toDelete.filter((img) => img !== modifiedContent[index]["p_id"]);
         setToDelete(updatePending);
         setData({ ...data, content: modifiedContent });
     }
@@ -172,8 +172,8 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                                 placeholder="Image description"
                                 value={block.desc ?? ""}
                                 className="w-full text-[14px] resize-none field-sizing-content leading-relaxed whitespace-pre-wrap outline-none"
-                                onChange={(e) => handleChange(index, "description", e.currentTarget.value)}
-                                onSelect={(e) => handleSelection(e.currentTarget, "description")}
+                                onChange={(e) => handleChange(index, "desc", e.currentTarget.value)}
+                                onSelect={(e) => handleSelection(e.currentTarget, "desc")}
                                 onBlur={() => setSelection({ ...selection, selected: false })}
                             />
                         </div>
@@ -284,8 +284,8 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                                 placeholder="Ib image description"
                                 value={block.desc ?? ""}
                                 className="w-full font-inter font-normal text-[0.85em] tracking-wide resize-none field-sizing-content leading-relaxed whitespace-pre-wrap outline-none"
-                                onChange={(e) => handleChange(index, "description", e.currentTarget.value)}
-                                onSelect={(e) => handleSelection(e.currentTarget, "description")}
+                                onChange={(e) => handleChange(index, "desc", e.currentTarget.value)}
+                                onSelect={(e) => handleSelection(e.currentTarget, "desc")}
                                 onBlur={() => setSelection({ ...selection, selected: false })}
                             />
                         </div>
