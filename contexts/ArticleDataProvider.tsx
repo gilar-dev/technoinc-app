@@ -39,7 +39,7 @@ const ArticleDataContext = createContext<DataTypes | undefined>(undefined);
 
 export function useArticleData() {
     const context = useContext(ArticleDataContext);
-    if (!context) throw new Error("Can only be used inside ArticleDataProvider");
+    if (!context) throw new Error("useArticleData must be used inside ArticleDataProvider");
     return context;
 }
 

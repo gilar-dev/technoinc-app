@@ -12,7 +12,7 @@ const SidebarContext = createContext<SidebarContextTypes | undefined>(undefined)
 
 export function useSidebar() {
     const context = useContext(SidebarContext);
-    if (!context) throw new Error("useSidebar can only be used inside SidebarProvider");
+    if (!context) throw new Error("useSidebar must be used inside SidebarProvider");
     return context;
 }
 
