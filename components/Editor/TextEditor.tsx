@@ -5,6 +5,7 @@ import { useRouter, redirect } from "next/navigation";
 import { toast } from "react-toastify";
 import { useArticleData } from "@/contexts/ArticleDataProvider";
 import { useEditor } from "@/contexts/EditorProvider";
+import { useProcess } from "@/contexts/ProcessProvider";
 import { reformatURI } from "@/utils/textUtils";
 import uploadArticleWiki from "@/libs/upload-article";
 import updateArticleWiki from "@/libs/update-article";
@@ -15,7 +16,7 @@ const DISABLED_BUTTON_CLASS = `${TOOLBAR_BUTTON_CLASS} text-foreground/30`;
 export default function TextEditor() {
     const { data, setData, toDelete } = useArticleData();
     const { editMode, currentData, selection, setSelection } = useEditor();
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const { isLoading } = useProcess();
     const router = useRouter();
 
     const syntaxActions = useMemo(() => [
@@ -53,8 +54,8 @@ export default function TextEditor() {
     };
 
     const processToPublish = async (): Promise<void> => {
-        if (isLoading) return;
-        setIsLoading(true);
+        if (isLoading.state) return;
+        isLoading.set(true);
         if (!editMode) {
             const process = await uploadArticleWiki(data);
             if (process.success) {
@@ -62,19 +63,19 @@ export default function TextEditor() {
                 redirect(`/wiki/${reformatURI(data.title)}`, "replace");
             }
             else toast.error(process.message, { className: "text-foreground! bg-menu-form-bg!" });
-            setIsLoading(false);
+            isLoading.set(false);
         } else {
             const process = await updateArticleWiki(data, currentData, toDelete);
             if (process.success) {
                 toast.success(process.message, { className: "text-foreground! bg-menu-form-bg!" });
                 redirect(`/wiki/${reformatURI(data.title)}`, "replace");
             } else toast.error(process.message, { className: "text-foreground! bg-menu-form-bg!" });
-            setIsLoading(false);
+            isLoading.set(false);
         }
     }
 
     useEffect(() => {
-        document.body.style.overflow = isLoading ? "hidden" : "visible";
+        document.body.style.overflow = isLoading.state ? "hidden" : "visible";
     }, [isLoading]);
 
     return (
@@ -116,7 +117,7 @@ export default function TextEditor() {
                     <i className="fa-solid fa-angle-right" />
                 </button>
             </div>
-            {isLoading && (
+            {isLoading.state && (
                 <>
                     <span className="w-[10%] h-1 absolute bottom-0 rounded-sm bg-blue-500 animate-[loading_1s_linear_infinite]"></span>
                     <div className="w-full h-full fixed top-0 left-0"></div>

@@ -44,12 +44,17 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
 
         if (editMode) {
             if (modifiedContent[index]["src"].trim()) {
-                modifiedContent[index]["prev_src"] = modifiedContent[index]["src"];
-                if (!toDelete.includes(modifiedContent[index]["p_id"]))
-                    setToDelete([...toDelete, modifiedContent[index]["p_id"]]);
+                if (!modifiedContent[index]["prev_src"]) {
+                    modifiedContent[index]["prev_src"] = modifiedContent[index]["src"];
+                    if (!toDelete.includes(modifiedContent[index]["p_id"]))
+                        setToDelete([...toDelete, modifiedContent[index]["p_id"]]);
+                }
             }
         }
 
+        if (modifiedContent[index]["src"].startsWith("blob:")) {
+            URL.revokeObjectURL(modifiedContent[index]["src"]);
+        }
         modifiedContent[index]["raw_file"] = imageFile;
         modifiedContent[index]["src"] = imagepreview;
         setData({ ...data, content: modifiedContent });
@@ -164,7 +169,9 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                             {block.prev_src !== undefined && (
                                 <button
                                     title="Restore image"
-                                ><i className="fa-solid fa-rotate-left"></i></button>
+                                    className="mx-auto p-1 cursor-pointer text-[0.9em] flex items-center gap-1 border-2 border-sidebar-border "
+                                    onClick={() => restoreImage()}
+                                ><i className="fa-solid fa-rotate-left"></i><span>Restore</span></button>
                             )}
                             <textarea
                                 name="gen-image-type"
@@ -274,9 +281,9 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                             {block.prev_src !== undefined && (
                                 <button
                                     title="Restore image"
-                                    className="cursor-pointer"
+                                    className="mx-auto p-1 cursor-pointer text-[0.9em] flex items-center gap-1 border-2 border-sidebar-border "
                                     onClick={() => restoreImage()}
-                                ><i className="fa-solid fa-rotate-left"></i></button>
+                                ><i className="fa-solid fa-rotate-left"></i><span>Restore</span></button>
                             )}
                             <textarea
                                 name="ib-image-type"

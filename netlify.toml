@@ -1,0 +1,10 @@
+[[redirects]]
+from = "https://technoinc-next.netlify.app/*"
+to = "https://technoinc.world"
+status = 301
+force = true
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200

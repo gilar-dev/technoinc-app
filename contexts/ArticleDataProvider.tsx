@@ -17,7 +17,7 @@ export interface ArticleData {
     his: History[];
     content: Schema;
     // Temporary properties
-    raw_file?: File | undefined;
+    raw_file?: File;
     prev_src?: string;
 }
 

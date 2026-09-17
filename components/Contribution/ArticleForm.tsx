@@ -24,11 +24,17 @@ export default function ArticleForm({ formData = undefined }: ArticleFormProps) 
         const modifiedData = structuredClone(data);
 
         if (editMode) {
-            modifiedData.prev_src = modifiedData.cover;
-            if (!toDelete.includes(modifiedData.p_id)) setToDelete([...toDelete, modifiedData.p_id]);
+            if (modifiedData.cover.trim()) {
+                if (!modifiedData.prev_src) {
+                    modifiedData.prev_src = modifiedData.cover;
+                    if (!toDelete.includes(modifiedData.p_id)) setToDelete([...toDelete, modifiedData.p_id]);
+                }
+            }
         }
 
-        if (modifiedData.cover.startsWith("blob:")) URL.revokeObjectURL(modifiedData.cover);
+        if (modifiedData.cover.startsWith("blob:")) {
+            URL.revokeObjectURL(modifiedData.cover);
+        }
         modifiedData.cover = previewImage;
         modifiedData.raw_file = selectedFile;
         setData(modifiedData);
