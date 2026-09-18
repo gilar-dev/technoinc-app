@@ -5,6 +5,7 @@ import type { SetState } from "@/utils/typeUtils";
 
 interface ProcessContextProps {
     isLoading: { state: boolean; set: SetState<boolean>; }
+    isValidating: { state: boolean; set: SetState<boolean>; }
 }
 
 const ProcessContext = createContext<ProcessContextProps | undefined>(undefined);
@@ -17,10 +18,12 @@ export function useProcess() {
 
 export default function ProcessProvider({ children }: { children: React.ReactNode }) {
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isValidating, setIsValidating] = useState<boolean>(false);
 
     return (
         <ProcessContext.Provider value={{
-            isLoading: { state: isLoading, set: setIsLoading }
+            isLoading: { state: isLoading, set: setIsLoading },
+            isValidating: { state: isValidating, set: setIsValidating }
         }}>
             {children}
         </ProcessContext.Provider>

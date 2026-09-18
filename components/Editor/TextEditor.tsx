@@ -1,22 +1,18 @@
 "use client"; // Client-side rendering directive for Next.js
 
-import { useState, useEffect, useMemo } from "react";
-import { useRouter, redirect } from "next/navigation";
-import { toast } from "react-toastify";
+import { useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { useArticleData } from "@/contexts/ArticleDataProvider";
 import { useEditor } from "@/contexts/EditorProvider";
 import { useProcess } from "@/contexts/ProcessProvider";
-import { reformatURI } from "@/utils/textUtils";
-import uploadArticleWiki from "@/libs/upload-article";
-import updateArticleWiki from "@/libs/update-article";
 
 const TOOLBAR_BUTTON_CLASS = "h-full w-full cursor-pointer text-foreground transition-colors duration-150 ease-in-out hover:bg-sidebar-hover";
 const DISABLED_BUTTON_CLASS = `${TOOLBAR_BUTTON_CLASS} text-foreground/30`;
 
 export default function TextEditor() {
-    const { data, setData, toDelete } = useArticleData();
-    const { editMode, currentData, selection, setSelection } = useEditor();
-    const { isLoading } = useProcess();
+    const { data, setData } = useArticleData();
+    const { editMode, selection, setSelection } = useEditor();
+    const { isLoading, isValidating } = useProcess();
     const router = useRouter();
 
     const syntaxActions = useMemo(() => [
@@ -53,25 +49,9 @@ export default function TextEditor() {
         });
     };
 
-    const processToPublish = async (): Promise<void> => {
+    const processToPublish = (): void => {
         if (isLoading.state) return;
-        isLoading.set(true);
-        if (!editMode) {
-            const process = await uploadArticleWiki(data);
-            if (process.success) {
-                toast.success(process.message, { className: "text-foreground! bg-menu-form-bg!" });
-                redirect(`/wiki/${reformatURI(data.title)}`, "replace");
-            }
-            else toast.error(process.message, { className: "text-foreground! bg-menu-form-bg!" });
-            isLoading.set(false);
-        } else {
-            const process = await updateArticleWiki(data, currentData, toDelete);
-            if (process.success) {
-                toast.success(process.message, { className: "text-foreground! bg-menu-form-bg!" });
-                redirect(`/wiki/${reformatURI(data.title)}`, "replace");
-            } else toast.error(process.message, { className: "text-foreground! bg-menu-form-bg!" });
-            isLoading.set(false);
-        }
+        isValidating.set(true);
     }
 
     useEffect(() => {

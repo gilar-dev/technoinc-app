@@ -1,5 +1,5 @@
 import type { ArticleData } from "@/contexts/ArticleDataProvider";
-import type { Schema } from "@/utils/typeUtils";
+import type { History, Schema } from "@/utils/typeUtils";
 
 interface Status {
     status: "Success" | "Error";
@@ -20,7 +20,9 @@ export function getUploadPreset(): string {
 type ArticleField = Exclude<keyof ArticleData, "content" | "raw_file" | "prev_src">;
 
 interface ArticleDataResult extends Status {
-    article: Omit<ArticleData, "content"> & {
+    article: Omit<ArticleData, "cat" | "his" | "content"> & {
+        cat: string;
+        his: string;
         content: string;
     }
 }
@@ -52,8 +54,10 @@ export async function dbGetArticleData<K extends ArticleField>(
         const result: ArticleDataResult | null = await response.json();
         if (!result) return;
         if (field) return result.article as unknown as ArticleData[K];
+        const parsedCategory: string[] = JSON.parse(result.article.cat);
+        const parsedHistory: History[] = JSON.parse(result.article.his);
         const parsedContent: Schema = JSON.parse(result.article.content);
-        return { ...result.article, content: parsedContent };
+        return { ...result.article, cat: parsedCategory, his: parsedHistory, content: parsedContent };
     }
     catch (error) {
         console.error(error);

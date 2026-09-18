@@ -8,6 +8,7 @@ import ToastProvider from "@/contexts/ToastProvider";
 import ContentSchema from "@/components/Schema/ContentSchema";
 import BlockTools from "@/components/Editor/BlockTools";
 import BlockMenu from "@/components/Editor/BlockMenu";
+import Validation from "@/components/Editor/Validation";
 import Overlay from "@/components/Overlay";
 import Footer from "@/components/Footer";
 import { ContributionHeader, MissingArticle } from "../../Components";
@@ -43,6 +44,7 @@ export default async function ContributionEditPage({ params }: PageProps) {
                             <ContentSchema />
                             <BlockTools />
                             <BlockMenu />
+                            <Validation />
                         </ToastProvider>
                     </EditorProvider>
                 )}

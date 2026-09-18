@@ -196,7 +196,9 @@ export function createDate(): string {
     return `${dateFormat}, ${timeFormat}`;
 }
 
-export function createHistory(historyList: History[], newHistory: History): History[] | any {
-    if (historyList.length >= 10) historyList.toSpliced(1, 1);
-    historyList.push(newHistory);
+export function createHistory(historyList: History[], newHistory: History): History[] {
+    const updatedHistory = historyList.length >= 10
+        ? historyList.toSpliced(1, 1)
+        : [...historyList];
+    return [...updatedHistory, newHistory];
 }
