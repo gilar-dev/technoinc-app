@@ -52,7 +52,7 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
                                 <i className="fa-regular fa-clone"></i>
                             </span>
                         </div>
-                        <TextParser content={block.description} style="font-[400] text-[0.85em] tracking-wide" />
+                        <TextParser content={block.desc} style="font-[400] text-[0.85em] tracking-wide" />
                     </div>
                 </div>
             );
@@ -106,7 +106,7 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
                                 <i className="fa-regular fa-clone"></i>
                             </span>
                         </div>
-                        <TextParser content={block.description} style="font-inter font-[400] text-[0.85em] tracking-wide" />
+                        <TextParser content={block.desc} style="font-inter font-[400] text-[0.85em] tracking-wide" />
                     </div>
                 </div>
             );
