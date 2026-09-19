@@ -186,7 +186,7 @@ export function checkIsEqual(current: ArticleData, stored: ArticleData): boolean
 export function createDate(): string {
     const date = new Date();
     const year = date.getFullYear();
-    const month = date.getMonth();
+    const month = date.getMonth() + 1;
     const dateNum = date.getDate();
     const hour = date.getHours();
     const minute = date.getMinutes();
@@ -196,9 +196,20 @@ export function createDate(): string {
     return `${dateFormat}, ${timeFormat}`;
 }
 
-export function createHistory(historyList: History[], newHistory: History): History[] {
-    const updatedHistory = historyList.length >= 10
+export function createHistory(
+    status: "create" | "edit",
+    historyList: History[],
+    validation: { contributor: string; summary: string; }
+): History[] {
+    const updatedHistory = historyList.length >= 20
         ? historyList.toSpliced(1, 1)
-        : [...historyList];
-    return [...updatedHistory, newHistory];
+        : historyList;
+    updatedHistory.push({
+        sts: status,
+        user: validation.contributor,
+        sum: validation.summary,
+        date: createDate(),
+        m_logs: []
+    });
+    return updatedHistory;
 }

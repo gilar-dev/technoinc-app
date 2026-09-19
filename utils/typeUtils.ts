@@ -8,8 +8,9 @@ export type Classification = "start" | "ga" | "fa";
 export type EditPermission = "free" | "strict";
 
 export interface History {
+    sts: "create" | "edit";
     user: string;
     sum: string;
     date: string;
-    m_logs: [("add" | "move" | "delete"), string];
+    m_logs: ["add" | "move" | "delete", string][];
 }

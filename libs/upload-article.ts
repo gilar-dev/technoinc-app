@@ -9,7 +9,8 @@ import {
     getImageBlockIndexes,
     uploadCoverImage,
     uploadContentImages,
-    replaceImageSources
+    replaceImageSources,
+    createHistory
 } from "./publish-materials";
 
 interface UploadArticleReturns {
@@ -22,7 +23,10 @@ interface UploadArticleReturns {
  * @param articleData article data (metadata and content)
  * @returns UploadArticleReturn = { succes: boolean, message: string }
  */
-export default async function uploadArticleWiki(articleData: ArticleData): Promise<UploadArticleReturns> {
+export default async function uploadArticleWiki(
+    articleData: ArticleData,
+    validation: { contributor: string; summary: string; }
+): Promise<UploadArticleReturns> {
     const safeClonedData = structuredClone(articleData);
     const formattedTitle = reformatURI(safeClonedData.title);
     const universalID = await dbGetUniversalID();
@@ -48,10 +52,11 @@ export default async function uploadArticleWiki(articleData: ArticleData): Promi
     const contentFiles = await uploadContentImages(safeClonedData.content, imageIndexes, universalID + 1);
     if (contentFiles && contentFiles.status === "Error") return { success: false, message: "Failed to upload content images" }
 
-    // Modify current content image src urls with secure cloud urls if exist
+    // Modify current content image src urls with secure cloud urls if exist and create new history
     const modifiedContent = contentFiles
         ? replaceImageSources(safeClonedData.content, imageIndexes, contentFiles.public_ids, contentFiles.secure_urls)
         : safeClonedData.content
+    const createNewHistory = createHistory("create", safeClonedData.his, validation);
 
     const finalArticlePayload: ArticleData = {
         ...safeClonedData,
@@ -59,6 +64,7 @@ export default async function uploadArticleWiki(articleData: ArticleData): Promi
         id: universalID + 1,
         cover: coverFile.secure_urls[0],
         p_id: coverFile.public_ids[0],
+        his: createNewHistory,
         content: modifiedContent
     }
     delete finalArticlePayload.raw_file;

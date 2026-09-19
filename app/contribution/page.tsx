@@ -9,6 +9,8 @@ import TextEditor from "@/components/Editor/TextEditor";
 import ContentSchema from "@/components/Schema/ContentSchema";
 import BlockTools from "@/components/Editor/BlockTools";
 import BlockMenu from "@/components/Editor/BlockMenu";
+import Validation from "@/components/Editor/Validation";
+import Overlay from "@/components/Overlay";
 import Footer from "@/components/Footer";
 import { ContributionHeader } from "./Components";
 import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
@@ -36,8 +38,10 @@ export default function ContributionPage() {
                         <ContentSchema />
                         <BlockTools />
                         <BlockMenu />
+                        <Validation />
                     </ToastProvider>
                 </EditorProvider>
+                <Overlay />
                 <Footer />
             </div>
         </ProcessProvider>

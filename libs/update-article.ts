@@ -11,7 +11,8 @@ import {
     getImageBlockIndexes,
     uploadCoverImage,
     uploadContentImages,
-    replaceImageSources
+    replaceImageSources,
+    createHistory
 } from "./publish-materials";
 
 interface UpdateArticleReturns {
@@ -28,7 +29,8 @@ interface UpdateArticleReturns {
 export default async function updateArticleWiki(
     articleData: ArticleData,
     storedData: ArticleData | undefined,
-    pendingDelete: string[]
+    pendingDelete: string[],
+    validation: { contributor: string; summary: string; }
 ): Promise<UpdateArticleReturns> {
     const safeClonedData = structuredClone(articleData);
     const formattedTitle = reformatURI(safeClonedData.title);
@@ -73,13 +75,11 @@ export default async function updateArticleWiki(
     const contentFiles = await uploadContentImages(safeClonedData.content, imageIndexes, safeClonedData.id);
     if (contentFiles && contentFiles.status === "Error") return { success: false, message: "Failed to upload content images" }
 
-    // Replace current content data with modified content if exist
+    // Replace current content data with modified content if exist and update new revision history
     const modifiedContent = contentFiles
         ? replaceImageSources(safeClonedData.content, imageIndexes, contentFiles.public_ids, contentFiles.secure_urls)
         : safeClonedData.content
-
-    const modifiedHistory = [...safeClonedData.his];
-    if (modifiedHistory.length >= 10) modifiedHistory.toSpliced(1, 1);
+    const updatedHistory = createHistory("edit", safeClonedData.his, validation);
 
     // Modify current content image src urls with secure cloud urls if exist
     const finalArticlePayload: ArticleData = {
@@ -87,6 +87,7 @@ export default async function updateArticleWiki(
         title: formattedTitle,
         cover: coverFile?.secure_urls[0] || safeClonedData.cover,
         p_id: coverFile?.public_ids[0] || safeClonedData.p_id,
+        his: updatedHistory,
         content: modifiedContent
     }
     delete finalArticlePayload.raw_file;

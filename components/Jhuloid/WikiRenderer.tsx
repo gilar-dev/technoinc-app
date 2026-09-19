@@ -21,26 +21,26 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
             return (
                 <h2
                     id={block.subheading.replaceAll(" ", "_")}
-                    className="scroll-mt-20 mb-2 font-basic font-semibold text-[18px]"
+                    className="scroll-mt-20 mt-3 font-basic font-semibold text-[18px]"
                 >
                     {block.subheading}
                 </h2>
             );
         case "gen-paragraph":
             return (
-                <p className="mb-3 font-basic font-normal text-[15px] leading-relaxed whitespace-pre-wrap">
+                <p className="mt-3 font-basic font-normal text-[15px] leading-relaxed whitespace-pre-wrap">
                     <TextParser content={block.text} />
                 </p>
             );
         case "gen-notes":
             return (
-                <p className="mb-3 font-basic font-light italic text-[14px] leading-relaxed whitespace-pre-wrap bg-infobox-bg/70">
+                <p className="p-1 font-basic font-light italic text-[13px] leading-relaxed whitespace-pre-wrap flex items-center bg-infobox-bg">
                     <TextParser content={block.text} />
                 </p>
             );
         case "gen-image":
             return (
-                <div className="whitespace-pre-wrap flex justify-center items-center md:max-w-[40%] md:float-left">
+                <div className="mt-3 whitespace-pre-wrap flex justify-center items-center md:max-w-[40%] md:float-left">
                     <div className="min-w-[60%] max-w-[90%] p-1 flex flex-col items-center gap-1">
                         <div className="overflow-hidden cursor-pointer relative">
                             <img
@@ -73,7 +73,7 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
             );
         case "ib-text":
             return (
-                <p className="mb-3 font-basic font-normal text-center text-[0.9em] leading-relaxed whitespace-pre-wrap">
+                <p className="mt-3 font-basic font-normal text-center text-[0.9em] leading-relaxed whitespace-pre-wrap">
                     <TextParser content={block.text} />
                 </p>
             );

@@ -27,13 +27,17 @@ export default function Validation() {
         isLoading.set(true);
 
         if (!editMode) {
-            const uploadProcess = await uploadArticleWiki(data);
+            const uploadProcess = await uploadArticleWiki(data,
+                { contributor: contributorName, summary: changeSummary }
+            );
             if (uploadProcess.success) {
                 toast.success(uploadProcess.message, { className: "text-foreground! bg-menu-form-bg!" });
                 router.replace(`/wiki/${reformatURI(data.title)}`);
             } else toast.error(uploadProcess.message, { className: "text-foreground! bg-menu-form-bg!" });
         } else {
-            const updateProcess = await updateArticleWiki(data, currentData, toDelete);
+            const updateProcess = await updateArticleWiki(data, currentData, toDelete,
+                { contributor: contributorName, summary: changeSummary }
+            );
             if (updateProcess.success) {
                 toast.success(updateProcess.message, { className: "text-foreground! bg-menu-form-bg!" });
                 router.replace(`/wiki/${reformatURI(data.title)}`);

@@ -5,6 +5,7 @@ import Menubar from "@/components/Menubar";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import Jhuloid from "@/components/Jhuloid/Jhuloid";
+import WikiInfo from "@/components/Jhuloid/WikiInfo";
 import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
 import { HeadingHolder, MissingArticle, RedirectNotice } from "./Components";
 import { reformatURI } from "@/utils/textUtils";
@@ -74,6 +75,12 @@ export default async function WikiPage({ params }: Params) {
                     : (<MissingArticle title={cleanURI} />)
                 }
             </div>
+            {articleData && (
+                <WikiInfo
+                    articleData={articleData}
+                    suggestions={existingLinks}
+                />
+            )}
             <Footer />
             {articleData
                 && redirectedURL

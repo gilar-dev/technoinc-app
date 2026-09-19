@@ -1,6 +1,7 @@
 "use client"; // Client-side rendering directive for Next.js
 
 import { useState, useEffect, useRef, useMemo } from "react";
+import type { SetState } from "@/utils/typeUtils";
 import WikiRenderer from "@/components/Jhuloid/WikiRenderer";
 
 interface PrimaryProps {
@@ -15,7 +16,7 @@ interface InfoboxProps {
 
 export function PrimaryParser({ block, expandContent }: PrimaryProps): React.JSX.Element {
     const [isMounted, setIsMounted] = useState<boolean>(false);
-    const contentRef = useRef<HTMLDivElement | null>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
 
     const isArray = (content: any): boolean => {
         return Array.isArray(content);
@@ -48,7 +49,7 @@ export function PrimaryParser({ block, expandContent }: PrimaryProps): React.JSX
                 <WikiRenderer block={block[0]} />
                 <span className="text-[1.3em]"><i className="child fa-solid fa-angle-down"></i></span>
             </div>
-            <div ref={contentRef} className="child pt-2 hidden md:block">
+            <div ref={contentRef} className="child hidden md:block">
                 {block.map((subBlock: any, subIndex: number) => {
                     if (!isArray(subBlock) && subBlock.type !== "gen-heading") return (
                         <WikiRenderer key={subIndex} block={subBlock} />
@@ -83,7 +84,7 @@ export function InfoboxParser({ block, index }: InfoboxProps): React.JSX.Element
     return (
         <table
             width="100%"
-            className="mb-5 border-separate border border-border bg-infobox-bg md:w-[10%] md:float-right md:clear-right md:ml-5"
+            className="mt-5 border-separate border border-border bg-infobox-bg md:w-[10%] md:float-right md:clear-right md:ml-5"
         >
             <tbody>
                 {block.map((subBlock: any, subIndex: number) => (

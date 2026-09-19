@@ -16,18 +16,18 @@ export function HeadingHolder({ title, description }: ArticleTitleProps) {
                 </h1>
                 <span className="text-[0.9em]">{description}</span>
             </div>
-            <div className="w-full p-3">
+            <div className="w-full px-3">
                 <nav className="w-full border-t border-b border-border">
                     <ul className="w-full px-1 flex justify-center items-center gap-1">
                         <li className="block mr-auto">
                             <span className="font-semibold">Page</span>
                         </li>
                         <Link href={`/contribution/edit/${title.replaceAll(" ", "_")}`}>
-                            <li className="p-1 hover:bg-list-bg">
+                            <li className="p-2 hover:bg-list-bg">
                                 <span className="text-[1.5em]"><i className="fa-solid fa-pen-to-square"></i></span>
                             </li>
                         </Link>
-                        <li className="p-1 hover:bg-list-bg">
+                        <li className="p-2 hover:bg-list-bg">
                             <span className="text-[1.5em]"><i className="fa-solid fa-ellipsis-vertical"></i></span>
                         </li>
                     </ul>
