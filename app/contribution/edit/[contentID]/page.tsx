@@ -36,7 +36,7 @@ export default async function ContributionEditPage({ params }: PageProps) {
                 {!articleData ? (
                     <MissingArticle title={cleanContentID} />
                 ) : (
-                    <EditorProvider editMode={true} currentData={articleData}>
+                    <EditorProvider editMode={true} currentData={structuredClone(articleData)}>
                         <ToastProvider>
                             <ContributionHeader title={articleData.title.replaceAll("_", " ")} />
                             <ArticleForm formData={{ ...articleData, title: articleData.title.replaceAll("_", " ") }} />
