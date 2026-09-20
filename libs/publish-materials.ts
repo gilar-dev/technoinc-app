@@ -32,8 +32,10 @@ export async function uploadCoverImage(
     const preset = getUploadPreset();
     const bundle = uploadPackage([coverFile], { folder: `Article_${universalID}`, uploadPreset: preset });
     const uploadProcess = await uploadToCloud(bundle);
-    if (!uploadProcess) return { status: "Error", public_ids: [], secure_urls: [] }
-    return uploadProcess;
+    if (!uploadProcess) return { status: "Error", secure_urls: [], public_ids: [] }
+    const [cloud, asset] = uploadProcess.public_ids[0].split("upload");
+    const modifiedUrl = [cloud, "upload/f_auto,q_auto", asset].join("");
+    return { status: "Success", secure_urls: [modifiedUrl], public_ids: uploadProcess.public_ids }
 }
 
 /**
@@ -154,8 +156,10 @@ export function replaceImageSources(
     secure_urls: string[]
 ): Schema {
     imageIndex.forEach((imgIndex, index) => {
+        const [cloud, asset] = secure_urls[index].split("upload");
+        const modifiedUrl = [cloud, "upload/f_auto,q_auto", asset];
+        content[imgIndex]["src"] = modifiedUrl.join("");
         content[imgIndex]["p_id"] = public_ids[index];
-        content[imgIndex]["src"] = secure_urls[index];
         delete content[imgIndex]["raw_file"];
         delete content[imgIndex]["prev_src"];
     });
