@@ -17,6 +17,6 @@ export default function robots(): MetadataRoute.Robots {
                 "/contribution/edit/"
             ]
         },
-        sitemap: "https://technoinc.world"
+        sitemap: "https://technoinc.world/sitemap.xml"
     }
 }
