@@ -4,13 +4,17 @@ export default function robots(): MetadataRoute.Robots {
     return {
         rules: {
             userAgent: "*",
-            allow: "/",
+            allow: [
+                "/",
+                "/wiki/",
+                "/category/"
+            ],
             disallow: [
                 "/api/",
                 "/_next/",
                 "/static/",
                 "/contribution/",
-                "contribution/edit/"
+                "/contribution/edit/"
             ]
         },
         sitemap: "https://technoinc.world"
