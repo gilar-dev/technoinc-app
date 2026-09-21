@@ -1,4 +1,4 @@
-import type { Schema, History } from "@/utils/typeUtils";
+import type { Schema, History, ModifyLogs } from "@/utils/typeUtils";
 import type { ArticleData } from "@/contexts/ArticleDataProvider";
 import type { UploadToCloudResults } from "./storage";
 import { uploadPackage, uploadToCloud } from "./storage";
@@ -203,7 +203,7 @@ export function createDate(): string {
 export function createHistory(
     status: "create" | "edit",
     historyList: History[],
-    validation: { contributor: string; summary: string; }
+    validation: { contributor: string; summary: string; m_logs: ModifyLogs; }
 ): History[] {
     const updatedHistory = historyList.length >= 20
         ? historyList.toSpliced(1, 1)
@@ -213,7 +213,7 @@ export function createHistory(
         user: validation.contributor,
         sum: validation.summary,
         date: createDate(),
-        m_logs: []
+        m_logs: validation.m_logs
     });
     return updatedHistory;
 }

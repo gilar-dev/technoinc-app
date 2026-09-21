@@ -1,4 +1,5 @@
 import type { ArticleData } from "@/contexts/ArticleDataProvider";
+import type { ModifyLogs } from "@/utils/typeUtils";
 import { reformatURI } from "@/utils/textUtils";
 import { updateArticle } from "./contribution";
 import { deleteFromCloud } from "./storage";
@@ -30,7 +31,7 @@ export default async function updateArticleWiki(
     articleData: ArticleData,
     storedData: ArticleData | undefined,
     pendingDelete: string[],
-    validation: { contributor: string; summary: string; }
+    validation: { contributor: string; summary: string; m_logs: ModifyLogs }
 ): Promise<UpdateArticleReturns> {
     const safeClonedData = structuredClone(articleData);
     const formattedTitle = reformatURI(safeClonedData.title);

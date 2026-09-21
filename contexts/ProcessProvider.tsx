@@ -8,6 +8,8 @@ interface ProcessContextProps {
     isValidating: { state: boolean; set: SetState<boolean>; }
 }
 
+type ModifyLogs = ["create" | "move" | "delete", string][];
+
 const ProcessContext = createContext<ProcessContextProps | undefined>(undefined);
 
 export function useProcess() {

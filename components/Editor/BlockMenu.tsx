@@ -4,11 +4,13 @@ import { useEffect, useRef } from "react";
 import type { Content } from "@/utils/typeUtils";
 import { useArticleData } from "@/contexts/ArticleDataProvider";
 import { useEditor } from "@/contexts/EditorProvider";
+import { useSidebar } from "@/contexts/SidebarProvider";
 import { blockMenuList } from "@/utils/blockUtils";
 
 export default function BlockMenu() {
     const { data, setData } = useArticleData();
     const { blockMenu } = useEditor();
+    const { modifyLogs } = useSidebar();
     const blockMenuRef = useRef<HTMLDivElement>(null);
 
     const addContentBlock = (block: Content): void => {
@@ -17,12 +19,18 @@ export default function BlockMenu() {
             setData({ ...data, content: modifiedContent.toSpliced(blockMenu.insert + 1, 0, block) });
             blockMenu.setInsert(null);
             blockMenu.set(false);
-            return;
+        } else {
+            setData({ ...data, content: [...data.content, block] });
+            blockMenu.set(false);
+            const mainContainer = document.querySelector("main");
+            if (mainContainer) mainContainer.scrollIntoView({ block: "end", behavior: "smooth" });
         }
-        setData({ ...data, content: [...data.content, block] });
-        blockMenu.set(false);
-        const mainContainer = document.querySelector("main");
-        if (mainContainer) mainContainer.scrollIntoView({ block: "end", behavior: "smooth" });
+
+        const updatedLogs = [...modifyLogs.logs];
+        if (updatedLogs.length > 0 && updatedLogs[0][1] === block.type) return;
+        if (updatedLogs.length >= 11) updatedLogs.pop();
+        updatedLogs.unshift(["add", block.type]);
+        modifyLogs.set(updatedLogs);
     }
 
     useEffect(() => {

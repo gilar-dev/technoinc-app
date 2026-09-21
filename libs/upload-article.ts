@@ -1,4 +1,5 @@
 import type { ArticleData } from "@/contexts/ArticleDataProvider";
+import type { ModifyLogs } from "@/utils/typeUtils";
 import { reformatURI } from "@/utils/textUtils";
 import { createArticle } from "./contribution";
 import { dbGetUniversalID, dbIncreaeUniversalID } from "./database";
@@ -25,7 +26,7 @@ interface UploadArticleReturns {
  */
 export default async function uploadArticleWiki(
     articleData: ArticleData,
-    validation: { contributor: string; summary: string; }
+    validation: { contributor: string; summary: string; m_logs: ModifyLogs }
 ): Promise<UploadArticleReturns> {
     const safeClonedData = structuredClone(articleData);
     const formattedTitle = reformatURI(safeClonedData.title);

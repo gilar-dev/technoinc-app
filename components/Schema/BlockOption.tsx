@@ -2,6 +2,7 @@
 
 import { useArticleData } from "@/contexts/ArticleDataProvider";
 import { useEditor } from "@/contexts/EditorProvider";
+import { useSidebar } from "@/contexts/SidebarProvider";
 
 interface BlockOptionProps {
     index: number;
@@ -12,6 +13,7 @@ type ModifyBlockAction = "copy" | "cut" | "paste" | "paste-below";
 export default function BlockOption({ index }: BlockOptionProps) {
     const { data, setData, toDelete, setToDelete } = useArticleData();
     const { editMode, blockOpt, blockStored, blockMenu } = useEditor();
+    const { modifyLogs } = useSidebar();
 
     // Swapping or moving block to up or down within wiki content
     const optMoveBlock = (direction: "up" | "down", index: number): void => {
@@ -25,6 +27,13 @@ export default function BlockOption({ index }: BlockOptionProps) {
         modifiedContent[index] = modifiedContent[targetBlock];
         modifiedContent[targetBlock] = currentblock;
         setData({ ...data, content: modifiedContent });
+
+        if (!editMode) return;
+        const updatedLogs = [...modifyLogs.logs];
+        if (updatedLogs.length > 0 && updatedLogs[0][1] === data.content[index].type) return;
+        if (updatedLogs.length >= 11) updatedLogs.pop();
+        updatedLogs.unshift(["move", data.content[index].type]);
+        modifyLogs.set(updatedLogs);
     }
 
     // Adding new block to wiki content
@@ -60,6 +69,13 @@ export default function BlockOption({ index }: BlockOptionProps) {
             }
         }
         setData({ ...data, content: modifiedContent.toSpliced(index, 1) });
+
+        if (!editMode) return;
+        const updatedLogs = [...modifyLogs.logs];
+        if (updatedLogs.length > 0 && updatedLogs[0][1] === data.content[index].type) return;
+        if (updatedLogs.length >= 11) updatedLogs.pop();
+        updatedLogs.unshift(["delete", data.content[index].type]);
+        modifyLogs.set(updatedLogs);
     }
 
     return (

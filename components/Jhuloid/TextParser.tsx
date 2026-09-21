@@ -66,7 +66,7 @@ export default function TextParser({ content, style = "" }: PropTypes) {
                         href={linkUrl}
                         target={isExternalLink ? "_blank" : "_self"}
                         rel={isExternalLink ? "noopener noreferrer" : undefined}
-                        className={`font-medium ${articleID && existingLinks.includes(articleID) ? "text-link" : "text-red-400"} hover:underline`}
+                        className={`font-medium ${articleID && existingLinks.includes(articleID) ? "text-link" : "text-red-400"} hover:underline active:underline`}
                     >
                         {parsedText(linkLabel)}
                     </a>

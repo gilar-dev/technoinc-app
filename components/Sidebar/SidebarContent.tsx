@@ -1,12 +1,11 @@
 interface SidebarContentProps {
-    show: boolean;
     contents: (string | string[])[];
     expandContent: (id: string, subContent: boolean) => void;
 }
 
-export default function SidebarContent({ show, contents, expandContent }: SidebarContentProps) {
+export default function SidebarContent({ contents, expandContent }: SidebarContentProps) {
     return (
-        <div className={`mx-1 mb-5 ${show ? "hidden" : "block"}`}>
+        <div className="mx-1 mb-5">
             <input id="content-label" type="checkbox" className="peer hidden" />
             <label
                 htmlFor="content-label"

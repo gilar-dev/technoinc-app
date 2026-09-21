@@ -38,8 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     } catch (error) {
         console.error("Failed to fetch dynamic sitemap list:", error);
     }
-
-    console.log(articles);
+    
     const staticRoutes = [
         "",
         "/contribution",

@@ -45,7 +45,7 @@ export default function WikiInfo({ articleData, suggestions = [] }: WikiInfoProp
             <div>
                 {latestRevision && (
                     <Link
-                        href={`/wiki/${articleData.title}`}
+                        href={`/wiki/${articleData.title}/history`}
                         className={`group cursor-pointer flex items-center gap-3 border-y border-border px-3 py-2 ${revision.isToday ? "bg-[#36c] text-white" : "bg-infobox-bg text-foreground/75"}`}
                     >
                         <i className={`fa-solid fa-clock-rotate-left ${revision?.isToday ? "text-white" : "text-sidebar-accent"}`}></i>

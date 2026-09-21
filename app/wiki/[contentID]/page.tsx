@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 import Jhuloid from "@/components/Jhuloid/Jhuloid";
 import WikiInfo from "@/components/Jhuloid/WikiInfo";
 import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
-import { HeadingHolder, MissingArticle, RedirectNotice } from "./Components";
+import { HeadingHolder, MissingArticle, RedirectNotice } from "../Components";
 import { reformatURI } from "@/utils/textUtils";
 import { getLinks } from "@/utils/parserUtils";
 import { dbGetArticleData, dbGetExistingLinks } from "@/libs/database";

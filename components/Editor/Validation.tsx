@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useArticleData } from "@/contexts/ArticleDataProvider";
 import { useEditor } from "@/contexts/EditorProvider";
+import { useSidebar } from "@/contexts/SidebarProvider";
 import { useProcess } from "@/contexts/ProcessProvider";
 import { reformatURI } from "@/utils/textUtils";
 import uploadArticleWiki from "@/libs/upload-article";
@@ -13,6 +14,7 @@ import updateArticleWiki from "@/libs/update-article";
 export default function Validation() {
     const { data, toDelete } = useArticleData();
     const { editMode, currentData } = useEditor();
+    const { modifyLogs } = useSidebar();
     const { isLoading, isValidating } = useProcess();
     const [name, setName] = useState("");
     const [summary, setSummary] = useState("");
@@ -28,7 +30,7 @@ export default function Validation() {
 
         if (!editMode) {
             const uploadProcess = await uploadArticleWiki(data,
-                { contributor: contributorName, summary: changeSummary }
+                { contributor: contributorName, summary: changeSummary, m_logs: modifyLogs.logs }
             );
             if (uploadProcess.success) {
                 toast.success(uploadProcess.message, { className: "text-foreground! bg-menu-form-bg!" });
@@ -36,7 +38,7 @@ export default function Validation() {
             } else toast.error(uploadProcess.message, { className: "text-foreground! bg-menu-form-bg!" });
         } else {
             const updateProcess = await updateArticleWiki(data, currentData, toDelete,
-                { contributor: contributorName, summary: changeSummary }
+                { contributor: contributorName, summary: changeSummary, m_logs: modifyLogs.logs }
             );
             if (updateProcess.success) {
                 toast.success(updateProcess.message, { className: "text-foreground! bg-menu-form-bg!" });

@@ -4,13 +4,12 @@ import { useTheme } from "next-themes";
 import { useState, useEffect, useMemo, useRef } from "react";
 import type { Schema } from "@/utils/typeUtils";
 import { getContents } from "@/utils/parserUtils";
-import { useArticleData } from "@/contexts/ArticleDataProvider";
 import { useSidebar } from "@/contexts/SidebarProvider";
 import SidebarContent from "./Sidebar/SidebarContent";
+import SidebarModifyLogs from "./Sidebar/SidebarModifyLogs";
 
 interface SidebarProps {
     contents?: Schema | undefined;
-    historyLog?: boolean;
 }
 
 const mainGroupLists: string[] = [
@@ -24,9 +23,9 @@ const CategoriesOfGroups: string[][] = [
     ["Arts", "Literature", "History", "Geography", "Philosophy"] // Culture and Thought
 ];
 
-export default function Sidebar({ contents = undefined, historyLog = false }: SidebarProps) {
+export default function Sidebar({ contents = undefined }: SidebarProps) {
     const { theme, setTheme } = useTheme();
-    const { isOpen, closeSidebar } = useSidebar();
+    const { isOpen, closeSidebar, modifyLogs } = useSidebar();
     const [mounted, setMounted] = useState<boolean>(false);
     const [selectedGroup, setSelectedGroup] = useState({ isSelected: false, selectedIndex: 0 });
     const contentHeadings = useMemo<(string | string[])[] | undefined>(() => getContents(contents), [contents]);
@@ -179,7 +178,9 @@ export default function Sidebar({ contents = undefined, historyLog = false }: Si
                 </div>
             </div>
             {/* Dynamic content list */}
-            {contentHeadings && (<SidebarContent show={selectedGroup.isSelected} contents={contentHeadings} expandContent={openContent} />)}
+            {contentHeadings && (<SidebarContent contents={contentHeadings} expandContent={openContent} />)}
+            {/* Modify logs list */}
+            {modifyLogs.logs.length > 0 && (<SidebarModifyLogs modifyLogs={modifyLogs.logs} />)}
             {/* Another sidebar panel menu for categories of group */}
             <div className={`
                     w-full h-full px-3 absolute top-0 left-0 bg-sidebar-bg transition-transform duration-150 ease-in-out

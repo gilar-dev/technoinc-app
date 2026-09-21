@@ -46,7 +46,7 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
                             <img
                                 src={block.src || undefined}
                                 alt={block.desc}
-                                className="w-full transition-transform ease-in-out duration-500 hover:scale-[110%]"
+                                className="w-full transition-transform ease-in-out duration-500 hover:scale-[110%] active:scale-[110%]"
                             />
                             <span className="p-1.25 text-[10px] absolute bottom-2 right-2 self-end rounded-full text-white bg-black/50">
                                 <i className="fa-regular fa-clone"></i>
@@ -100,7 +100,7 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
                             <img
                                 src={block.src || null}
                                 alt={block.desc}
-                                className="w-full transition-transform ease-in-out duration-500 hover:scale-[110%]"
+                                className="w-full transition-transform ease-in-out duration-500 hover:scale-[110%] active:scale-[110%]"
                             />
                             <span className="p-1.25 text-[10px] absolute bottom-2 right-2 self-end rounded-full text-white bg-black/50">
                                 <i className="fa-regular fa-clone"></i>
