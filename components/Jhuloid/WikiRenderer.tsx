@@ -40,8 +40,8 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
             );
         case "gen-image":
             return (
-                <div className="mt-3 whitespace-pre-wrap flex justify-center items-center md:max-w-[40%] md:float-left">
-                    <div className="min-w-[60%] max-w-[90%] p-1 flex flex-col items-center gap-1">
+                <div className="mt-3 whitespace-pre-wrap md:max-w-[35%] md:mr-3 md:float-left">
+                    <div className="w-full p-1 flex flex-col items-center gap-1">
                         <div className="overflow-hidden cursor-pointer relative">
                             <img
                                 src={block.src || undefined}

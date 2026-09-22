@@ -33,6 +33,7 @@ export default function Validation() {
                 { contributor: contributorName, summary: changeSummary, m_logs: modifyLogs.logs }
             );
             if (uploadProcess.success) {
+                modifyLogs.set([]);
                 toast.success(uploadProcess.message, { className: "text-foreground! bg-menu-form-bg!" });
                 router.replace(`/wiki/${reformatURI(data.title)}`);
             } else toast.error(uploadProcess.message, { className: "text-foreground! bg-menu-form-bg!" });
@@ -41,6 +42,7 @@ export default function Validation() {
                 { contributor: contributorName, summary: changeSummary, m_logs: modifyLogs.logs }
             );
             if (updateProcess.success) {
+                modifyLogs.set([]);
                 toast.success(updateProcess.message, { className: "text-foreground! bg-menu-form-bg!" });
                 router.replace(`/wiki/${reformatURI(data.title)}`);
             } else toast.error(updateProcess.message, { className: "text-foreground! bg-menu-form-bg!" });

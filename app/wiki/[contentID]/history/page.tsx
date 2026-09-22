@@ -32,7 +32,6 @@ export default async function WikiPageHistory({ params }: PageProps) {
                 <SidebarOverlay />
                 <Sidebar />
             </div>
-
             <main className="min-h-[calc(100vh-4rem)] px-3 py-6 font-basic lg:px-7 lg:py-10">
                 {articleData ? (
                     <section className="mx-auto max-w-5xl">
@@ -44,6 +43,7 @@ export default async function WikiPageHistory({ params }: PageProps) {
                                 </div>
                                 <Link
                                     href={`/wiki/${articleData.title}`}
+                                    replace
                                     className="flex items-center gap-2 border border-border px-3 py-2 text-sm font-semibold hover:bg-list-bg"
                                 >
                                     <i className="fa-solid fa-arrow-left" aria-hidden="true"></i>
@@ -54,7 +54,6 @@ export default async function WikiPageHistory({ params }: PageProps) {
                                 Browse the article&apos;s revisions and the block-level changes recorded for each edit.
                             </p>
                         </header>
-
                         {historyGroups.length > 0 ? (
                             <div className="border-y border-border">
                                 {historyGroups.map((group) => (
@@ -93,7 +92,6 @@ export default async function WikiPageHistory({ params }: PageProps) {
                     <MissingArticle title={articleTitle} />
                 )}
             </main>
-
             <Footer />
         </div>
     );

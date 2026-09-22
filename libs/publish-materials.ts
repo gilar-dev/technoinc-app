@@ -205,7 +205,7 @@ export function createHistory(
     historyList: History[],
     validation: { contributor: string; summary: string; m_logs: ModifyLogs; }
 ): History[] {
-    const updatedHistory = historyList.length >= 20
+    const updatedHistory = historyList.length >= 32
         ? historyList.toSpliced(1, 1)
         : historyList;
     updatedHistory.push({
