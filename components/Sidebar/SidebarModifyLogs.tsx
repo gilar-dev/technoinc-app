@@ -24,9 +24,9 @@ export default function SidebarModifyLogs({ modifyLogs }: SidebarModifyProps) {
                 <span className="transition-transform duration-150 ease-in-out"><i className="fa-solid fa-angle-up"></i></span>
             </label>
             <div className="max-h-96 overflow-hidden peer-checked:max-h-0 peer-checked:p-0 transition-[max-height] duration-150 ease-in-out">
-                <ul className="m-3 flex flex-col gap-1 [&_a]:cursor-pointer [&_a]:rounded-[5px] [&_a]:hover:bg-sidebar-hover">
+                <ul className="m-3 flex flex-col gap-1 [&_a]:cursor-pointer [&_a]:rounded-[5px] [&_a]:hover:bg-sidebar-hover [&_a]:active:bg-sidebar-hover">
                     {modifyLogs.map((log, index) => (
-                        <li key={`log-${index}`} className="rounded-[5px] py-1.5 hover:bg-sidebar-hover">
+                        <li key={`log-${index}`} className="rounded-[5px] py-1.5 hover:bg-sidebar-hover active:bg-sidebar-hover">
                             {(() => {
                                 const [action, blockType] = log;
                                 const details = actionDetails[action];

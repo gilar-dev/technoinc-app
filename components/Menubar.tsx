@@ -40,7 +40,7 @@ export default function Menubar({ title = "" }: MenubarProps) {
         >
             <div
                 title="Menu"
-                className="w-10 aspect-square flex justify-center items-center relative hover:bg-white/20 transition-colors duration-300 ease-in-out *:absolute md:hidden"
+                className="w-10 aspect-square flex justify-center items-center relative hover:bg-white/20 active:bg-white/20 transition-colors duration-300 ease-in-out *:absolute md:hidden"
             >
                 <i className="fa-solid fa-bars text-[1.4em]"></i>
                 <button
@@ -57,7 +57,7 @@ export default function Menubar({ title = "" }: MenubarProps) {
                 )}
             </div>
             <div className="ml-auto">
-                <ul className="flex items-center gap-2 [&_div]:w-10 [&_div]:aspect-square [&_div]:hover:bg-white/20 [&_i]:text-[1.4em]">
+                <ul className="flex items-center gap-2 [&_div]:w-10 [&_div]:aspect-square [&_div]:hover:bg-white/20 [&_div]:active:bg-white/20 [&_i]:text-[1.4em]">
                     <li title="Search">
                         <div className="flex justify-center items-center relative *:absolute">
                             <i className="fa-solid fa-search"></i>

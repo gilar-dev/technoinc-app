@@ -130,10 +130,10 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
                         {mainGroupLists.map((group, index) => (
                             <li
                                 key={`group-${index}`}
-                                className="cursor-pointer rounded-[5px] hover:bg-sidebar-hover"
+                                className="cursor-pointer rounded-[5px] hover:bg-sidebar-hover active:bg-sidebar-hover"
                                 onClick={() => setSelectedGroup({ isSelected: true, selectedIndex: index })}
                             >
-                                <div className="group flex justify-between items-center gap-1 hover:font-bold transition-[font] duration-150 ease-in-out">
+                                <div className="group flex justify-between items-center gap-1 hover:font-bold active:font-bold transition-[font] duration-150 ease-in-out">
                                     <span className="text-[0.9em]">{group}</span>
                                     <span className="text-sidebar-accent group-hover:scale-[120%]"><i className="fa-solid fa-angle-right"></i></span>
                                 </div>
@@ -153,12 +153,12 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
                     <span className="transition-transform duration-150 ease-in-out"><i className="fa-solid fa-angle-up"></i></span>
                 </label>
                 <div className="max-h-40 overflow-hidden peer-checked:max-h-0 peer-checked:p-0 transition-[max-height] duration-150 ease-in-out">
-                    <ul className="m-3 flex flex-col gap-3 [&>li]:cursor-pointer [&>li]:rounded-[5px] [&>li]:hover:bg-sidebar-hover">
+                    <ul className="m-3 flex flex-col gap-3 [&>li]:cursor-pointer [&>li]:rounded-[5px] [&>li]:hover:bg-sidebar-hover [&>li]:active:bg-sidebar-hover">
                         <li
                             onClick={() => { setTheme(theme === "bright" ? "dark" : "bright"); closeSidebar(); }}
                         >
-                            <div className="group flex items-center gap-3 hover:font-bold transition-[font,scale] duration-150 ease-in-out">
-                                <span className="text-sidebar-accent group-hover:scale-[120%]">
+                            <div className="group flex items-center gap-3 hover:font-bold active:font-bold transition-[font,scale] duration-150 ease-in-out">
+                                <span className="text-sidebar-accent group-hover:scale-[120%] group-active:scale-[120%]">
                                     <i className={`fa-solid ${mounted && theme === "bright" ? "fa-sun" : "fa-moon"}`}></i>
                                 </span>
                                 <span className="text-[0.9em]">Switch theme</span>
@@ -167,8 +167,8 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
                         <li
                             onClick={() => { }}
                         >
-                            <div className="group flex items-center gap-3 hover:font-bold transition-[font,scale] duration-150 ease-in-out">
-                                <span className="text-sidebar-accent group-hover:scale-[120%]">
+                            <div className="group flex items-center gap-3 hover:font-bold active:font-bold transition-[font,scale] duration-150 ease-in-out">
+                                <span className="text-sidebar-accent group-hover:scale-[120%] group-active:scale-[120%]">
                                     <i className="fa-regular fa-map"></i>
                                 </span>
                                 <span className="text-[0.9em]">Interactive map</span>

@@ -84,7 +84,7 @@ export function InfoboxParser({ block, index }: InfoboxProps): React.JSX.Element
     return (
         <table
             width="100%"
-            className="mt-5 border-separate border border-border bg-infobox-bg md:w-[10%] md:float-right md:clear-right md:ml-5"
+            className="my-5 border-separate border border-border bg-infobox-bg md:w-[10%] md:float-right md:clear-right md:ml-5"
         >
             <tbody>
                 {block.map((subBlock: any, subIndex: number) => (

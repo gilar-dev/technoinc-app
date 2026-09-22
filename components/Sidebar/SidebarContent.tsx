@@ -15,7 +15,7 @@ export default function SidebarContent({ contents, expandContent }: SidebarConte
                 <span className="transition-transform duration-150 ease-in-out"><i className="fa-solid fa-angle-up"></i></span>
             </label>
             <div className="max-h-96 overflow-hidden peer-checked:max-h-0 peer-checked:p-0 transition-[max-height] duration-150 ease-in-out [&_ul]:pl-3">
-                <ul className="m-3 flex flex-col gap-1 [&_a]:cursor-pointer [&_a]:rounded-[5px] [&_a]:hover:bg-sidebar-hover">
+                <ul className="m-3 flex flex-col gap-1 [&_a]:cursor-pointer [&_a]:rounded-[5px] [&_a]:hover:bg-sidebar-hover [&_a]:active:bg-sidebar-hover">
                     {contents.map((heading, index) => {
                         const nextContent = contents[index + 1];
                         if (!Array.isArray(heading)) return (
@@ -48,7 +48,7 @@ export default function SidebarContent({ contents, expandContent }: SidebarConte
                                     }}
                                 >{heading}</a>
                                 {Array.isArray(nextContent) && (
-                                    <ul className="flex flex-col gap-1 border-l border-sidebar-border [&_a]:cursor-pointer [&_a]:rounded-[5px] [&_a]:hover:bg-sidebar-hover">
+                                    <ul className="flex flex-col gap-1 border-l border-sidebar-border [&_a]:cursor-pointer [&_a]:rounded-[5px] [&_a]:hover:bg-sidebar-hover [&_a]:active:bg-sidebar-hover">
                                         {nextContent.map((subheading, subindex) => (
                                             <li key={`subheading-${index}.${subindex}`}>
                                                 <a
