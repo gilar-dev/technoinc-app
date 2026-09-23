@@ -4,17 +4,9 @@ export default function robots(): MetadataRoute.Robots {
     return {
         rules: {
             userAgent: "*",
-            allow: [
-                "/",
-                "/wiki/",
-                "/wiki/*",
-                "/category/"
-            ],
+            allow: "/",
             disallow: [
                 "/api/",
-                "/_next/",
-                "/static/",
-                "/contribution/",
                 "/contribution/edit/"
             ]
         },
