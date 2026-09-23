@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useArticleData } from "@/contexts/ArticleDataProvider";
 import { useDebounce } from "@/utils/hookUtils";
-import { dbCreateCategory } from "@/libs/database";
+import { dbCreateCategory, dbSearchCategories, type CategorySearchResult } from "@/libs/database";
 import { capitalize, formattedText, cleanText } from "@/utils/textUtils";
 
 interface CreateCategoryProps {
@@ -12,23 +12,13 @@ interface CreateCategoryProps {
     createInput: string;
 }
 
-interface Category {
-    category: string;
-    hierarchy: string;
-}
-
-interface FetchResult {
-    status: string;
-    data: Category[];
-}
-
 export default function CategoryForm() {
     const { data, setData, categoryForm, setCategoryForm } = useArticleData();
     const [input, setInput] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [matches, setMatches] = useState<Category[]>([]);
+    const [matches, setMatches] = useState<CategorySearchResult[]>([]);
     const [createCategory, setCreateCategory] = useState<CreateCategoryProps>({ create: false, createInput: "" });
-    const debounceQuery = useDebounce(input);
+    const debounceQuery = useDebounce(input, 300);
 
     const checkConditions = (category: string): boolean => {
         return !data.cat.includes(category) || createCategory.create;
@@ -46,16 +36,8 @@ export default function CategoryForm() {
         const fetchData = async () => {
             setIsLoading(true);
             try {
-                const API_URL = process.env.NEXT_PUBLIC_TECHNOINC_BACKEND_API!;
-                const response = await fetch(`${API_URL}/api/v1/wiki/category/search/${formattedText(debounceQuery)}`, {
-                    cache: "no-store",
-                    signal: controller.signal
-                });
-                if (!response.ok) throw new Error(`Error when fetching data: ${response}`);
-                const result: FetchResult = await response.json();
-                setMatches(result.data);
-            } catch (error) {
-                if (!controller.signal.aborted) console.error("Error when fetching categories:", error);
+                const results = await dbSearchCategories(debounceQuery, controller.signal);
+                if (!controller.signal.aborted) setMatches(results);
             } finally {
                 if (!controller.signal.aborted) setIsLoading(false);
             }

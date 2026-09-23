@@ -68,6 +68,53 @@ interface CreateCategoryResult extends Status {
     message: string
 }
 
+export interface ArticleSearchResult {
+    title: string;
+    cover: string;
+    desc: string;
+}
+
+export async function dbSearchArticleTitles(query: string, signal?: AbortSignal): Promise<ArticleSearchResult[]> {
+    try {
+        const API_URL = getAPIUrl();
+        const response = await fetch(`${API_URL}/api/v1/wiki/search/${encodeURIComponent(query)}`, {
+            cache: "no-store",
+            signal
+        });
+        if (!response.ok) throw new Error(`Failed to search articles (${response.status})`);
+
+        const result: { status: string; articles: ArticleSearchResult[] } = await response.json();
+        return result.articles;
+    } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") return [];
+        console.error(error);
+        return [];
+    }
+}
+
+export interface CategorySearchResult {
+    category: string;
+    hierarchy: string;
+}
+
+export async function dbSearchCategories(query: string, signal?: AbortSignal): Promise<CategorySearchResult[]> {
+    try {
+        const API_URL = getAPIUrl();
+        const response = await fetch(`${API_URL}/api/v1/wiki/category/search/${encodeURIComponent(query.trim().replace(/\s+/g, "_"))}`, {
+            cache: "no-store",
+            signal
+        });
+        if (!response.ok) throw new Error(`Failed to search categories (${response.status})`);
+
+        const result: { status: string; data: CategorySearchResult[] } = await response.json();
+        return result.data ?? [];
+    } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") return [];
+        console.error(error);
+        return [];
+    }
+}
+
 /**
  * Create new category in database
  * @param category string

@@ -33,7 +33,7 @@ export async function uploadCoverImage(
     const bundle = uploadPackage([coverFile], { folder: `Article_${universalID}`, uploadPreset: preset });
     const uploadProcess = await uploadToCloud(bundle);
     if (!uploadProcess) return { status: "Error", secure_urls: [], public_ids: [] }
-    const [cloud, asset] = uploadProcess.public_ids[0].split("upload");
+    const [cloud, asset] = uploadProcess.secure_urls[0].split("upload");
     const modifiedUrl = [cloud, "upload/f_auto,q_auto", asset].join("");
     return { status: "Success", secure_urls: [modifiedUrl], public_ids: uploadProcess.public_ids }
 }

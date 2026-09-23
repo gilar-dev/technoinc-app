@@ -2,6 +2,8 @@
 
 import { useSidebar } from "@/contexts/SidebarProvider";
 import { useEffect, useRef } from "react";
+import { useState } from "react";
+import SearchPanel from "./SearchPanel";
 
 interface MenubarProps {
     title?: string;
@@ -10,6 +12,7 @@ interface MenubarProps {
 export default function Menubar({ title = "" }: MenubarProps) {
     const { toggleSidebar } = useSidebar();
     const menubarRef = useRef<HTMLElement | null>(null);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     useEffect(() => {
         if (!menubarRef.current) return;
@@ -61,7 +64,13 @@ export default function Menubar({ title = "" }: MenubarProps) {
                     <li title="Search">
                         <div className="flex justify-center items-center relative *:absolute">
                             <i className="fa-solid fa-search"></i>
-                            <button className="w-full h-full cursor-pointer"></button>
+                            <button
+                                type="button"
+                                title="Search articles"
+                                aria-label="Search articles"
+                                className="w-full h-full cursor-pointer"
+                                onClick={() => setIsSearchOpen(true)}
+                            ></button>
                         </div>
                     </li>
                     <li title="Contribution">
@@ -75,6 +84,7 @@ export default function Menubar({ title = "" }: MenubarProps) {
                     </li>
                 </ul>
             </div>
+            {isSearchOpen && <SearchPanel onClose={() => setIsSearchOpen(false)} />}
         </nav>
     );
 }

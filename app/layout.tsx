@@ -3,6 +3,7 @@ import { Inter, Montserrat } from "next/font/google";
 import ThemeProvider from "@/contexts/ThemeProvider";
 import SidebarProvider from "@/contexts/SidebarProvider";
 import ArticleDataProvider from "@/contexts/ArticleDataProvider";
+import ThemeColorSync from "@/components/ThemeColorSync";
 import "./globals.css";
 
 const inter = Inter({
@@ -22,6 +23,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
     title: "TechnoInc MC Wiki",
     description: "A free documented Minecraft encyclopedia for TechnoInc survival world.",
+    icons: "/icons/technoinc-logo.png",
     metadataBase: new URL("https://technoinc.world")
 };
 
@@ -34,6 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
             <body className={`${inter.variable} ${montserrat.variable} overflow-auto`}>
                 <ThemeProvider>
+                    <ThemeColorSync />
                     <SidebarProvider>
                         <ArticleDataProvider>
                             {children}
