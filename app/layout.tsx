@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Montserrat } from "next/font/google";
+import AppSessionProvider from "@/contexts/AppSessionProvider";
 import ThemeProvider from "@/contexts/ThemeProvider";
 import SidebarProvider from "@/contexts/SidebarProvider";
 import ArticleDataProvider from "@/contexts/ArticleDataProvider";
@@ -35,14 +36,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             suppressHydrationWarning
         >
             <body className={`${inter.variable} ${montserrat.variable} overflow-auto`}>
-                <ThemeProvider>
-                    <ThemeColorSync />
-                    <SidebarProvider>
-                        <ArticleDataProvider>
-                            {children}
-                        </ArticleDataProvider>
-                    </SidebarProvider>
-                </ThemeProvider>
+                <AppSessionProvider>
+                    <ThemeProvider>
+                        <ThemeColorSync />
+                        <SidebarProvider>
+                            <ArticleDataProvider>
+                                {children}
+                            </ArticleDataProvider>
+                        </SidebarProvider>
+                    </ThemeProvider>
+                </AppSessionProvider>
             </body>
         </html >
     );

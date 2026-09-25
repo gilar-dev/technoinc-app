@@ -12,11 +12,11 @@
     --form-bg: #ffffff80;
     --menu-form-bg: #ffffff;
 
-    --sidebar-bg: #f5f5f5e2;
-    --sidebar-panel: #e8edf3;
-    --sidebar-hover: #dce4ed;
-    --sidebar-border: #c5d0dc;
-    --sidebar-accent: #526b86;
+    --sidebar-bg: #f1eadf;
+    --sidebar-panel: #e3d6c5;
+    --sidebar-hover: #d8c8b2;
+    --sidebar-border: #c5b49d;
+    --sidebar-accent: #735f4a;
 }
 
 @theme inline {

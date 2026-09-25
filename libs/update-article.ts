@@ -36,11 +36,6 @@ export default async function updateArticleWiki(
     const safeClonedData = structuredClone(articleData);
     const formattedTitle = reformatURI(safeClonedData.title);
     const storedTitle = storedData ? reformatURI(storedData.title) : "";
-    
-    // Check if current version matches with the latest version
-    const latestVersion = await dbGetArticleData(storedTitle, "ver");
-    if (latestVersion === undefined) return { success: false, message: "Failed to get latest version" }
-    if (safeClonedData.ver !== latestVersion) return { success: false, message: "Outdated version! Please refresh the page"  }
 
     // Check equality of current data with stored data
     const isEqual = checkIsEqual(safeClonedData, storedData as ArticleData);
@@ -58,6 +53,11 @@ export default async function updateArticleWiki(
     // Check article content values
     const contentComplete = checkContentValues(safeClonedData.content);
     if (contentComplete !== "Pass") return { success: false, message: contentComplete }
+
+    // Check if current version matches with the latest version
+    const latestVersion = await dbGetArticleData(storedTitle, "ver");
+    if (latestVersion === undefined) return { success: false, message: "Failed to get latest version" }
+    if (safeClonedData.ver !== latestVersion) return { success: false, message: "Outdated version! Please refresh the page"  }
 
     // Check image change in pending to delete, then delete it if exist
     if (pendingDelete.length > 0) {
