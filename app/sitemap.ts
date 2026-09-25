@@ -14,6 +14,8 @@ interface WIkiArticle {
     modifiedAt?: [number, number, number];
 }
 
+export const revalidate = 3600;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = "https://technoinc.world";
     const API_URL = getAPIUrl();
@@ -21,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     try {
         const response = await fetch(`${API_URL}/api/v1/wiki/articles`, {
-            cache: "no-store"
+            next: { revalidate }
         });
         if (response.ok) {
             const result: FetchResults = await response.json();
