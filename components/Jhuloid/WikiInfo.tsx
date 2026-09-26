@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ArticleData } from "@/contexts/ArticleDataProvider";
+import { createDate } from "@/libs/publish-materials";
 
 interface WikiInfoProps {
     articleData: ArticleData;
@@ -11,27 +12,23 @@ function displayTitle(title: string): string {
 }
 
 function revisionMessage(status: "create" | "edit", date: string): { text: string; isToday: boolean } {
-    const [datePart, timePart] = date.split(", ");
     const action = status === "create" ? "created" : "last edited";
-    if (!datePart || !timePart) return { text: `This article was ${action} ${date}.`, isToday: false };
 
+    const [datePart, timePart] = date.split(", ");
     const [year, month, day] = datePart.split("/");
     const [hour, minute] = timePart.split(":");
-
     const revisionDate = new Date(Number(year), Number(month) - 1, Number(day));
-    const currentDate = new Date();
-    const isToday = revisionDate.toDateString() === currentDate.toDateString();
-    const yesterdayDate = new Date(currentDate);
-    yesterdayDate.setDate(currentDate.getDate() - 1);
-    const isYesterday = revisionDate.toDateString() === yesterdayDate.toDateString();
-    const dateLabel = isToday
-        ? "today"
-        : isYesterday
-            ? "yesterday"
-            : revisionDate.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
-    const timeLabel = `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`;
+    const stringifiedRevDate = revisionDate.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
 
-    return { text: `${currentDate} || ${revisionDate}` /*`This article was ${isToday || isYesterday ? action : `${action} on`} ${dateLabel}, at ${timeLabel}`*/, isToday };
+    const currentDate = createDate().split(", ");
+    const [cYear, cMonth, cDay] = currentDate[0].split("/");
+
+    const isToday = year === cYear && month === cMonth && day === cDay;
+    const isYesterday = year === cYear && month === cMonth && Number(cDay) - 1 === Number(day);
+    const dateLabel = isToday ? "today" : isYesterday ? "yesterday" : stringifiedRevDate;
+    const timeFormat = `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`;
+
+    return { text: `This article was ${isToday || isYesterday ? action : `${action} on`} ${dateLabel}, at ${timeFormat}`, isToday };
 }
 
 export default function WikiInfo({ articleData, suggestions = [] }: WikiInfoProps) {
