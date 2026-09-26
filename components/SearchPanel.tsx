@@ -39,6 +39,11 @@ export default function SearchPanel({ onClose }: SearchPanelProps) {
         return () => controller.abort();
     }, [debouncedQuery]);
 
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+        return () => { document.body.style.overflow = "visible"; }
+    }, []);
+
     return (
         <div
             className="fixed inset-0 z-10 flex items-start justify-center bg-black/35 px-3 md:pl-[25%] lg:pt-24"

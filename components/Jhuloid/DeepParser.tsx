@@ -41,7 +41,7 @@ export function PrimaryParser({ block, expandContent }: PrimaryProps): React.JSX
     }, [isMounted]);
 
     return (
-        <div className="content">
+        <article className="content">
             <div
                 onClick={(e) => expandContent(e.currentTarget)}
                 className="py-2 cursor-pointer flex justify-between items-center gap-2 border-b border-border active:bg-gray-500/10"
@@ -59,7 +59,7 @@ export function PrimaryParser({ block, expandContent }: PrimaryProps): React.JSX
                     );
                 })}
             </div>
-        </div>
+        </article>
     );
 }
 

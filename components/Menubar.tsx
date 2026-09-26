@@ -79,7 +79,7 @@ export default function Menubar({ title = "" }: MenubarProps) {
                     </li>
                 </ul>
             </div>
-            {isSearchOpen && <SearchPanel onClose={() => setIsSearchOpen(false)} />}
+            {isSearchOpen && (<SearchPanel onClose={() => setIsSearchOpen(false)} />)}
         </nav>
     );
 }

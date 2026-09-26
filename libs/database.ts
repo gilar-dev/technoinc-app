@@ -20,7 +20,7 @@ export function getUploadPreset(): string {
 type ArticleField = Exclude<keyof ArticleData, "content" | "raw_file" | "prev_src">;
 
 interface ArticleDataResult extends Status {
-    article: Omit<ArticleData, "cat" | "his" | "content"> & {
+    data: Omit<ArticleData, "cat" | "his" | "content"> & {
         cat: string;
         his: string;
         content: string;
@@ -46,18 +46,18 @@ export async function dbGetArticleData<K extends ArticleField>(
         const API_URL = getAPIUrl();
         const query = field ? `?field=${encodeURIComponent(field)}` : "";
         const response = await fetch(
-            `${API_URL}/api/v1/wiki/get/${encodeURIComponent(contentID)}${query}`,
+            `${API_URL}/api/v1/wiki/${encodeURIComponent(contentID)}${query}`,
             { cache: "no-store" }
         );
         if (response.status === 404) return undefined;
         if (!response.ok) throw new Error(`Failed to fetch article content (${response.status})`);
         const result: ArticleDataResult | null = await response.json();
         if (!result) return;
-        if (field) return result.article as unknown as ArticleData[K];
-        const parsedCategory: string[] = JSON.parse(result.article.cat);
-        const parsedHistory: History[] = JSON.parse(result.article.his);
-        const parsedContent: Schema = JSON.parse(result.article.content);
-        return { ...result.article, cat: parsedCategory, his: parsedHistory, content: parsedContent };
+        if (field) return result.data as unknown as ArticleData[K];
+        const parsedCategory: string[] = JSON.parse(result.data.cat);
+        const parsedHistory: History[] = JSON.parse(result.data.his);
+        const parsedContent: Schema = JSON.parse(result.data.content);
+        return { ...result.data, cat: parsedCategory, his: parsedHistory, content: parsedContent };
     }
     catch (error) {
         console.error(error);

@@ -18,7 +18,7 @@ export default function LoginButton() {
                     title={session.user.name || ""}
                     src={session.user.image}
                     alt="Profile"
-                    className="w-10 h-10 rounded-full"
+                    className="w-9 h-9 rounded-full"
                 />
             )}
         </div>
