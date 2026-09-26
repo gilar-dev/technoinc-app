@@ -189,14 +189,27 @@ export function checkIsEqual(current: ArticleData, stored: ArticleData): boolean
 
 export function createDate(): string {
     const date = new Date();
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const dateNum = date.getDate();
-    const hour = date.getHours();
-    const minute = date.getMinutes();
-    const milisecond = date.getMilliseconds();
-    const dateFormat = `${year}/${month}/${dateNum}`;
-    const timeFormat = `${hour}:${minute}:${milisecond}`;
+    const formatter = Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Jakarta",
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        hour12: false
+    });
+    const parts = formatter.formatToParts(date);
+    const partObj: Record<string, string> = {}
+    parts.forEach(({ type, value }) => partObj[type] = value);
+    const year = partObj.year;
+    const month = partObj.month;
+    const day = partObj.day;
+    const hour = partObj.hour;
+    const minute = partObj.minute;
+    const second = partObj.second;
+    const dateFormat = `${year}/${month}/${day}`;
+    const timeFormat = `${hour}:${minute}:${second}`;
     return `${dateFormat}, ${timeFormat}`;
 }
 
