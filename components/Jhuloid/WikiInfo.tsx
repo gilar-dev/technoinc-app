@@ -21,7 +21,6 @@ function revisionMessage(status: "create" | "edit", date: string): { text: strin
     const revisionDate = new Date(Number(year), Number(month) - 1, Number(day));
     const currentDate = new Date();
     const isToday = revisionDate.toDateString() === currentDate.toDateString();
-    console.log(currentDate, revisionDate);
     const yesterdayDate = new Date(currentDate);
     yesterdayDate.setDate(currentDate.getDate() - 1);
     const isYesterday = revisionDate.toDateString() === yesterdayDate.toDateString();
@@ -32,7 +31,7 @@ function revisionMessage(status: "create" | "edit", date: string): { text: strin
             : revisionDate.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
     const timeLabel = `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`;
 
-    return { text: `This article was ${isToday || isYesterday ? action : `${action} on`} ${dateLabel}, at ${timeLabel}`, isToday };
+    return { text: `${currentDate} || ${revisionDate}` /*`This article was ${isToday || isYesterday ? action : `${action} on`} ${dateLabel}, at ${timeLabel}`*/, isToday };
 }
 
 export default function WikiInfo({ articleData, suggestions = [] }: WikiInfoProps) {
