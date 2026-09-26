@@ -21,6 +21,7 @@ function revisionMessage(status: "create" | "edit", date: string): { text: strin
     const revisionDate = new Date(Number(year), Number(month) - 1, Number(day));
     const currentDate = new Date();
     const isToday = revisionDate.toDateString() === currentDate.toDateString();
+    console.log(currentDate, revisionDate);
     const yesterdayDate = new Date(currentDate);
     yesterdayDate.setDate(currentDate.getDate() - 1);
     const isYesterday = revisionDate.toDateString() === yesterdayDate.toDateString();
