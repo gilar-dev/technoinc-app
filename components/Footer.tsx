@@ -26,6 +26,8 @@ export default function Footer() {
                             <li><Link href="/wiki" className="hover:text-sidebar-accent hover:underline"><i className="fa-brands fa-wikipedia-w"></i> Wiki</Link></li>
                             <li><Link href="/category" className="hover:text-sidebar-accent hover:underline"><i className="fa-solid fa-layer-group"></i> Category</Link></li>
                             <li><Link href="/contribution" className="hover:text-sidebar-accent hover:underline"><i className="fa-brands fa-gratipay"></i> Contribution</Link></li>
+                            <li><Link href="/privacy-policy" className="hover:text-sidebar-accent hover:underline"><i className="fa-solid fa-shield-halved"></i> Privacy policy</Link></li>
+                            <li><Link href="/terms" className="hover:text-sidebar-accent hover:underline"><i className="fa-solid fa-file-contract"></i> Terms of servive</Link></li>
                         </ul>
                     </div>
                     <div>
