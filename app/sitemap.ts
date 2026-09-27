@@ -22,8 +22,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const articles: WIkiArticle[] = [];
 
     try {
-        const response = await fetch(`${API_URL}/api/v1/wiki/articles`, {
-            next: { revalidate }
+        const response = await fetch(`${API_URL}/api/v1/wiki/articles/sitemap`, {
+            cache: "no-store"
         });
         if (response.ok) {
             const result: FetchResults = await response.json();
@@ -45,7 +45,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         "",
         "/contribution",
         "/wiki",
-        "/portal",
         "/category"
     ].map((route) => ({
         url: `${baseUrl}${route}`,
