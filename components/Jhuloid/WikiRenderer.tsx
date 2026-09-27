@@ -40,8 +40,8 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
             );
         case "gen-image":
             return (
-                <div className="mt-3 whitespace-pre-wrap md:max-w-[35%] md:mr-3 md:mb-2 md:float-left">
-                    <div className="w-[80%] mx-auto flex flex-col items-center gap-1 md:w-full">
+                <div className="mt-3 whitespace-pre-wrap md:max-w-[30%] md:mr-3 md:mb-1 md:float-left">
+                    <div className="w-[75%] mx-auto flex flex-col items-center gap-1 md:w-full">
                         <div className="overflow-hidden cursor-pointer relative">
                             <img
                                 src={block.src || undefined}
@@ -95,7 +95,7 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
         case "ib-image":
             return (
                 <div className="whitespace-pre-wrap flex justify-center items-center md:min-w-[25vw]">
-                    <div className="p-3 flex flex-col items-center gap-1 md:max-w-[80%]">
+                    <div className="w-[80%] p-3 flex flex-col items-center gap-1">
                         <div className="w-full overflow-hidden cursor-pointer relative">
                             <img
                                 src={block.src || null}
