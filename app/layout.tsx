@@ -3,6 +3,7 @@ import { Inter, Montserrat } from "next/font/google";
 import AppSessionProvider from "@/contexts/AppSessionProvider";
 import ThemeProvider from "@/contexts/ThemeProvider";
 import SidebarProvider from "@/contexts/SidebarProvider";
+import ToastProvider from "@/contexts/ToastProvider";
 import ArticleDataProvider from "@/contexts/ArticleDataProvider";
 import ThemeColorSync from "@/components/ThemeColorSync";
 import "./globals.css";
@@ -41,7 +42,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         <ThemeColorSync />
                         <SidebarProvider>
                             <ArticleDataProvider>
-                                {children}
+                                <ToastProvider>
+                                    {children}
+                                </ToastProvider>
                             </ArticleDataProvider>
                         </SidebarProvider>
                     </ThemeProvider>

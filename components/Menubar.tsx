@@ -53,7 +53,7 @@ export default function Menubar({ title = "" }: MenubarProps) {
             </div>
             <div className="font-montserrat flex flex-col">
                 <h2 className="font-bold">
-                    {title.trim() ? title : "TechnoInc Wiki MC"}
+                    {title.trim() ? title : "TechnoInc MC Wiki"}
                 </h2>
                 {title.trim() && (
                     <span className="font-semibold text-[0.75em]">TechnoInc MC Wiki</span>

@@ -35,6 +35,10 @@ export default function Home() {
 	return (
 		<div className="md:relative md:w-[75%] md:left-[25%]">
 			<Menubar />
+			<div className="fixed top-0 left-0 z-2 md:w-[25%]">
+				<SidebarOverlay />
+				<Sidebar />
+			</div>
 			<main className="min-h-[calc(100vh-4rem)] px-3 py-8 font-basic lg:px-7 lg:py-12">
 				<div className="mx-auto max-w-5xl">
 					<header className="border-b border-border pb-8 lg:pb-10">
@@ -131,10 +135,6 @@ export default function Home() {
 				</div>
 			</main>
 			<Footer />
-			<div className="fixed top-0 left-0 z-2 md:w-[25%]">
-				<SidebarOverlay />
-				<Sidebar />
-			</div>
 		</div>
 	);
 }

@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { useDebounce } from "@/utils/hookUtils";
 import { dbSearchArticleTitles, type ArticleSearchResult } from "@/libs/database";
 
@@ -10,17 +11,23 @@ interface SearchPanelProps {
 }
 
 export default function SearchPanel({ onClose }: SearchPanelProps) {
+    const router = useRouter();
     const [query, setQuery] = useState("");
     const [matches, setMatches] = useState<ArticleSearchResult[]>([]);
+    const [activeIndex, setActiveIndex] = useState(-1);
     const [isLoading, setIsLoading] = useState(false);
     const debouncedQuery = useDebounce(query, 300);
+    const isNavigatingResults = useRef(false);
 
     useEffect(() => {
+        if (isNavigatingResults.current) return;
+
         const controller = new AbortController();
         const normalizedQuery = debouncedQuery.trim().toLocaleLowerCase();
 
         if (!normalizedQuery) {
             setMatches([]);
+            setActiveIndex(-1);
             setIsLoading(false);
             return () => controller.abort();
         }
@@ -29,7 +36,10 @@ export default function SearchPanel({ onClose }: SearchPanelProps) {
             setIsLoading(true);
             try {
                 const results = await dbSearchArticleTitles(normalizedQuery, controller.signal);
-                if (!controller.signal.aborted) setMatches(results.slice(0, 12));
+                if (!controller.signal.aborted) {
+                    setMatches(results.slice(0, 12));
+                    setActiveIndex(-1);
+                }
             } finally {
                 if (!controller.signal.aborted) setIsLoading(false);
             }
@@ -38,6 +48,33 @@ export default function SearchPanel({ onClose }: SearchPanelProps) {
         fetchMatches();
         return () => controller.abort();
     }, [debouncedQuery]);
+
+    const selectResult = (index: number): void => {
+        const article = matches[index];
+        if (!article) return;
+
+        isNavigatingResults.current = true;
+        setActiveIndex(index);
+        setQuery(article.title.replaceAll("_", " "));
+    };
+
+    const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+        if (event.key === "ArrowDown" && matches.length > 0) {
+            event.preventDefault();
+            selectResult(activeIndex < 0 ? 0 : (activeIndex + 1) % matches.length);
+        } else if (event.key === "ArrowUp" && matches.length > 0) {
+            event.preventDefault();
+            selectResult(activeIndex < 0 ? matches.length - 1 : (activeIndex - 1 + matches.length) % matches.length);
+        } else if (event.key === "Enter" && activeIndex >= 0) {
+            event.preventDefault();
+            const article = matches[activeIndex];
+            if (!article) return;
+            router.push(`/wiki/${encodeURIComponent(article.title)}`);
+            onClose();
+        } else if (event.key === "Escape") {
+            onClose();
+        }
+    };
 
     useEffect(() => {
         document.body.style.overflow = "hidden";
@@ -75,7 +112,17 @@ export default function SearchPanel({ onClose }: SearchPanelProps) {
                             autoFocus
                             value={query}
                             placeholder="Search article titles..."
-                            onChange={(event) => setQuery(event.currentTarget.value)}
+                            onChange={(event) => {
+                                isNavigatingResults.current = false;
+                                setActiveIndex(-1);
+                                setQuery(event.currentTarget.value);
+                            }}
+                            onKeyDown={handleSearchKeyDown}
+                            role="combobox"
+                            aria-autocomplete="list"
+                            aria-expanded={matches.length > 0}
+                            aria-controls="article-search-results"
+                            aria-activedescendant={activeIndex >= 0 ? `article-search-result-${activeIndex}` : undefined}
                             className="w-full bg-transparent outline-none placeholder:text-foreground/45"
                         />
                     </div>
@@ -86,13 +133,18 @@ export default function SearchPanel({ onClose }: SearchPanelProps) {
                         ) : !debouncedQuery.trim() ? (
                             <p className="px-2 py-4 text-sm text-foreground/65">Enter an article title to search the wiki.</p>
                         ) : matches.length > 0 ? (
-                            <ul className="max-h-120 divide-y divide-border/60 overflow-y-auto border-y border-border">
-                                {matches.map((article) => (
+                            <ul id="article-search-results" role="listbox" className="max-h-120 divide-y divide-border/60 overflow-y-auto border-y border-border">
+                                {matches.map((article, index) => (
                                     <li key={article.title}>
                                         <Link
+                                            id={`article-search-result-${index}`}
+                                            role="option"
+                                            aria-selected={activeIndex === index}
                                             href={`/wiki/${encodeURIComponent(article.title)}`}
                                             onClick={onClose}
-                                            className="flex items-start gap-3 px-3 py-3 hover:bg-list-bg active:bg-list-bg"
+                                            onMouseEnter={() => setActiveIndex(index)}
+                                            onMouseLeave={() => setActiveIndex(-1)}
+                                            className={`flex items-start gap-3 px-3 py-3 hover:bg-list-bg active:bg-list-bg ${activeIndex === index ? "bg-list-bg" : ""}`}
                                         >
                                             <div className="h-16 w-16 shrink-0 overflow-hidden border border-border bg-list-bg">
                                                 {article.cover ? (
