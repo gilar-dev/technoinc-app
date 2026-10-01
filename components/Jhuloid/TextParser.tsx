@@ -9,6 +9,7 @@ interface PropTypes {
 
 export default function TextParser({ content, style = "" }: PropTypes) {
     const { existingLinks } = useJhuloid();
+    const lowerizedExistingLinks = existingLinks.map(link => link.toLowerCase());
 
     const parsedText = (content: string): any => {
         if (!content) return [];
@@ -51,7 +52,7 @@ export default function TextParser({ content, style = "" }: PropTypes) {
                 const linkLabel = match[10];
                 const linkUrl = match[11];
                 const isExternalLink = /^https?:\/\//i.test(linkUrl);
-                const articleID = isExternalLink ? undefined : linkUrl.split("/")[2];
+                const articleID = isExternalLink ? undefined : linkUrl.split("/")[2].toLowerCase();
                 const isSafeLink = isExternalLink || Boolean(articleID);
 
                 if (!isSafeLink) {
@@ -66,7 +67,7 @@ export default function TextParser({ content, style = "" }: PropTypes) {
                         href={linkUrl}
                         target={isExternalLink ? "_blank" : "_self"}
                         rel={isExternalLink ? "noopener noreferrer" : undefined}
-                        className={`font-medium ${articleID && existingLinks.includes(articleID.toLowerCase()) ? "text-link" : "text-red-400"} hover:underline active:underline`}
+                        className={`font-medium ${articleID && lowerizedExistingLinks.includes(articleID) ? "text-link" : "text-red-400"} hover:underline active:underline`}
                     >
                         {parsedText(linkLabel)}
                     </a>
