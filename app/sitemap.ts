@@ -14,8 +14,6 @@ interface WIkiArticle {
     modifiedAt?: [number, number, number];
 }
 
-export const revalidate = 3600;
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = "https://technoinc.world";
     const API_URL = getAPIUrl();
