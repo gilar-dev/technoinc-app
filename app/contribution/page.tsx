@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ProcessProvider from "@/contexts/ProcessProvider";
+import ArticleDataProvider from "@/contexts/ArticleDataProvider";
 import Menubar from "@/components/Menubar";
 import Sidebar from "@/components/Sidebar";
 import EditorProvider from "@/contexts/EditorProvider";
@@ -23,24 +24,26 @@ export const metadata: Metadata = {
 export default function ContributionPage() {
     return (
         <ProcessProvider>
-            <div className="md:relative md:w-[75%] md:left-[25%]">
-                <Menubar title="Contribution - Create" />
-                <div className="fixed top-0 left-0 z-3 md:w-[25%]">
-                    <SidebarOverlay />
-                    <Sidebar />
+            <ArticleDataProvider>
+                <div className="md:relative md:w-[75%] md:left-[25%]">
+                    <Menubar title="Contribution - Create" />
+                    <div className="fixed top-0 left-0 z-3 md:w-[25%]">
+                        <SidebarOverlay />
+                        <Sidebar />
+                    </div>
+                    <EditorProvider>
+                        <ContributionHeader />
+                        <ArticleForm />
+                        <TextEditor />
+                        <ContentSchema />
+                        <BlockTools />
+                        <BlockMenu />
+                        <Validation />
+                    </EditorProvider>
+                    <Overlay />
+                    <Footer />
                 </div>
-                <EditorProvider>
-                    <ContributionHeader />
-                    <ArticleForm />
-                    <TextEditor />
-                    <ContentSchema />
-                    <BlockTools />
-                    <BlockMenu />
-                    <Validation />
-                </EditorProvider>
-                <Overlay />
-                <Footer />
-            </div>
+            </ArticleDataProvider>
         </ProcessProvider>
     );
 }

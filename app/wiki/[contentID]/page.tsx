@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import ArticleDataProvider from "@/contexts/ArticleDataProvider";
 import Menubar from "@/components/Menubar";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
@@ -56,37 +57,39 @@ export default async function WikiPage({ params }: Params) {
     }
 
     return (
-        <div className="md:relative md:w-[75%] md:left-[25%]">
-            <Menubar title={articleData ? articleData.title.replaceAll("_", " ") : cleanURI} />
-            <div className="fixed top-0 left-0 z-3 md:w-[25%]">
-                <SidebarOverlay />
-                <Sidebar contents={articleData?.content} />
-            </div>
-            <HeadingHolder
-                title={articleData ? articleData.title.replaceAll("_", " ") : cleanURI}
-                description={articleData ? articleData.desc : ""}
-            />
-            <div className="main-container lg:px-7">
-                {articleData
-                    ? (<Jhuloid
-                        articleData={articleData}
-                        existingLinks={existingLinks}
-                    />)
-                    : (<MissingArticle title={cleanURI} />)
-                }
-            </div>
-            {articleData && (
-                <WikiInfo
-                    articleData={articleData}
-                    suggestions={existingLinks}
+        <ArticleDataProvider>
+            <div className="md:relative md:w-[75%] md:left-[25%]">
+                <Menubar title={articleData ? articleData.title.replaceAll("_", " ") : cleanURI} />
+                <div className="fixed top-0 left-0 z-3 md:w-[25%]">
+                    <SidebarOverlay />
+                    <Sidebar contents={articleData?.content} />
+                </div>
+                <HeadingHolder
+                    title={articleData ? articleData.title.replaceAll("_", " ") : cleanURI}
+                    description={articleData ? articleData.desc : ""}
                 />
-            )}
-            <Footer />
-            {articleData
-                && redirectedURL
-                && articleData.title.toLowerCase() === redirectedURL.toLowerCase()
-                && articleData.title !== redirectedURL
-                && (<RedirectNotice redirectedURL={redirectedURL} />)}
-        </div>
+                <div className="main-container lg:px-7">
+                    {articleData
+                        ? (<Jhuloid
+                            articleData={articleData}
+                            existingLinks={existingLinks}
+                        />)
+                        : (<MissingArticle title={cleanURI} />)
+                    }
+                </div>
+                {articleData && (
+                    <WikiInfo
+                        articleData={articleData}
+                        suggestions={existingLinks}
+                    />
+                )}
+                <Footer />
+                {articleData
+                    && redirectedURL
+                    && articleData.title.toLowerCase() === redirectedURL.toLowerCase()
+                    && articleData.title !== redirectedURL
+                    && (<RedirectNotice redirectedURL={redirectedURL} />)}
+            </div>
+        </ArticleDataProvider>
     );
 }

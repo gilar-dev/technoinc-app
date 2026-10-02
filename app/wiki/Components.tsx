@@ -23,11 +23,11 @@ export function HeadingHolder({ title, description }: ArticleTitleProps) {
                             <span className="font-semibold">Page</span>
                         </li>
                         <Link href={`/contribution/edit/${title.replaceAll(" ", "_")}`}>
-                            <li className="p-2 hover:bg-list-bg">
+                            <li className="p-2 hover:bg-list-bg active:bg-list-bg">
                                 <span className="text-[1.5em]"><i className="fa-solid fa-pen-to-square"></i></span>
                             </li>
                         </Link>
-                        <li className="p-2 hover:bg-list-bg">
+                        <li className="p-2 hover:bg-list-bg active:bg-list-bg">
                             <span className="text-[1.5em]"><i className="fa-solid fa-ellipsis-vertical"></i></span>
                         </li>
                     </ul>

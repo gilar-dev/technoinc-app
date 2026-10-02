@@ -15,7 +15,7 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const { contentID } = await params;
     const title = decodeURIComponent(contentID).replaceAll("_", " ");
-    return { title: `${title} history - TechnoInc MC Wiki` };
+    return { title: `${title} revision history - TechnoInc MC Wiki` };
 }
 
 export default async function WikiPageHistory({ params }: PageProps) {

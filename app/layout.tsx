@@ -4,7 +4,6 @@ import AppSessionProvider from "@/contexts/AppSessionProvider";
 import ThemeProvider from "@/contexts/ThemeProvider";
 import SidebarProvider from "@/contexts/SidebarProvider";
 import ToastProvider from "@/contexts/ToastProvider";
-import ArticleDataProvider from "@/contexts/ArticleDataProvider";
 import ThemeColorSync from "@/components/ThemeColorSync";
 import "./globals.css";
 
@@ -41,11 +40,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <ThemeProvider>
                         <ThemeColorSync />
                         <SidebarProvider>
-                            <ArticleDataProvider>
-                                <ToastProvider>
-                                    {children}
-                                </ToastProvider>
-                            </ArticleDataProvider>
+                            <ToastProvider>
+                                {children}
+                            </ToastProvider>
                         </SidebarProvider>
                     </ThemeProvider>
                 </AppSessionProvider>
