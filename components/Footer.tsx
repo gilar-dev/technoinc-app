@@ -33,9 +33,9 @@ export default function Footer() {
                     <div>
                         <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-sidebar-accent">Support</h2>
                         <ul className="space-y-2">
-                            <li><Link href="https://github.com/gilar-dev" target="_blank" rel="noopener noreferer" className="hover:text-sidebar-accent hover:underline"><i className="fa-brands fa-github"></i> GitHub</Link></li>
-                            <li><Link href="https://www.linkedin.com/in/gilar-hafizh-indarto-b1891941a?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferer" className="hover:text-sidebar-accent hover:underline"><i className="fa-brands fa-linkedin"></i> LinkedIn</Link></li>
-                            <li><Link href="https://instagram.com/_glrin" target="_blank" rel="noopener noreferer" className="hover:text-sidebar-accent hover:underline"><i className="fa-brands fa-instagram"></i> Instagram</Link></li>
+                            <li><Link href="https://github.com/gilar-dev" target="_blank" rel="noopener noreferrer" className="hover:text-sidebar-accent hover:underline"><i className="fa-brands fa-github"></i> GitHub</Link></li>
+                            <li><Link href="https://www.linkedin.com/in/gilar-hafizh-indarto-b1891941a" target="_blank" rel="noopener noreferrer" className="hover:text-sidebar-accent hover:underline"><i className="fa-brands fa-linkedin"></i> LinkedIn</Link></li>
+                            <li><Link href="https://instagram.com/_glrin" target="_blank" rel="noopener noreferrer" className="hover:text-sidebar-accent hover:underline"><i className="fa-brands fa-instagram"></i> Instagram</Link></li>
                         </ul>
                     </div>
                     <div>

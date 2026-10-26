@@ -1,5 +1,6 @@
 "use client"; // Client-side rendering directive for Next.js
 
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
@@ -16,16 +17,15 @@ export default function Validation() {
     const { editMode, currentData } = useEditor();
     const { modifyLogs } = useSidebar();
     const { isLoading, isValidating } = useProcess();
-    const [name, setName] = useState("");
+    const { data: session } = useSession();
     const [summary, setSummary] = useState("");
     const router = useRouter();
 
     const submitContribution = async (): Promise<void> => {
-        const contributorName = name.trim();
-        const changeSummary = summary.trim();
-        if (!contributorName || isLoading.state) return;
+        if (!session) return;
 
-        localStorage.setItem("technoinc-contributor-name", contributorName);
+        const contributorName = session.user?.name ?? "Anonymous";
+        const changeSummary = summary.trim();
         isLoading.set(true);
 
         if (!editMode) {
@@ -53,7 +53,6 @@ export default function Validation() {
 
     useEffect(() => {
         const storedName = localStorage.getItem("technoinc-contributor-name");
-        if (storedName) setName(storedName);
     }, []);
 
     useEffect(() => {
@@ -73,20 +72,9 @@ export default function Validation() {
                 <div className="mb-5 border-b border-sidebar-border pb-3">
                     <p className="text-[0.72em] font-semibold uppercase tracking-[0.18em] text-sidebar-accent">Contributor validation</p>
                     <h2 className="mt-1 text-xl font-bold">Review your contribution</h2>
-                    <p className="mt-1 text-sm text-foreground/65">Add your contributor name and a short summary before submitting this edit.</p>
+                    <p className="mt-1 text-sm text-foreground/65">Add a short summary before submitting this edit.</p>
                 </div>
                 <div className="grid gap-5 lg:grid-cols-2">
-                    <label className="flex flex-col gap-2">
-                        <span className="font-semibold">Name or alias</span>
-                        <input
-                            id="contributor-name-input"
-                            type="text"
-                            placeholder="How should we credit you?"
-                            value={name}
-                            onChange={(e) => setName(e.currentTarget.value)}
-                            className="rounded-sm border border-sidebar-border bg-foreground/5 p-2 outline-none transition-colors focus:border-sidebar-accent"
-                        />
-                    </label>
                     <label className="flex flex-col gap-2">
                         <span className="font-semibold">Edit summary</span>
                         <textarea
@@ -102,7 +90,7 @@ export default function Validation() {
                 <div className="mt-5 flex justify-end border-t border-sidebar-border pt-4">
                     <button
                         type="button"
-                        disabled={!name.trim() || isLoading.state}
+                        disabled={isLoading.state}
                         onClick={submitContribution}
                         className="flex items-center gap-2 rounded-sm border border-link bg-link px-4 py-2 font-semibold text-white transition-opacity hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
                     >

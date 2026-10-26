@@ -7,7 +7,7 @@ import Link from "next/link";
 const frequentlyAskedQuestions = [
 	{
 		question: "What is the TechnoInc MC Wiki?",
-		answer: "It is a community-maintained reference for the TechnoInc Minecraft survival world, collecting information about its places, people, projects, stories, and history."
+		answer: "It is a singleplayer survival world owned by GilarInc reference for the TechnoInc Minecraft survival world, collecting information about its places, people, projects, stories, and history."
 	},
 	{
 		question: "How do I find an article?",
@@ -130,7 +130,7 @@ export default function Home() {
 					</section>
 
 					<p className="border-t border-border pt-4 text-sm text-foreground/60">
-						TechnoInc MC Wiki is an independent community project and is not affiliated with Mojang or Microsoft.
+						TechnoInc MC Wiki is an independent personal-community project and is not affiliated with Mojang or Microsoft.
 					</p>
 				</div>
 			</main>

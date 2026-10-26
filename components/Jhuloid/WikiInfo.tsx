@@ -35,7 +35,7 @@ export default function WikiInfo({ articleData, suggestions = [] }: WikiInfoProp
     const latestRevision = articleData.his[articleData.his.length - 1];
     const contributor = latestRevision.user;
     const revision = revisionMessage(latestRevision.sts, latestRevision.date);
-    const relatedArticles = suggestions.filter((suggestion) => suggestion !== articleData.title).slice(0, 6);
+    const relatedArticles = suggestions.filter((suggestion) => suggestion !== articleData.title).slice(0, 3);
 
     return (
         <section className="font-basic text-[14px] bg-form-bg">

@@ -12,7 +12,7 @@ export default function LoginButton() {
     );
 
     if (session) return (
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4" onClick={() => signOut()}>
             {session.user?.image && (
                 <img
                     title={session.user.name || ""}
@@ -27,7 +27,7 @@ export default function LoginButton() {
     return (
         <button
             onClick={() => signIn()}
-            className="px-4 py-2 rounded-md text-white"
+            className="p-2 rounded-md text-white"
         ><i className="fa-solid fa-user"></i></button>
     );
 }

@@ -1,7 +1,10 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import ProcessProvider from "@/contexts/ProcessProvider";
 import ArticleDataProvider from "@/contexts/ArticleDataProvider";
 import Menubar from "@/components/Menubar";
 import Sidebar from "@/components/Sidebar";
+import LoginForm from "@/components/Auth/LoginForm";
 import EditorProvider from "@/contexts/EditorProvider";
 import ArticleForm from "@/components/Contribution/ArticleForm";
 import TextEditor from "@/components/Editor/TextEditor";
@@ -24,6 +27,7 @@ export default async function ContributionEditPage({ params }: PageProps) {
     const reformatURI = decodeURIComponent(contentID).replace(/(_+)|( +)/g, "_");
     const cleanContentID = reformatURI.replaceAll("_", " ");
     const articleData = await dbGetArticleData(reformatURI);
+    const loggedIn = await getServerSession(authOptions);
 
     return (
         <ProcessProvider>
@@ -36,6 +40,11 @@ export default async function ContributionEditPage({ params }: PageProps) {
                     </div>
                     {!articleData ? (
                         <MissingArticle title={cleanContentID} />
+                    ) : !loggedIn ? (
+                        <LoginForm
+                            articleTitle={cleanContentID}
+                            returnHref={`/contribution/edit/${encodeURIComponent(reformatURI)}`}
+                        />
                     ) : (
                         <EditorProvider editMode={true} currentData={structuredClone(articleData)}>
                             <ContributionHeader title={articleData.title.replaceAll("_", " ")} />
