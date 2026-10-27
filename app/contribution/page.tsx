@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+import LoginForm from "@/components/Auth/LoginForm";
 import ProcessProvider from "@/contexts/ProcessProvider";
 import ArticleDataProvider from "@/contexts/ArticleDataProvider";
 import Menubar from "@/components/Menubar";
@@ -21,7 +24,9 @@ export const metadata: Metadata = {
     metadataBase: new URL("https://technoinc.world/contribution")
 }
 
-export default function ContributionPage() {
+export default async function ContributionPage() {
+    const isLoggedIn = await getServerSession(authOptions);
+
     return (
         <ProcessProvider>
             <ArticleDataProvider>
@@ -31,15 +36,23 @@ export default function ContributionPage() {
                         <SidebarOverlay />
                         <Sidebar />
                     </div>
-                    <EditorProvider>
-                        <ContributionHeader />
-                        <ArticleForm />
-                        <TextEditor />
-                        <ContentSchema />
-                        <BlockTools />
-                        <BlockMenu />
-                        <Validation />
-                    </EditorProvider>
+                    {!isLoggedIn ? (
+                        <LoginForm
+                            action="create"
+                            articleTitle=""
+                            returnHref="/contribution"
+                        />
+                    ) : (
+                        <EditorProvider>
+                            <ContributionHeader />
+                            <ArticleForm />
+                            <TextEditor />
+                            <ContentSchema />
+                            <BlockTools />
+                            <BlockMenu />
+                            <Validation />
+                        </EditorProvider>
+                    )}
                     <Overlay />
                     <Footer />
                 </div>

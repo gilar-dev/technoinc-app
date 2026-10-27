@@ -52,10 +52,6 @@ export default function Validation() {
     };
 
     useEffect(() => {
-        const storedName = localStorage.getItem("technoinc-contributor-name");
-    }, []);
-
-    useEffect(() => {
         document.body.style.overflow = isValidating.state ? "hidden" : "visible";
     }, [isValidating]);
 
@@ -74,8 +70,8 @@ export default function Validation() {
                     <h2 className="mt-1 text-xl font-bold">Review your contribution</h2>
                     <p className="mt-1 text-sm text-foreground/65">Add a short summary before submitting this edit.</p>
                 </div>
-                <div className="grid gap-5 lg:grid-cols-2">
-                    <label className="flex flex-col gap-2">
+                <div className="w-full">
+                    <label className="w-full flex flex-col gap-2">
                         <span className="font-semibold">Edit summary</span>
                         <textarea
                             id="summary-input"

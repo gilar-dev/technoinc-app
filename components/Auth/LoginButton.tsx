@@ -1,6 +1,7 @@
 "use client"; // Client-side rendering directive for Next.js
 
-import { useSession, signIn, signOut } from "next-auth/react";
+import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
 
 export default function LoginButton() {
     const { data: session, status } = useSession();
@@ -25,9 +26,9 @@ export default function LoginButton() {
     );
 
     return (
-        <button
-            onClick={() => signIn()}
+        <Link
+            href="/contributor"
             className="p-2 rounded-md text-white"
-        ><i className="fa-solid fa-user"></i></button>
+        ><i className="fa-solid fa-user"></i></Link>
     );
 }

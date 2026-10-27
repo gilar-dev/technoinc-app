@@ -5,11 +5,12 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 
 interface LoginFormProps {
+    action: "create" | "edit";
     articleTitle: string;
     returnHref: string;
 }
 
-export default function LoginForm({ articleTitle, returnHref }: LoginFormProps) {
+export default function LoginForm({ action, articleTitle, returnHref }: LoginFormProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
 
@@ -38,11 +39,11 @@ export default function LoginForm({ articleTitle, returnHref }: LoginFormProps) 
                                 <i className="fa-solid fa-lock text-xl" aria-hidden="true"></i>
                                 <span className="text-xs font-semibold uppercase tracking-[0.16em]">Contributor access</span>
                             </div>
-                            <h1 className="font-historical text-3xl font-medium">Sign in to edit this article</h1>
+                            <h1 className="font-historical text-3xl font-medium">Sign in to {action} article</h1>
                             <p className="mt-3 leading-7 text-foreground/75">
-                                Sign in with your Google account to continue editing
+                                Sign in with your Google account to continue {action} article
                                 {articleTitle ? <> <strong className="text-foreground">{articleTitle}</strong></> : " this article"}.
-                                You will return to this edit page after authentication.
+                                You will return to this page after authentication.
                             </p>
                             <p className="mt-3 text-sm leading-6 text-foreground/65">
                                 Your Google sign-in is used to authenticate your session. Article revision attribution is provided
@@ -51,7 +52,7 @@ export default function LoginForm({ articleTitle, returnHref }: LoginFormProps) 
                         </div>
 
                         <div className="w-full border-l-4 border-sidebar-accent bg-sidebar-panel p-5 lg:max-w-xs">
-                            <h2 className="mb-3 font-semibold">Continue to editing</h2>
+                            <h2 className="mb-3 font-semibold">Continue to {action} article</h2>
                             <button
                                 type="button"
                                 disabled={isLoading}

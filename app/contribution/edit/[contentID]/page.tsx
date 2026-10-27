@@ -42,6 +42,7 @@ export default async function ContributionEditPage({ params }: PageProps) {
                         <MissingArticle title={cleanContentID} />
                     ) : !loggedIn ? (
                         <LoginForm
+                            action="edit"
                             articleTitle={cleanContentID}
                             returnHref={`/contribution/edit/${encodeURIComponent(reformatURI)}`}
                         />
