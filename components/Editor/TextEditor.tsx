@@ -16,11 +16,11 @@ export default function TextEditor() {
     const router = useRouter();
 
     const syntaxActions = useMemo(() => [
-        { title: "Bold", icon: "fa-solid fa-bold", prefix: "**", suffix: "**" },
-        { title: "Italic", icon: "fa-solid fa-italic", prefix: "*", suffix: "*" },
-        { title: "Underline", icon: "fa-solid fa-underline", prefix: "__", suffix: "__" },
-        { title: "Dotted", icon: "fa-solid fa-ellipsis", prefix: "_", suffix: "_" },
-        { title: "Link", icon: "fa-solid fa-link", prefix: "<link:", suffix: "#/wiki/>" },
+        { title: "Bold", icon: "fa-solid fa-bold", prefix: "*", suffix: "*" },
+        { title: "Italic", icon: "fa-solid fa-italic", prefix: "_", suffix: "_" },
+        { title: "Underline", icon: "fa-solid fa-underline", prefix: "<u>", suffix: "</u>" },
+        { title: "Dotted", icon: "fa-solid fa-ellipsis", prefix: "<d>", suffix: "</d>" },
+        { title: "Internal link", icon: "fa-solid fa-link", prefix: "[[", suffix: "#]]" },
     ], []);
 
     const addSyntax = (prefix: string, suffix: string): void => {

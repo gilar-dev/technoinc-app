@@ -1,4 +1,4 @@
-"use client";
+"use client"; // Client-side rendering directive for Next.js
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -16,7 +16,7 @@ interface RouteSuggestion {
 const routeSuggestions: RouteSuggestion[] = [
     { label: "Wiki", href: "/wiki", keywords: ["wiki", "article", "page", "encyclopedia"] },
     { label: "Categories", href: "/category", keywords: ["category", "categories", "topics"] },
-    { label: "Contribution", href: "/contribution", keywords: ["contribution", "create", "edit", "article"] },
+    { label: "Contribution", href: "/contribution", keywords: ["contribution", "create", "edit"] },
     { label: "Home", href: "/", keywords: ["home", "index", "main"] },
 ];
 
@@ -28,12 +28,10 @@ function getClosestRoute(pathname: string): RouteSuggestion {
 
     return routeSuggestions.reduce((closest, route) => {
         const closestScore = closest.keywords.reduce(
-            (score, keyword) => score + pathWords.filter((word) => word.includes(keyword) || keyword.includes(word)).length,
-            0
+            (score, keyword) => score + pathWords.filter((word) => word.includes(keyword) || keyword.includes(word)).length, 0
         );
         const routeScore = route.keywords.reduce(
-            (score, keyword) => score + pathWords.filter((word) => word.includes(keyword) || keyword.includes(word)).length,
-            0
+            (score, keyword) => score + pathWords.filter((word) => word.includes(keyword) || keyword.includes(word)).length, 0
         );
 
         return routeScore > closestScore ? route : closest;

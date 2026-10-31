@@ -1,6 +1,7 @@
 "use client"; // Client-side rendering directive for Next.js
 
 import { useJhuloid } from "./Jhuloid";
+import { reformatURI } from "@/utils/textUtils";
 
 interface PropTypes {
     content: string;
@@ -14,7 +15,14 @@ export default function TextParser({ content, style = "" }: PropTypes) {
     const parsedText = (content: string): any => {
         if (!content) return [];
 
-        const regexCombined = /(?<bold>\*\*(.*?)\*\*)|(?<underline>__(.*?)__)|(?<italic>\*(.*?)\*)|(?<dotted>_(.*?)_)|(?<link><link:(.*?)#(.*?)>)/g;
+        const regexPatterns = [
+            "(?<bold>\\*(.*?)\\*)",
+            "|(?<underline><u>(.*?)</u>)",
+            "|(?<italic>_(.*?)_)",
+            "|(?<dotted><d>(.*?)</d>)",
+            "|(?<link>\\[\\[(.*?)#(.*?)\\]\\])"
+        ];
+        const regexCombined = new RegExp(regexPatterns.join(""), "g");
         const elements: React.ReactNode[] = [];
         let lastIndex: number = 0;
 
@@ -51,23 +59,13 @@ export default function TextParser({ content, style = "" }: PropTypes) {
             } else if (groups?.link) {
                 const linkLabel = match[10];
                 const linkUrl = match[11];
-                const isExternalLink = /^https?:\/\//i.test(linkUrl);
-                const articleID = isExternalLink ? undefined : linkUrl.split("/")[2];
-                const isSafeLink = isExternalLink || Boolean(articleID);
-
-                if (!isSafeLink) {
-                    elements.push(parsedText(linkLabel));
-                    lastIndex = matchIndex + matchString.length;
-                    return;
-                }
-
                 elements.push(
                     <a
                         key={`l-${index}`}
-                        href={linkUrl}
-                        target={isExternalLink ? "_blank" : "_self"}
-                        rel={isExternalLink ? "noopener noreferrer" : undefined}
-                        className={`font-medium ${articleID && lowerizedExistingLinks.includes(articleID.toLowerCase()) ? "text-link" : "text-[#FC7A68]"} hover:underline active:underline`}
+                        href={reformatURI(linkUrl)}
+                        target="_self"
+                        rel={undefined}
+                        className={`font-medium ${linkUrl && lowerizedExistingLinks.includes(reformatURI(linkUrl).toLowerCase()) ? "text-link" : "text-[#FC7A68]"} hover:underline active:underline`}
                     >
                         {parsedText(linkLabel)}
                     </a>

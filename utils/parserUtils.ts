@@ -1,4 +1,5 @@
 import { Schema } from "./typeUtils";
+import { reformatURI } from "./textUtils";
 
 export function getContents(schema: Schema | undefined): (string | string[])[] | undefined {
     if (!schema) return;
@@ -22,9 +23,9 @@ export function getContents(schema: Schema | undefined): (string | string[])[] |
 export function getLinks(schema: Schema) {
     const links: string[] = [];
     const stringifySchema = JSON.stringify(schema);
-    const regex = /<link:([^#>]+)#([^>]+)>/g;
+    const regex = /\[\[(.*?)#(.*?)\]\]/g;
     for (const match of stringifySchema.matchAll(regex)) {
-        const linkUrl = match[2].split("/")[2];
+        const linkUrl = reformatURI(match[2]);
         if (linkUrl && !links.includes(linkUrl)) {
             links.push(linkUrl);
         }
