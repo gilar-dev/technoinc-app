@@ -80,7 +80,13 @@ export default function WikiRenderer({ block, infoboxStyle }: WikiRendererProps)
             );
         case "ib-subheading":
             return (
-                <div className="mt-5 p-3 border-t border-border">
+                <div
+                    style={{
+                        color: infoboxStyle ? infoboxStyle.sh_text : undefined,
+                        backgroundColor: infoboxStyle ? infoboxStyle.sh_col : undefined
+                    }}
+                    className="mt-5 p-3 border-t border-border"
+                >
                     <h4 className="font-basic font-bold text-center">
                         <span className="highlight">{block.subheading}</span>
                     </h4>

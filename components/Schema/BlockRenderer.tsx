@@ -232,6 +232,32 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                                 onChange={(e) => handleChange(index, "h_text", e.currentTarget.value)}
                             />
                         </div>
+                        <div className="w-full p-1 flex justify-between items-center">
+                            <label
+                                htmlFor={`ib-style-h_col-input${index}`}
+                                className="w-full font-medium"
+                            >Subheading background</label>
+                            <input
+                                id={`ib-style-sh_col-input${index}`}
+                                type="color"
+                                value={block.sh_col}
+                                className="w-full"
+                                onChange={(e) => handleChange(index, "sh_col", e.currentTarget.value)}
+                            />
+                        </div>
+                        <div className="w-full p-1 flex justify-between items-center">
+                            <label
+                                htmlFor={`ib-style-h_col-input${index}`}
+                                className="w-full font-medium"
+                            >Subheading color</label>
+                            <input
+                                id={`ib-style-sh_text-input${index}`}
+                                type="color"
+                                value={block.sh_text}
+                                className="w-full"
+                                onChange={(e) => handleChange(index, "sh_text", e.currentTarget.value)}
+                            />
+                        </div>
                     </div>
                 </div>
             );
