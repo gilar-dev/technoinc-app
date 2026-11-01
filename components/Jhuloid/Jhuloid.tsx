@@ -2,10 +2,10 @@
 
 import { createContext, useContext } from "react";
 import type { ArticleData } from "@/contexts/ArticleDataProvider";
+import type { Content, SetState } from "@/utils/typeUtils";
 import WikiRenderer from "@/components/Jhuloid/WikiRenderer";
 import { PrimaryParser, InfoboxParser } from "@/components/Jhuloid/DeepParser";
 import { contentGrouper } from "@/utils/parserUtils";
-import { Content } from "@/utils/typeUtils";
 
 interface JhuloidProps {
     articleData: ArticleData;

@@ -6,6 +6,7 @@ export type BlockType =
     | "gen-notes"
     | "gen-image"
     // Infobox
+    | "ib-style"
     | "ib-heading"
     | "ib-subheading"
     | "ib-text"
@@ -39,6 +40,14 @@ export interface GenImage {
 }
 
 // Infobox block types
+export interface IbStyle {
+    type: "ib-style";
+    b_col: string;
+    h_col: string;
+    h_text: string;
+    sh_col: string;
+    sh_text: string;
+}
 export interface IbHeading {
     type: "ib-heading";
     heading: string;
@@ -67,5 +76,5 @@ export interface IbImage {
 
 // Export grouped blocks
 export type GeneralBlock = GenHeading | GenSubheading | GenParagraph | GenNotes | GenImage;
-export type InfoboxBlock = IbHeading | IbSubheading | IbText | IbInfo | IbImage;
+export type InfoboxBlock = IbStyle | IbHeading | IbSubheading | IbText | IbInfo | IbImage;
 export type Block = GeneralBlock | InfoboxBlock;

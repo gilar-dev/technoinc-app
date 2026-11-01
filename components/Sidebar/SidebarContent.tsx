@@ -25,7 +25,7 @@ export default function SidebarContent({ contents, expandContent }: SidebarConte
                             >
                                 {Array.isArray(nextContent) && (
                                     <span
-                                        className="mr-2 cursor-pointer absolute translate-x-[-110%] text-sidebar-accent"
+                                        className="mr-2 cursor-pointer absolute translate-x-[-110%] text-sidebar-accent border hover:bg-sidebar-hover active:border-sidebar-hover"
                                         onClick={(e) => {
                                             const parent = e.currentTarget.parentElement;
                                             const icon = e.currentTarget.children[0];

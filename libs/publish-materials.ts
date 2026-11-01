@@ -106,6 +106,8 @@ export function checkContentValues(content: Schema): string {
                 if (!block.src.trim() || !block.desc.trim()) return emptyMessage;
                 break;
             // Infobox
+            case "ib-style":
+                break;
             case "ib-heading":
                  if (!block.heading.trim()) return emptyMessage;
                 break;

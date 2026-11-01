@@ -188,6 +188,53 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                 </div>
             );
         // Infobox block types
+        case "ib-style":
+            return (
+                <div className={`flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""} ${checkNextType("ib") ? "" : "mb-3"}`}>
+                    <BlockOption index={index} />
+                    <div className="w-full overflow-hidden font-basic text-[1.25em] flex flex-col items-center border border-border bg-infobox-bg">
+                        <div className="w-full p-1 flex justify-between items-center">
+                            <label
+                                htmlFor={`ib-style-b_col-input${index}`}
+                                className="w-full font-medium"
+                            >Border color</label>
+                            <input
+                                id={`ib-style-b_col-input${index}`}
+                                type="color"
+                                value={block.b_col}
+                                className="w-full"
+                                onChange={(e) => handleChange(index, "b_col", e.currentTarget.value)}
+                            />
+                        </div>
+                        <div className="w-full p-1 flex justify-between items-center">
+                            <label
+                                htmlFor={`ib-style-h_col-input${index}`}
+                                className="w-full font-medium"
+                            >Heading background</label>
+                            <input
+                                id={`ib-style-h_col-input${index}`}
+                                type="color"
+                                value={block.h_col}
+                                className="w-full"
+                                onChange={(e) => handleChange(index, "h_col", e.currentTarget.value)}
+                            />
+                        </div>
+                        <div className="w-full p-1 flex justify-between items-center">
+                            <label
+                                htmlFor={`ib-style-h_col-input${index}`}
+                                className="w-full font-medium"
+                            >Heading color</label>
+                            <input
+                                id={`ib-style-h_text-input${index}`}
+                                type="color"
+                                value={block.h_text}
+                                className="w-full"
+                                onChange={(e) => handleChange(index, "h_text", e.currentTarget.value)}
+                            />
+                        </div>
+                    </div>
+                </div>
+            );
         case "ib-heading":
             return (
                 <div className={`flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""} ${checkNextType("ib") ? "" : "mb-3"}`}>

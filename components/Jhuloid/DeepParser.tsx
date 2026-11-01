@@ -1,7 +1,7 @@
 "use client"; // Client-side rendering directive for Next.js
 
 import { useState, useEffect, useRef, useMemo } from "react";
-import type { SetState } from "@/utils/typeUtils";
+import type { InfoboxStyle } from "@/components/Jhuloid/WikiRenderer";
 import WikiRenderer from "@/components/Jhuloid/WikiRenderer";
 
 interface PrimaryProps {
@@ -64,6 +64,8 @@ export function PrimaryParser({ block, expandContent }: PrimaryProps): React.JSX
 }
 
 export function InfoboxParser({ block, index }: InfoboxProps): React.JSX.Element {
+    const getIbStyle = block.find((subblock: any) => subblock.type === "ib-style");
+
     const getIBSubheadings = useMemo<number[]>(() => {
         const subheadings: number[] = [];
         for (let pos: number = 0; pos < block.length; pos++) {
@@ -84,7 +86,12 @@ export function InfoboxParser({ block, index }: InfoboxProps): React.JSX.Element
     return (
         <table
             width="100%"
-            className="my-5 border-separate border border-border bg-infobox-bg md:w-[10%] md:float-right md:clear-right md:ml-5"
+            style={{
+                borderColor: getIbStyle ? `${getIbStyle.b_col}` : undefined
+            }}
+            className={`
+                my-5 border-separate border bg-infobox-bg md:w-[10%] md:float-right md:clear-right md:ml-5
+            `}
         >
             <tbody>
                 {block.map((subBlock: any, subIndex: number) => (
@@ -93,7 +100,7 @@ export function InfoboxParser({ block, index }: InfoboxProps): React.JSX.Element
                         className={`table-row ${getIBSubheadings.length > 1 && subIndex >= getIBSubheadings[1] ? `more-${index}` : ""}`}
                     >
                         <td>
-                            <WikiRenderer block={subBlock} />
+                            <WikiRenderer block={subBlock} infoboxStyle={getIbStyle as InfoboxStyle} />
                         </td>
                     </tr>
                 ))}

@@ -23,6 +23,7 @@ export const blockMenuList: BlockMenuList = {
 
     ],
     infobox: [
+        { label: "Ib Style", icon: "fa-brands fa-elementor", block: () => ({ type: "ib-style", b_col: "#000000", h_col: "#000000", h_text: "#000000", sh_col: "#000000", sh_text:"#000000" }) },
         { label: "Ib Heading", icon: "fa-solid fa-heading p-1 border", block: () => ({ type: "ib-heading", heading: "" }) },
         { label: "Ib Subheading", icon: "fa-solid fa-s p-1 border", block: () => ({ type: "ib-subheading", subheading: "" }) },
         { label: "Ib Text", icon: "fa-solid fa-t", block: () => ({ type: "ib-text", text: "" }) },

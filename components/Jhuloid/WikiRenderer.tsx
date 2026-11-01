@@ -3,9 +3,18 @@ import type { CSON } from "@/utils/typeUtils";
 
 interface WikiRendererProps {
     block: CSON;
+    infoboxStyle?: InfoboxStyle;
 }
 
-export default function WikiRenderer({ block }: WikiRendererProps) {
+export interface InfoboxStyle {
+    b_col: string;
+    h_col: string;
+    h_text: string;
+    sh_col: string;
+    sh_text: string;
+}
+
+export default function WikiRenderer({ block, infoboxStyle }: WikiRendererProps) {
     switch (block.type) {
         // General content block types
         case "gen-heading":
@@ -59,7 +68,13 @@ export default function WikiRenderer({ block }: WikiRendererProps) {
         // Infobox content block types
         case "ib-heading":
             return (
-                <div className="font-basic font-normal text-center text-[1.25em] leading-relaxed whitespace-pre-wrap md:text-[1em] xl:text-[1.2em]">
+                <div
+                    style={{
+                        color: infoboxStyle ? infoboxStyle.h_text : undefined,
+                        backgroundColor: infoboxStyle ? infoboxStyle.h_col : undefined
+                    }}
+                    className="font-basic font-normal text-center text-[1.25em] leading-relaxed whitespace-pre-wrap md:text-[1em] xl:text-[1.2em]"
+                >
                     <TextParser content={block.heading} />
                 </div>
             );
