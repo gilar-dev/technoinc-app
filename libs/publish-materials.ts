@@ -103,7 +103,7 @@ export function checkContentValues(content: Schema): string {
                 if (!block.text.trim()) return emptyMessage;
                 break;
             case "gen-image":
-                if (!block.src.trim() || !block.desc.trim()) return emptyMessage;
+                if (!block.src.trim()) return emptyMessage;
                 break;
             // Infobox
             case "ib-style":
@@ -121,7 +121,7 @@ export function checkContentValues(content: Schema): string {
                 if (!block.head.trim() || !block.data.trim()) return emptyMessage;
                 break
             case "ib-image":
-                if (!block.src.trim() || !block.desc.trim()) return emptyMessage;
+                if (!block.src.trim()) return emptyMessage;
                 break;
             default:
                 return "None";

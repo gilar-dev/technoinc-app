@@ -176,7 +176,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                             <textarea
                                 name="gen-image-type"
                                 aria-label={`Image block ${index}`}
-                                placeholder="Image description"
+                                placeholder="Image description (optional)"
                                 value={block.desc ?? ""}
                                 className="w-full text-[14px] resize-none field-sizing-content leading-relaxed whitespace-pre-wrap outline-none"
                                 onChange={(e) => handleChange(index, "desc", e.currentTarget.value)}
@@ -379,7 +379,7 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                             <textarea
                                 name="ib-image-type"
                                 aria-label={`Ib image block ${index}`}
-                                placeholder="Ib image description"
+                                placeholder="Ib image description (optional)"
                                 value={block.desc ?? ""}
                                 className="w-full font-inter font-normal text-[0.85em] tracking-wide resize-none field-sizing-content leading-relaxed whitespace-pre-wrap outline-none"
                                 onChange={(e) => handleChange(index, "desc", e.currentTarget.value)}

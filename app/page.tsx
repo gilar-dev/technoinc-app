@@ -3,6 +3,16 @@ import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
 import Link from "next/link";
+import HomeSearch from "@/components/HomeSearch";
+
+const homepageLinks = [
+	{ label: "Wiki", href: "/wiki", icon: "fa-book-open", description: "Explore articles" },
+	{ label: "Contributor", href: "/contributor", icon: "fa-people-group", description: "Meet contributors" },
+	{ label: "Category", href: "/category", icon: "fa-layer-group", description: "Browse topics" },
+	{ label: "Template", icon: "fa-file-lines" },
+	{ label: "Portal", icon: "fa-compass" },
+	{ label: "Map", icon: "fa-map" },
+];
 
 const frequentlyAskedQuestions = [
 	{
@@ -39,60 +49,89 @@ export default function Home() {
 				<SidebarOverlay />
 				<Sidebar />
 			</div>
-			<main className="min-h-[calc(100vh-4rem)] px-3 py-8 font-basic lg:px-7 lg:py-12">
+			<main className="min-h-[calc(100vh-4rem)] px-3 py-8 font-basic lg:px-7 lg:py-10">
 				<div className="mx-auto max-w-5xl">
-					<header className="border-b border-border pb-8 lg:pb-10">
-						<div className="mb-5 flex items-center gap-3 text-sidebar-accent">
-							<span className="flex h-11 w-11 items-center justify-center rounded-md bg-sidebar-accent text-sidebar-bg">
-								<i className="fa-solid fa-cube text-xl" aria-hidden="true"></i>
-							</span>
-							<p className="text-xs font-semibold uppercase tracking-[0.16em]">A community encyclopedia</p>
+					<header className="flex min-h-[min(70vh,42rem)] flex-col items-center justify-center border-b border-border px-2 pb-10 text-center sm:pb-12">
+						<div className="mb-7">
+							<h1 className="font-historical text-4xl font-medium sm:text-5xl">TechnoInc MC Wiki</h1>
+							<p className="mt-1 font-historical text-lg font-semibold text-sidebar-accent sm:text-xl">
+								A Survival World Encyclopedia
+							</p>
 						</div>
-						<h1 className="font-historical text-4xl font-medium sm:text-5xl">TechnoInc MC Wiki</h1>
-						<p className="mt-4 max-w-3xl text-lg leading-8 text-foreground/75">
-							A growing record of the TechnoInc Minecraft survival world. Explore its places, people,
-							stories, and history, documented and maintained by its community.
-						</p>
-						<div className="mt-6 flex flex-wrap gap-x-6 gap-y-3">
-							<Link href="/wiki" className="inline-flex items-center gap-2 border border-link bg-link px-4 py-2.5 font-semibold text-white hover:brightness-110 active:brightness-110">
-								<i className="fa-brands fa-wikipedia-w" aria-hidden="true"></i>
-								Browse the wiki
-							</Link>
-							<Link href="/contribution" className="inline-flex items-center gap-2 border border-sidebar-border px-4 py-2.5 font-semibold hover:bg-list-bg active:bg-list-bg">
-								<i className="fa-solid fa-pen-to-square" aria-hidden="true"></i>
-								Contribute
-							</Link>
+
+						<nav aria-label="Explore TechnoInc Wiki" className="hidden max-w-3xl grid-cols-[1fr_auto_1fr] grid-rows-3 items-center gap-x-8 gap-y-3 sm:grid lg:gap-x-14">
+							{homepageLinks.map(({ label, href, icon, description }, index) => {
+								const position = [
+									"col-start-1 row-start-1",
+									"col-start-3 row-start-1",
+									"col-start-1 row-start-2",
+									"col-start-3 row-start-2",
+									"col-start-1 row-start-3",
+									"col-start-3 row-start-3",
+								][index];
+								const content = (
+									<>
+										<span className={`mb-1 flex items-center justify-center gap-2 text-lg font-bold ${href ? "text-link" : "text-foreground/50"}`}>
+											<i className={`fa-solid ${icon}`} aria-hidden="true"></i>
+											{label}
+										</span>
+										<span className="text-sm text-foreground/65">{description ?? "Coming soon"}</span>
+									</>
+								);
+
+								return href ? (
+									<Link
+										key={label}
+										href={href}
+										className={`${position} rounded-md px-3 py-2 transition-colors hover:bg-list-bg focus-visible:outline-2 focus-visible:outline-sidebar-accent`}
+									>
+										{content}
+									</Link>
+								) : (
+									<div key={label} aria-disabled="true" className={`${position} px-3 py-2`}>
+										{content}
+									</div>
+								);
+							})}
+
+							<div className="col-start-2 row-span-3 row-start-1 flex h-50 w-50 items-center justify-center text-sidebar-accent shadow-inner sm:h-54 sm:w-54">
+								<img src="/icons/technoinc-logo.png" alt="TechnoInc MC Wiki" />
+							</div>
+						</nav>
+
+						<div className="flex h-70 w-70 mb-7 items-center justify-center text-sidebar-accent shadow-inner sm:hidden">
+							<img src="/icons/technoinc-logo.png" alt="TechnoInc MC Wiki" />
+						</div>
+						<nav aria-label="Explore TechnoInc Wiki" className="grid w-full max-w-xl grid-cols-2 gap-3 sm:hidden">
+
+							{homepageLinks.map(({ label, href, icon }) => {
+								const content = (
+									<>
+										<i className={`fa-solid ${icon} text-sidebar-accent`} aria-hidden="true"></i>
+										<span className="font-semibold">{label}</span>
+										{!href && <span className="col-span-2 text-xs text-foreground/55">Coming soon</span>}
+									</>
+								);
+
+								return href ? (
+									<Link key={label} href={href} className="flex min-h-16 items-center justify-center gap-2 border border-sidebar-border bg-form-bg px-2 py-3 hover:bg-list-bg">
+										{content}
+									</Link>
+								) : (
+									<div key={label} aria-disabled="true" className="grid min-h-16 grid-cols-[auto_auto] content-center items-center justify-center gap-x-2 border border-sidebar-border/60 px-2 py-2 text-foreground/50">
+										{content}
+									</div>
+								);
+							})}
+						</nav>
+
+						<div className="mt-7 flex w-full flex-col items-center gap-3">
+							<HomeSearch />
+							<p className="max-w-xl text-sm leading-6 text-foreground/65">
+								Explore the places, people, stories, and history of the TechnoInc Minecraft world.
+							</p>
 						</div>
 					</header>
-
-					<section className="grid gap-8 py-8 sm:grid-cols-2 lg:gap-12 lg:py-10" aria-label="Explore the wiki">
-						<div>
-							<div className="mb-3 flex items-center gap-2 text-sidebar-accent">
-								<i className="fa-solid fa-compass" aria-hidden="true"></i>
-								<h2 className="font-montserrat text-lg font-semibold text-foreground">Explore the world</h2>
-							</div>
-							<p className="leading-7 text-foreground/75">
-								Find articles by title or browse topics through the category index. Each page brings together
-								information and the recorded history of how it has changed.
-							</p>
-							<Link href="/category" className="mt-4 inline-flex items-center gap-2 font-semibold text-link hover:underline active:underline">
-								Explore categories <i className="fa-solid fa-arrow-right text-sm" aria-hidden="true"></i>
-							</Link>
-						</div>
-						<div className="border-l-2 border-sidebar-accent pl-5 sm:pl-6">
-							<div className="mb-3 flex items-center gap-2 text-sidebar-accent">
-								<i className="fa-solid fa-people-group" aria-hidden="true"></i>
-								<h2 className="font-montserrat text-lg font-semibold text-foreground">Built together</h2>
-							</div>
-							<p className="leading-7 text-foreground/75">
-								Contributors can create articles, improve existing pages, and leave a summary with each revision.
-								Use a name or alias you are comfortable showing in the public article history.
-							</p>
-							<Link href="/contribution" className="mt-4 inline-flex items-center gap-2 font-semibold text-link hover:underline active:underline">
-								Start contributing <i className="fa-solid fa-arrow-right text-sm" aria-hidden="true"></i>
-							</Link>
-						</div>
-					</section>
 
 					<section className="border-t border-border py-8 lg:py-10" aria-labelledby="about-heading">
 						<div className="max-w-3xl">
