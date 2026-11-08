@@ -164,7 +164,7 @@ export default function SearchPanel({ onClose }: SearchPanelProps) {
                                                     <h3 className="font-semibold">{article.title.replaceAll("_", " ")}</h3>
                                                 </div>
                                                 {article.desc.trim() && (
-                                                    <p className="mt-1 line-clamp-2 text-sm leading-5 text-foreground/65">{article.desc}</p>
+                                                    <p className="mt-1 line-clamp-2 text-start text-sm leading-5 text-foreground/65">{article.desc}</p>
                                                 )}
                                             </div>
                                             <i className="fa-solid fa-angle-right mt-1 self-center shrink-0 text-sm text-sidebar-accent" aria-hidden="true"></i>

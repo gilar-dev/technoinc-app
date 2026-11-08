@@ -8,6 +8,14 @@ interface PropTypes {
     style?: string;
 }
 
+export const textToken = [
+    "(?<bold>\\*(.*?)\\*)",
+    "|(?<underline><u>(.*?)</u>)",
+    "|(?<italic>_(.*?)_)",
+    "|(?<dotted><d>(.*?)</d>)",
+    "|(?<link>\\[\\[(.*?)#(.*?)\\]\\])"
+];
+
 export default function TextParser({ content, style = "" }: PropTypes) {
     const { existingLinks } = useJhuloid();
     const lowerizedExistingLinks = existingLinks.map(link => link.toLowerCase());
@@ -15,14 +23,7 @@ export default function TextParser({ content, style = "" }: PropTypes) {
     const parsedText = (content: string): any => {
         if (!content) return [];
 
-        const regexPatterns = [
-            "(?<bold>\\*(.*?)\\*)",
-            "|(?<underline><u>(.*?)</u>)",
-            "|(?<italic>_(.*?)_)",
-            "|(?<dotted><d>(.*?)</d>)",
-            "|(?<link>\\[\\[(.*?)#(.*?)\\]\\])"
-        ];
-        const regexCombined = new RegExp(regexPatterns.join(""), "g");
+        const regexCombined = new RegExp(textToken.join(""), "g");
         const elements: React.ReactNode[] = [];
         let lastIndex: number = 0;
 
@@ -75,9 +76,7 @@ export default function TextParser({ content, style = "" }: PropTypes) {
             lastIndex = matchIndex + matchString.length;
         });
 
-        if (lastIndex < content.length) {
-            elements.push(content.substring(lastIndex));
-        }
+        if (lastIndex < content.length) elements.push(content.substring(lastIndex));
 
         return elements;
     }

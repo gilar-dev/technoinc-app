@@ -6,6 +6,7 @@ import type { Content, SetState } from "@/utils/typeUtils";
 import WikiRenderer from "@/components/Jhuloid/WikiRenderer";
 import { PrimaryParser, InfoboxParser } from "@/components/Jhuloid/DeepParser";
 import { contentGrouper } from "@/utils/parserUtils";
+import ImageGallery from "@/components/ImageGallery";
 
 interface JhuloidProps {
     articleData: ArticleData;
@@ -26,6 +27,12 @@ export function useJhuloid() {
 
 export default function Jhuloid({ articleData, existingLinks = [] }: JhuloidProps) {
     const contents: (Content | Content[])[] = contentGrouper(articleData.content);
+    const galleryImages = articleData.content.filter((block) =>
+        (block.type === "gen-image" || block.type === "ib-image")
+        && typeof block.src === "string"
+        && block.src.trim().length > 0
+    );
+
     const expandContent = (event: HTMLDivElement): void => {
         const target = event.nextElementSibling;
         if (!target) return;
@@ -36,20 +43,22 @@ export default function Jhuloid({ articleData, existingLinks = [] }: JhuloidProp
     }
 
     return (
-        <JhuloidEngine.Provider value={{ existingLinks: existingLinks }}>
-            <main className="mb-5 px-3 flow-root [&>article:first-of-type]:mt-7">
-                {contents.map((block, index) => {
-                    if (!Array.isArray(block)) return (
-                        <WikiRenderer key={index} block={block} />
-                    );
-                    else if (block[0].type === "gen-heading") return (
-                        <PrimaryParser key={index} block={block} expandContent={expandContent} />
-                    );
-                    else if (block[0].type.includes("ib")) return (
-                        <InfoboxParser key={index} block={block} index={index} />
-                    );
-                })}
-            </main>
-        </JhuloidEngine.Provider>
+        <ImageGallery images={galleryImages}>
+            <JhuloidEngine.Provider value={{ existingLinks: existingLinks }}>
+                <main className="mb-5 px-3 flow-root [&>article:first-of-type]:mt-7">
+                    {contents.map((block, index) => {
+                        if (!Array.isArray(block)) return (
+                            <WikiRenderer key={index} block={block} />
+                        );
+                        else if (block[0].type === "gen-heading") return (
+                            <PrimaryParser key={index} block={block} expandContent={expandContent} />
+                        );
+                        else if (block[0].type.includes("ib")) return (
+                            <InfoboxParser key={index} block={block} index={index} />
+                        );
+                    })}
+                </main>
+            </JhuloidEngine.Provider>
+        </ImageGallery>
     );
 }

@@ -1,5 +1,6 @@
 import TextParser from "./TextParser";
 import type { CSON } from "@/utils/typeUtils";
+import { useImageGallery } from "@/components/ImageGallery";
 
 interface WikiRendererProps {
     block: CSON;
@@ -15,6 +16,8 @@ export interface InfoboxStyle {
 }
 
 export default function WikiRenderer({ block, infoboxStyle }: WikiRendererProps) {
+    const { openImage } = useImageGallery();
+
     switch (block.type) {
         // General content block types
         case "gen-heading":
@@ -51,7 +54,13 @@ export default function WikiRenderer({ block, infoboxStyle }: WikiRendererProps)
             return (
                 <div className="mt-3 whitespace-pre-wrap md:max-w-[30%] md:mr-3 md:mb-1 md:float-left">
                     <div className="w-[75%] mx-auto flex flex-col items-center gap-1 md:w-full">
-                        <div className="overflow-hidden cursor-pointer relative">
+                        <button
+                            type="button"
+                            onClick={() => openImage(block)}
+                            disabled={!block.src}
+                            aria-label={`Open image: ${block.desc || "article image"}`}
+                            className="relative w-full cursor-pointer overflow-hidden disabled:cursor-default"
+                        >
                             <img
                                 src={block.src || undefined}
                                 alt={block.desc}
@@ -60,7 +69,7 @@ export default function WikiRenderer({ block, infoboxStyle }: WikiRendererProps)
                             <span className="p-1.25 text-[10px] absolute bottom-2 right-2 self-end rounded-full text-white bg-black/50">
                                 <i className="fa-regular fa-clone"></i>
                             </span>
-                        </div>
+                        </button>
                         <TextParser content={block.desc} style="font-[400] text-[0.85em] tracking-wide" />
                     </div>
                 </div>
@@ -70,8 +79,8 @@ export default function WikiRenderer({ block, infoboxStyle }: WikiRendererProps)
             return (
                 <div
                     style={{
-                        color: infoboxStyle ? infoboxStyle.h_text : undefined,
-                        backgroundColor: infoboxStyle ? infoboxStyle.h_col : undefined
+                        color: infoboxStyle && infoboxStyle.h_text !== "#000000" ? infoboxStyle.h_text : "var(--foreground)",
+                        backgroundColor: infoboxStyle && infoboxStyle.h_col !== "#000000" ? infoboxStyle.h_col : undefined
                     }}
                     className="font-basic font-normal text-center text-[1.25em] leading-relaxed whitespace-pre-wrap md:text-[1em] xl:text-[1.2em]"
                 >
@@ -82,7 +91,7 @@ export default function WikiRenderer({ block, infoboxStyle }: WikiRendererProps)
             return (
                 <div
                     style={{
-                        color: infoboxStyle ? infoboxStyle.sh_text : undefined,
+                        color: infoboxStyle && infoboxStyle.sh_text !== "#000000" ? infoboxStyle.sh_text : "var(--foreground)",
                         backgroundColor: infoboxStyle ? infoboxStyle.sh_col : undefined
                     }}
                     className="mt-5 p-3 border-t border-border"
@@ -117,7 +126,13 @@ export default function WikiRenderer({ block, infoboxStyle }: WikiRendererProps)
             return (
                 <div className="whitespace-pre-wrap flex justify-center items-center md:min-w-[25vw]">
                     <div className="w-[80%] p-3 flex flex-col items-center gap-1">
-                        <div className="w-full overflow-hidden cursor-pointer relative">
+                        <button
+                            type="button"
+                            onClick={() => openImage(block)}
+                            disabled={!block.src}
+                            aria-label={`Open image: ${block.desc || "article image"}`}
+                            className="relative w-full cursor-pointer overflow-hidden disabled:cursor-default"
+                        >
                             <img
                                 src={block.src || null}
                                 alt={block.desc}
@@ -126,7 +141,7 @@ export default function WikiRenderer({ block, infoboxStyle }: WikiRendererProps)
                             <span className="p-1.25 text-[10px] absolute bottom-2 right-2 self-end rounded-full text-white bg-black/50">
                                 <i className="fa-regular fa-clone"></i>
                             </span>
-                        </div>
+                        </button>
                         <TextParser content={block.desc} style="font-inter font-[400] text-[0.85em] tracking-wide" />
                     </div>
                 </div>

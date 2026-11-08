@@ -30,8 +30,13 @@ export function PrimaryParser({ block, expandContent }: PrimaryProps): React.JSX
         const handleResize = (): void => {
             if (isMounted && contentRef.current) {
                 if (window.innerWidth > 768) {
+                    const previousSibling = contentRef.current.previousElementSibling;
+                    const contentIcon = previousSibling?.getElementsByClassName("child");
                     contentRef.current.classList.replace("hidden", "block");
                     contentRef.current.classList.remove("md:block");
+                    if (contentIcon) {
+                        contentIcon[0].classList.replace("fa-angle-down", "fa-angle-up");
+                    }
                 }
             }
         }
@@ -64,7 +69,7 @@ export function PrimaryParser({ block, expandContent }: PrimaryProps): React.JSX
 }
 
 export function InfoboxParser({ block, index }: InfoboxProps): React.JSX.Element {
-    const getIbStyle = block.find((subblock: any) => subblock.type === "ib-style");
+    const getIbStyle = block.find((subblock: any) => subblock.type === "ib-style") as InfoboxStyle;
 
     const getIBSubheadings = useMemo<number[]>(() => {
         const subheadings: number[] = [];
@@ -87,7 +92,7 @@ export function InfoboxParser({ block, index }: InfoboxProps): React.JSX.Element
         <table
             width="100%"
             style={{
-                borderColor: getIbStyle ? `${getIbStyle.b_col}` : undefined
+                borderColor: getIbStyle && getIbStyle.b_col !== "#000000" ? getIbStyle.b_col : undefined
             }}
             className={`
                 my-5 border-separate border bg-infobox-bg md:w-[10%] md:float-right md:clear-right md:ml-5
