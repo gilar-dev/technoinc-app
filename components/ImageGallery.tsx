@@ -93,9 +93,6 @@ export default function ImageGallery({ images, children }: ImageGalleryProps) {
                                 alt={activeImage.desc || ""}
                                 className="max-h-[calc(100vh-17rem)] max-w-full object-contain"
                             />
-                            {activeImage.desc && (
-                                <p className="mt-2 max-w-full text-center text-sm text-white/80">{removeTextToken(activeImage.desc || "")}</p>
-                            )}
                         </div>
                         {showNavigation && (
                             <>
@@ -108,6 +105,9 @@ export default function ImageGallery({ images, children }: ImageGalleryProps) {
                                     <i className="fa-solid fa-xmark"></i>
                                 </button>
                                 <div className="w-full shrink-0 pb-2">
+                                    {activeImage.desc && (
+                                        <p className="mb-2 max-w-full text-center text-sm text-white/80">{removeTextToken(activeImage.desc || "")}</p>
+                                    )}
                                     <div className="mb-3 flex items-center justify-center gap-8 text-white">
                                         <button
                                             type="button"

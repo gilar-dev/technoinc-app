@@ -146,7 +146,7 @@ export default function ArticleForm({ formData = undefined }: ArticleFormProps) 
                 <div className="p-1 flex flex-col items-center justify-center gap-3">
                     <div className="w-[70%] p-1 flex justify-center items-center border border-border lg:w-[50%]">
                         <img
-                            src={formData && !useProvider ? formData.cover : data.cover || undefined}
+                            src={formData && formData.cover !== "" && !useProvider ? formData.cover : data.cover !== "" ? data.cover : undefined}
                             draggable={false}
                             className="min-w-full cursor-pointer object-cover"
                         />

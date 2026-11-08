@@ -46,7 +46,7 @@ export default async function uploadArticleWiki(
 
     // Check cover raw file and upload the file to cloud storage
     const coverFile = await uploadCoverImage(safeClonedData.raw_file, universalID + 1);
-    if (!coverFile) return { success: false, message: "Failed to upload cover image" }
+    //if (!coverFile) return { success: false, message: "Failed to upload cover image" }
 
     // Check image file if exist and start uploading its files
     const imageIndexes = getImageBlockIndexes(safeClonedData.content);
@@ -63,8 +63,8 @@ export default async function uploadArticleWiki(
         ...safeClonedData,
         title: formattedTitle,
         id: universalID + 1,
-        cover: coverFile.secure_urls[0],
-        p_id: coverFile.public_ids[0],
+        cover: coverFile?.secure_urls[0] || "",
+        p_id: coverFile?.public_ids[0] || "",
         his: createNewHistory,
         content: modifiedContent
     }

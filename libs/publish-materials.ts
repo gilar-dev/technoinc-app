@@ -74,7 +74,7 @@ export async function uploadContentImages(
 export function checkMetadataValues(metadata: ArticleData): string {
     if (!metadata.title.trim()) return "Title can't be empty";
     if (metadata.cat.length === 0) return "Category should be added at least one";
-    if (!metadata.cover.trim()) return "Cover can't be empty";
+    //if (!metadata.cover.trim()) return "Cover can't be empty";
     return "Pass";
 }
 
