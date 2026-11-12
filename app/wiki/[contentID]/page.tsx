@@ -52,8 +52,9 @@ export default async function WikiPage({ params }: Params) {
 
     const showRedirectNotify = (): boolean => {
         if (articleData && redirectedURL) {
-            if (articleData.title !== redirectedURL && articleData.title.toLowerCase() === redirectedURL.toLowerCase()
-                || articleData.redirect_arts?.some((article) => article.toLowerCase() === redirectedURL.toLowerCase())) {
+            if (articleData.title !== redirectedURL && articleData.title.toLowerCase() === redirectedURL.toLowerCase()) {
+                return true;
+            } else if (articleData.redirect_arts?.some((article) => article.toLowerCase() === redirectedURL.toLowerCase())) {
                 return true;
             }
             return false;
