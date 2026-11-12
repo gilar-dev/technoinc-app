@@ -134,6 +134,32 @@ export default function BlockMenu() {
                     </ul>
                 </div>
             </div>
+            {/* Universal blocks */}
+            <div className="mb-3">
+                <div className="mb-2">
+                    <span className="text-[0.72em] font-semibold uppercase tracking-[0.16em] text-sidebar-accent">Infobox</span>
+                </div>
+                <div>
+                    <ul className="w-auto flex flex-wrap items-center gap-3">
+                        {blockMenuList.universal.map((item, index) => (
+                            <li key={`item-${index}`}>
+                                <div
+                                    className="
+                                        w-26 aspect-square cursor-pointer font-montserrat flex flex-col items-center justify-center gap-2 rounded-md
+                                        border border-sidebar-border bg-sidebar-panel hover:border-sidebar-accent hover:text-sidebar-accent hover:bg-sidebar-hover
+                                        active:border-sidebar-accent active:text-sidebar-accent active:bg-sidebar-hover"
+                                    onClick={() => addContentBlock(item.block())}
+                                >
+                                    <div className="text-3xl">
+                                        <i className={item.icon}></i>
+                                    </div>
+                                    <div className="font-medium text-[0.8em]"><span>{item.label}</span></div>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
         </div>
     );
 }

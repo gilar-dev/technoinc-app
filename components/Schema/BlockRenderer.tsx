@@ -390,6 +390,24 @@ export default function BlockRenderer({ block, index }: BlockRendererProps) {
                     </div>
                 </div>
             );
+        // Universal block types
+        case "uni-redirect":
+            return (
+                <div className={`mb-3 flex bg-sidebar-bg ${blockOpt.selected === index ? "border-2 border-blue-500" : ""}`}>
+                    <BlockOption index={index} />
+                    <div className="w-full overflow-hidden font-basic font-medium text-[15px] flex items-center">
+                        <span><i className="fa-solid fa-turn-up rotate-90"></i></span>
+                        <textarea
+                            name="uni-redirect-type"
+                            placeholder="Redirect to"
+                            aria-label={`Redirect block ${index}`}
+                            value={block.to}
+                            className="peer w-full px-1 resize-none field-sizing-content leading-relaxed whitespace-pre-wrap outline-none"
+                            onChange={(e) => handleChange(index, "to", e.currentTarget.value)}
+                        />
+                    </div>
+                </div>
+            );
         default:
             return (
                 <div>Another type of block</div>

@@ -119,9 +119,13 @@ export function checkContentValues(content: Schema): string {
                 break;
             case "ib-info":
                 if (!block.head.trim() || !block.data.trim()) return emptyMessage;
-                break
+                break;
             case "ib-image":
                 if (!block.src.trim()) return emptyMessage;
+                break;
+            // Universal
+            case "uni-redirect":
+                if (!block.to.trim()) return emptyMessage;
                 break;
             default:
                 return "None";

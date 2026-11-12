@@ -46,13 +46,27 @@ export default async function WikiPage({ params }: Params) {
     const formattedURI = reformatURI(decodeURIComponent(contentID));
     const cleanURI = formattedURI.replaceAll("_", " ");
     const articleData = await dbGetArticleData(formattedURI);
+    const isRedirect = articleData?.content.find((block) => block.type === "uni-redirect");
     const links = articleData ? getLinks(articleData.content) : [];
     const existingLinks = links ? await dbGetExistingLinks(links) : undefined;
+
+    const showRedirectNotify = (): boolean => {
+        if (articleData && redirectedURL) {
+            if (articleData.title !== redirectedURL && articleData.title.toLowerCase() === redirectedURL.toLowerCase()
+                || articleData.redirect_arts?.some((article) => article.toLowerCase() === redirectedURL.toLowerCase())) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
 
     if (articleData) {
         // Redirect to the correct URL if the contentID in the URL does not match the article title
         if (decodeURIComponent(contentID) !== formattedURI || articleData.title !== formattedURI) {
             redirect(`/wiki/${articleData.title}`, "replace");
+        } else if (isRedirect) {
+            redirect(`/wiki/${isRedirect.to}`);
         }
     }
 
@@ -84,11 +98,7 @@ export default async function WikiPage({ params }: Params) {
                     />
                 )}
                 <Footer />
-                {articleData
-                    && redirectedURL
-                    && articleData.title.toLowerCase() === redirectedURL.toLowerCase()
-                    && articleData.title !== redirectedURL
-                    && (<RedirectNotice redirectedURL={redirectedURL} />)}
+                {showRedirectNotify() && (<RedirectNotice redirectedURL={redirectedURL || ""} />)}
             </div>
         </ArticleDataProvider>
     );

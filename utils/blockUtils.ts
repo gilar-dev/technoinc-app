@@ -1,16 +1,15 @@
 import type { Block } from "./blockTypeUtils";
 
-export type BlockFactory = () => Block;
-
 export interface BlockMenuItem {
     label: string;
     icon: string;
-    block: BlockFactory;
+    block: () => Block;
 }
 
 export interface BlockMenuList {
     general: BlockMenuItem[];
     infobox: BlockMenuItem[];
+    universal: BlockMenuItem[];
 }
 
 export const blockMenuList: BlockMenuList = {
@@ -29,5 +28,8 @@ export const blockMenuList: BlockMenuList = {
         { label: "Ib Text", icon: "fa-solid fa-t", block: () => ({ type: "ib-text", text: "" }) },
         { label: "Ib Info", icon: "fa-solid fa-info p-1 border", block: () => ({ type: "ib-info", head: "", data: "" }) },
         { label: "Ib Image", icon: "fa-solid fa-image p-1 border", block: () => ({ type: "ib-image", src: "", p_id: "", desc: "" }) }
+    ],
+    universal: [
+        { label: "Uni Redirect", icon: "fa-solid fa-turn-up rotate-90", block: () => ({ type: "uni-redirect", to: "" }) }
     ]
 }

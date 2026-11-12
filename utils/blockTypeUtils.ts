@@ -74,7 +74,14 @@ export interface IbImage {
     prev_src?: string;
 }
 
+// Universal block types
+export interface UniRedirect {
+    type: "uni-redirect";
+    to: string;
+}
+
 // Export grouped blocks
-export type GeneralBlock = GenHeading | GenSubheading | GenParagraph | GenNotes | GenImage;
-export type InfoboxBlock = IbStyle | IbHeading | IbSubheading | IbText | IbInfo | IbImage;
-export type Block = GeneralBlock | InfoboxBlock;
+export type GeneralBlocks = GenHeading | GenSubheading | GenParagraph | GenNotes | GenImage;
+export type InfoboxBlocks = IbStyle | IbHeading | IbSubheading | IbText | IbInfo | IbImage;
+export type UniversalBlocks = UniRedirect
+export type Block = GeneralBlocks | InfoboxBlocks | UniversalBlocks;

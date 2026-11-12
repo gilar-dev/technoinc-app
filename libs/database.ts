@@ -24,7 +24,8 @@ interface ArticleDataResult extends Status {
         cat: string;
         his: string;
         content: string;
-    }
+    },
+    redirect_arts: string[];
 }
 
 export function dbGetArticleData(contentID: string): Promise<ArticleData | undefined>;
@@ -55,9 +56,11 @@ export async function dbGetArticleData<K extends ArticleField>(
         if (!result) return;
         if (field) return result.data as unknown as ArticleData[K];
         const parsedCategory: string[] = JSON.parse(result.data.cat);
+      
         const parsedHistory: History[] = JSON.parse(result.data.his);
         const parsedContent: Schema = JSON.parse(result.data.content);
-        return { ...result.data, cat: parsedCategory, his: parsedHistory, content: parsedContent };
+        return { ...result.data, cat: parsedCategory, his: parsedHistory, content: parsedContent, redirect_arts: result.redirect_arts };
+
     }
     catch (error) {
         console.error(error);

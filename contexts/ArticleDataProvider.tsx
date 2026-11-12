@@ -19,6 +19,7 @@ export interface ArticleData {
     // Temporary properties
     raw_file?: File;
     prev_src?: string;
+    redirect_arts?: string[];
 }
 
 interface CategoryForm {
