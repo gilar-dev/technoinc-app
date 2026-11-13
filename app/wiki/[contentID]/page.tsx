@@ -50,18 +50,17 @@ export default async function WikiPage({ params }: Params) {
     const links = articleData ? getLinks(articleData.content) : [];
     const existingLinks = links ? await dbGetExistingLinks(links) : undefined;
 
-    const normalizedRedirectedURL = redirectedURL && reformatURI(redirectedURL).toLowerCase();
-    const showRedirectNotify = Boolean(
-        articleData &&
-        normalizedRedirectedURL &&
-        (
-            (articleData.title !== redirectedURL &&
-                reformatURI(articleData.title).toLowerCase() === normalizedRedirectedURL) ||
-            articleData.redirect_arts?.some(
-                (article) => reformatURI(article).toLowerCase() === normalizedRedirectedURL,
-            )
-        ),
-    );
+    const showRedirectNotify = (): boolean => {
+        if (articleData && redirectedURL) {
+            if (articleData.title !== redirectedURL && articleData.title.toLowerCase() === redirectedURL.toLowerCase()) {
+                return true;
+            } else if (articleData.redirect_arts?.some((article) => article.toLowerCase() === redirectedURL.toLowerCase())) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
 
     if (articleData) {
         // Redirect to the correct URL if the contentID in the URL does not match the article title
@@ -100,7 +99,7 @@ export default async function WikiPage({ params }: Params) {
                     />
                 )}
                 <Footer />
-                {showRedirectNotify && (<RedirectNotice redirectedURL={redirectedURL || ""} />)}
+                {showRedirectNotify() && (<RedirectNotice redirectedURL={redirectedURL || ""} />)}
             </div>
         </ArticleDataProvider>
     );
