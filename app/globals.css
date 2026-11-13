@@ -104,7 +104,8 @@ img {
     }
 
     100% {
-        bottom: 28px;
+        bottom: 0;
+        display: none;
     }
 }
 
