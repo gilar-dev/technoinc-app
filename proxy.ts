@@ -1,22 +1,25 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { reformatURI } from "./utils/textUtils";
 
-export async function proxy(response: NextRequest) {
-    const { pathname } = response.nextUrl;
+export function proxy(request: NextRequest) {
+    const { pathname } = request.nextUrl;
     const contentID = decodeURIComponent(pathname).split("/wiki/")[1];
     if (!contentID) return NextResponse.next();
 
     const formattedURI = reformatURI(contentID);
-    const cookieStore = await cookies();
+    const response = NextResponse.next();
 
     // Set the cookie only if it doesn't already exist
-    if (!cookieStore.get("x-user-previous-url")?.value) {
-        cookieStore.set("x-user-previous-url", formattedURI, { path: "/", maxAge: 5 });
+    if (!request.cookies.get("x-user-previous-url")?.value) {
+        response.cookies.set("x-user-previous-url", formattedURI, {
+            path: "/",
+            maxAge: 5,
+            sameSite: "lax",
+        });
     }
 
-    return NextResponse.next();
+    return response;
 }
 
 export const config = {
