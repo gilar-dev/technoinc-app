@@ -1,18 +1,3 @@
-export type BlockType =
-    // Generals
-    | "gen-heading"
-    | "gen-subheading"
-    | "gen-paragraph"
-    | "gen-notes"
-    | "gen-image"
-    // Infobox
-    | "ib-style"
-    | "ib-heading"
-    | "ib-subheading"
-    | "ib-text"
-    | "ib-info"
-    | "ib-image";
-
 // General block types
 export interface GenHeading {
     type: "gen-heading";

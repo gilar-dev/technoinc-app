@@ -63,6 +63,7 @@ export default function TextParser({ content, style = "" }: PropTypes) {
                 elements.push(
                     <a
                         key={`l-${index}`}
+                        title={!lowerizedExistingLinks.includes(reformatURI(linkUrl).toLowerCase()) ? `${linkUrl.replaceAll("_", " ")} (article does not exist)` : ""}
                         href={reformatURI(linkUrl)}
                         target="_self"
                         rel={undefined}
