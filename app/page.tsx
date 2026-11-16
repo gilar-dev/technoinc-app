@@ -44,7 +44,7 @@ const frequentlyAskedQuestions = [
 export default function Home() {
 	return (
 		<div className="md:relative md:w-[75%] md:left-[25%]">
-			<Menubar />
+			<Menubar showSearchButton={false} />
 			<div className="fixed top-0 left-0 z-2 md:w-[25%]">
 				<SidebarOverlay />
 				<Sidebar />
@@ -67,7 +67,7 @@ export default function Home() {
 									"col-start-1 row-start-2",
 									"col-start-3 row-start-2",
 									"col-start-1 row-start-3",
-									"col-start-3 row-start-3",
+									"col-start-3 row-start-3"
 								][index];
 								const content = (
 									<>

@@ -7,9 +7,10 @@ import LoginButton from "./Auth/LoginButton";
 
 interface MenubarProps {
     title?: string;
+    showSearchButton?: boolean;
 }
 
-export default function Menubar({ title = "" }: MenubarProps) {
+export default function Menubar({ title = "", showSearchButton = true }: MenubarProps) {
     const { toggleSidebar } = useSidebar();
     const menubarRef = useRef<HTMLElement | null>(null);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -61,17 +62,19 @@ export default function Menubar({ title = "" }: MenubarProps) {
             </div>
             <div className="ml-auto">
                 <ul className="flex items-center gap-2 [&_div]:w-10 [&_div]:aspect-square [&_div]:hover:bg-white/20 [&_div]:active:bg-white/20 [&_i]:text-[1em]">
-                    <li title="Search">
-                        <div className="flex justify-center items-center relative *:absolute">
-                            <button
-                                type="button"
-                                title="Search articles"
-                                aria-label="Search articles"
-                                className="w-full h-full cursor-pointer"
-                                onClick={() => setIsSearchOpen(true)}
-                            ><i className="fa-solid fa-search"></i></button>
-                        </div>
-                    </li>
+                    {showSearchButton && (
+                        <li title="Search">
+                            <div className="flex justify-center items-center relative *:absolute">
+                                <button
+                                    type="button"
+                                    title="Search articles"
+                                    aria-label="Search articles"
+                                    className="w-full h-full cursor-pointer"
+                                    onClick={() => setIsSearchOpen(true)}
+                                ><i className="fa-solid fa-search"></i></button>
+                            </div>
+                        </li>
+                    )}
                     <li title="Contribution">
                         <div className="flex justify-center items-center relative *:absolute">
                             <LoginButton />

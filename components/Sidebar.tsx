@@ -7,6 +7,7 @@ import { getContents } from "@/utils/parserUtils";
 import { useSidebar } from "@/contexts/SidebarProvider";
 import SidebarContent from "./Sidebar/SidebarContent";
 import SidebarModifyLogs from "./Sidebar/SidebarModifyLogs";
+import { goToRandomArticle } from "@/libs/helper";
 
 interface SidebarProps {
     contents?: Schema | undefined;
@@ -165,13 +166,23 @@ export default function Sidebar({ contents = undefined }: SidebarProps) {
                             </div>
                         </li>
                         <li
-                            onClick={() => { }}
+                            onClick={() => { }} // Coming soon
                         >
                             <div className="group flex items-center gap-3 hover:font-bold active:font-bold transition-[font,scale] duration-150 ease-in-out">
                                 <span className="text-sidebar-accent group-hover:scale-[120%] group-active:scale-[120%]">
                                     <i className="fa-regular fa-map"></i>
                                 </span>
                                 <span className="text-[0.9em]">Interactive map</span>
+                            </div>
+                        </li>
+                        <li
+                            onClick={() => goToRandomArticle()} // Coming soon
+                        >
+                            <div className="group flex items-center gap-3 hover:font-bold active:font-bold transition-[font,scale] duration-150 ease-in-out">
+                                <span className="text-sidebar-accent group-hover:scale-[120%] group-active:scale-[120%]">
+                                    <i className="fa-solid fa-dice"></i>
+                                </span>
+                                <span className="text-[0.9em]">Random article</span>
                             </div>
                         </li>
                     </ul>
