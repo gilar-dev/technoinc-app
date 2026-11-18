@@ -125,17 +125,17 @@ export default async function Home() {
 						</div>
 						<nav aria-label="Explore TechnoInc Wiki" className="grid w-full max-w-xl grid-cols-2 gap-3 sm:hidden">
 
-							{homepageLinks.map(({ label, href, icon }) => {
+							{homepageLinks.map(({ label, href, icon, description }) => {
 								const content = (
 									<>
 										<i className={`fa-solid ${icon} text-sidebar-accent`} aria-hidden="true"></i>
 										<span className="font-semibold">{label}</span>
-										{!href && <span className="col-span-2 text-xs text-foreground/55">Coming soon</span>}
+										<span className="col-span-2 text-xs text-foreground/55">{label === "Wiki" ? essentials?.total_articles : ""} {description ?? "Coming soon"}</span>
 									</>
 								);
 
 								return href ? (
-									<Link key={label} href={href} className="flex min-h-16 items-center justify-center gap-2 border border-sidebar-border bg-form-bg px-2 py-3 hover:bg-list-bg">
+									<Link key={label} href={href} className="grid min-h-16 grid-cols-[auto_auto] content-center items-center justify-center gap-x-2 text-foreground/50 border border-sidebar-border bg-form-bg px-2 py-3 hover:bg-list-bg">
 										{content}
 									</Link>
 								) : (
