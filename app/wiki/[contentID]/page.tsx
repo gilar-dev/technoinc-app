@@ -48,7 +48,7 @@ export default async function WikiPage({ params }: Params) {
     const articleData = await dbGetArticleData(formattedURI);
     const isRedirect = articleData?.content.find((block) => block.type === "uni-redirect");
     const links = articleData ? getLinks(articleData.content) : [];
-    const existingLinks = links ? await dbGetExistingLinks(links) : undefined;
+    const existingLinks = links.length > 0 ? await dbGetExistingLinks(links) : undefined;
 
     const showRedirectNotify = (): boolean => {
         if (articleData && redirectedURL) {

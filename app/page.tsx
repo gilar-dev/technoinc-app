@@ -4,9 +4,10 @@ import Footer from "@/components/Footer";
 import { SidebarOverlay } from "@/components/Sidebar/SidebarOverlay";
 import Link from "next/link";
 import HomeSearch from "@/components/HomeSearch";
+import { getAPIUrl } from "@/libs/database";
 
 const homepageLinks = [
-	{ label: "Wiki", href: "/wiki", icon: "fa-book-open", description: "Explore articles" },
+	{ label: "Wiki", href: "/wiki", icon: "fa-book-open", description: "articles" },
 	{ label: "Contributor", href: "/contributor", icon: "fa-people-group", description: "Meet contributors" },
 	{ label: "Category", href: "/category", icon: "fa-layer-group", description: "Browse topics" },
 	{ label: "Template", icon: "fa-file-lines" },
@@ -41,7 +42,27 @@ const frequentlyAskedQuestions = [
 	}
 ];
 
-export default function Home() {
+interface GetDataResult {
+	status: string;
+	total_articles: number;
+}
+
+async function getData(): Promise<GetDataResult | undefined> {
+	try {
+		const response = await fetch(`${getAPIUrl()}/api/v1/wiki?field=total`, { "cache": "no-store" });
+		if (!response.ok) throw new Error(`${response}`);
+
+		const result: GetDataResult = await response.json();
+		return result;
+
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+export default async function Home() {
+	const essentials = await getData();
+
 	return (
 		<div className="md:relative md:w-[75%] md:left-[25%]">
 			<Menubar showSearchButton={false} />
@@ -75,7 +96,7 @@ export default function Home() {
 											<i className={`fa-solid ${icon}`} aria-hidden="true"></i>
 											{label}
 										</span>
-										<span className="text-sm text-foreground/65">{description ?? "Coming soon"}</span>
+										<span className="text-sm text-foreground/65">{label === "Wiki" ? essentials?.total_articles : ""} {description ?? "Coming soon"}</span>
 									</>
 								);
 

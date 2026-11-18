@@ -156,7 +156,7 @@ export async function dbGetExistingLinks(links: string[]): Promise<string[] | un
             body: JSON.stringify({ links: links })
         });
         if (!response.ok) throw new Error("Failed to check existing links");
-        const result = await response.json();
+        const result: { status: string; existing: string[] } = await response.json();
         return result.existing.map((link: string) => link.replaceAll(" ", "_"));
     } catch (error) {
         console.error(error);
