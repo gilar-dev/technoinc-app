@@ -27,9 +27,11 @@ export function HeadingHolder({ title, description }: ArticleTitleProps) {
                                 <span className="text-[1.5em]"><i className="fa-solid fa-pen-to-square"></i></span>
                             </li>
                         </Link>
-                        <li className="p-2 border border-transparent hover:bg-list-bg active:bg-list-bg active:border-foreground">
-                            <span className="text-[1.5em]"><i className="fa-solid fa-info"></i></span>
-                        </li>
+                        <Link href={`/wiki/${title.replaceAll(" ", "_")}/info`}>
+                            <li className="p-2 border border-transparent hover:bg-list-bg active:bg-list-bg active:border-foreground">
+                                <span className="text-[1.5em]"><i className="fa-solid fa-info"></i></span>
+                            </li>
+                        </Link>
                     </ul>
                 </nav>
             </div>
