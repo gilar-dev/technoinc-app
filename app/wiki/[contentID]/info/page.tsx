@@ -123,22 +123,20 @@ export default async function WikiPageInfo({ params }: Params) {
                                     </caption>
                                     <tbody className="block sm:table-row-group">
                                         <ArticlePropertyRow label="Display title">
-                                            <span className="tebular-nums">{basicInfo?.title.replaceAll("_", " ")}</span>
+                                            <span>{basicInfo?.title.replaceAll("_", " ")}</span>
                                         </ArticlePropertyRow>
                                         <ArticlePropertyRow label="Article ID">
-                                            <span className="tabular-nums">{basicInfo?.id.toLocaleString()}</span>
+                                            <span>{basicInfo?.id.toLocaleString()}</span>
                                         </ArticlePropertyRow>
                                         <ArticlePropertyRow label="Content length (in bytes)">
                                             <span className="tabular-nums">{basicInfo?.content_length.toLocaleString()}</span>
                                         </ArticlePropertyRow>
                                         <ArticlePropertyRow label="Page views">
-                                            <span className="inline-flex items-center gap-2 tabular-nums">
-                                                {basicInfo?.view.toLocaleString()}
-                                            </span>
+                                            <span className="tabular-nums">{basicInfo?.view.toLocaleString()}</span>
                                         </ArticlePropertyRow>
                                         <ArticlePropertyRow label="Central description">
                                             {basicInfo?.description.trim() || (
-                                                <span className="italic text-foreground/60">No description has been added yet.</span>
+                                                <span className="italic text-foreground/60">No description has been added yet</span>
                                             )}
                                         </ArticlePropertyRow>
                                         <ArticlePropertyRow label="Page cover">
