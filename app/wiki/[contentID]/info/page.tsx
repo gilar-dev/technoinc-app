@@ -15,12 +15,14 @@ interface Params {
 interface ArticleInfo {
     status: "Success" | "Error";
     data: {
-        title: string;
-        content_length: number;
-        id: number;
-        view: number;
-        description: string;
-        cover: string;
+        basic_info: {
+            title: string;
+            content_length: number;
+            id: number;
+            view: number;
+            description: string;
+            cover: string;
+        }
     };
 }
 
@@ -34,9 +36,9 @@ function ArticlePropertyRow({ label, children }: { label: string; children: Reac
         <tr className="block border-b border-border/70 last:border-b-0 sm:table-row">
             <th
                 scope="row"
-                className="block bg-list-bg px-4 py-2.5 text-left text-sm font-semibold text-sidebar-accent sm:table-cell sm:w-[38%] sm:border-r sm:border-border sm:px-5 sm:py-3 sm:text-foreground"
+                className="block bg-list-bg px-4 py-2.5 text-sm font-semibold text-sidebar-accent sm:table-cell sm:w-[35%] sm:align-top sm:border-r sm:border-border sm:px-5 sm:py-3.5 sm:text-foreground"
             >
-                {label}
+                <span>{label}</span>
             </th>
             <td className="block min-w-0 bg-form-bg px-4 py-3 text-sm leading-6 sm:table-cell sm:px-5">
                 {children}
@@ -48,7 +50,7 @@ function ArticlePropertyRow({ label, children }: { label: string; children: Reac
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
     const { contentID } = await params;
     const title = reformatURI(decodeURIComponent(contentID)).replaceAll("_", " ");
-    return { title: `${title} article information - TechnoInc MC Wiki` };
+    return { title: `"${title}" information - TechnoInc MC Wiki` };
 }
 
 async function getArticleInfo(title: string): Promise<ArticleInfoResult> {
@@ -61,6 +63,8 @@ async function getArticleInfo(title: string): Promise<ArticleInfoResult> {
         if (!response.ok) throw new Error(`Article information request failed (${response.status})`);
 
         const result: ArticleInfo = await response.json();
+        if (!result) return { kind: "error" };
+
         if (result.status !== "Success" || !result.data) {
             throw new Error("The article information service returned an unsuccessful response");
         }
@@ -76,6 +80,7 @@ export default async function WikiPageInfo({ params }: Params) {
     const { contentID } = await params;
     const articleInfo = await getArticleInfo(reformatURI(decodeURIComponent(contentID)));
     const requestedTitle = reformatURI(decodeURIComponent(contentID)).replaceAll("_", " ");
+    const basicInfo = articleInfo.kind === "success" ? articleInfo.article.basic_info : undefined;
 
     return (
         <div className="md:relative md:w-[75%] md:left-[25%]">
@@ -91,17 +96,14 @@ export default async function WikiPageInfo({ params }: Params) {
                             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                                 <div>
                                     <p className="font-montserrat text-xs font-bold uppercase tracking-[0.18em] text-sidebar-accent">
-                                        TechnoInc wiki <span className="mx-1 text-foreground/35">/</span> page record
+                                        Information for
                                     </p>
                                     <h1 className="mt-2 font-historical text-3xl font-medium sm:text-4xl">
-                                        {articleInfo.article.title.replaceAll("_", " ")}
+                                        {articleInfo.article.basic_info.title.replaceAll("_", " ")}
                                     </h1>
-                                    <p className="mt-2 text-sm text-foreground/70">
-                                        A quick reference to this page&apos;s content and readership.
-                                    </p>
                                 </div>
                                 <Link
-                                    href={`/wiki/${encodeURIComponent(articleInfo.article.title)}`}
+                                    href={`/wiki/${encodeURIComponent(articleInfo.article.basic_info.title)}`}
                                     className="inline-flex w-fit shrink-0 items-center gap-2 border border-border px-3 py-2 text-sm font-semibold hover:bg-list-bg"
                                 >
                                     <i className="fa-solid fa-arrow-left text-xs" aria-hidden="true"></i>
@@ -112,63 +114,49 @@ export default async function WikiPageInfo({ params }: Params) {
 
                         <section aria-labelledby="record-heading">
                             <div className="mb-2 flex items-center gap-2 font-montserrat text-xs font-bold uppercase tracking-[0.14em] text-sidebar-accent">
-                                <i className="fa-solid fa-list-check" aria-hidden="true"></i>
-                                <h2 id="record-heading">Article details</h2>
+                                <h2 id="record-heading">Basic information</h2>
                             </div>
                             <div className="overflow-hidden border border-border shadow-sm">
                                 <table className="block w-full border-collapse text-left sm:table">
                                     <caption className="sr-only">
-                                        Metadata and readership details for {articleInfo.article.title.replaceAll("_", " ")}
+                                        Metadata and readership details for {basicInfo?.title.replaceAll("_", " ")}
                                     </caption>
                                     <tbody className="block sm:table-row-group">
                                         <ArticlePropertyRow label="Display title">
-                                            <Link
-                                                href={`/wiki/${encodeURIComponent(articleInfo.article.title)}`}
-                                                className="font-semibold text-link hover:underline"
-                                            >
-                                                {articleInfo.article.title.replaceAll("_", " ")}
-                                            </Link>
+                                            <span className="tebular-nums">{basicInfo?.title.replaceAll("_", " ")}</span>
                                         </ArticlePropertyRow>
-                                        <ArticlePropertyRow label="Page ID">
-                                            <span className="tabular-nums">{articleInfo.article.id.toLocaleString()}</span>
+                                        <ArticlePropertyRow label="Article ID">
+                                            <span className="tabular-nums">{basicInfo?.id.toLocaleString()}</span>
                                         </ArticlePropertyRow>
-                                        <ArticlePropertyRow label="Page length (bytes)">
-                                            <span className="tabular-nums">{articleInfo.article.content_length.toLocaleString()}</span>
+                                        <ArticlePropertyRow label="Content length (in bytes)">
+                                            <span className="tabular-nums">{basicInfo?.content_length.toLocaleString()}</span>
                                         </ArticlePropertyRow>
                                         <ArticlePropertyRow label="Page views">
                                             <span className="inline-flex items-center gap-2 tabular-nums">
-                                                <i className="fa-regular fa-eye text-sidebar-accent" aria-hidden="true"></i>
-                                                {articleInfo.article.view.toLocaleString()}
+                                                {basicInfo?.view.toLocaleString()}
                                             </span>
                                         </ArticlePropertyRow>
-                                        <ArticlePropertyRow label="Local description">
-                                            {articleInfo.article.description.trim() || (
+                                        <ArticlePropertyRow label="Central description">
+                                            {basicInfo?.description.trim() || (
                                                 <span className="italic text-foreground/60">No description has been added yet.</span>
                                             )}
                                         </ArticlePropertyRow>
-                                        <ArticlePropertyRow label="Page image">
-                                            {articleInfo.article.cover ? (
+                                        <ArticlePropertyRow label="Page cover">
+                                            {basicInfo?.cover ? (
                                                 <figure className="max-w-xl">
                                                     <img
-                                                        src={articleInfo.article.cover}
-                                                        alt={`Cover for ${articleInfo.article.title.replaceAll("_", " ")}`}
-                                                        className="max-h-72 w-full bg-list-bg object-contain p-2"
+                                                        src={articleInfo.article.basic_info.cover}
+                                                        alt={`Cover for ${articleInfo.article.basic_info.title.replaceAll("_", " ")}`}
+                                                        className="max-h-72 w-full object-contain p-2"
                                                     />
-                                                    <figcaption className="mt-2 text-xs text-foreground/60">
-                                                        Cover image for this wiki page
-                                                    </figcaption>
                                                 </figure>
                                             ) : (
-                                                <span className="italic text-foreground/60">No page image has been added.</span>
+                                                <span className="italic text-foreground/60">No page image for this article</span>
                                             )}
                                         </ArticlePropertyRow>
                                     </tbody>
                                 </table>
                             </div>
-                            <p className="mt-3 flex items-center gap-2 text-xs text-foreground/60">
-                                <i className="fa-solid fa-circle-info text-sidebar-accent" aria-hidden="true"></i>
-                                Page information is provided by the TechnoInc wiki archive.
-                            </p>
                         </section>
                     </article>
                 ) : articleInfo.kind === "not-found" ? (
